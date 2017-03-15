@@ -35,6 +35,8 @@ public class User {
     @Column(columnDefinition = "ENUM ('guest', 'student', 'teacher', 'organizer')")
     private Role role;
 
+    private boolean isDeleted;
+
     public long getId() {
         return id;
     }
@@ -99,6 +101,14 @@ public class User {
         this.role = role;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,7 +123,8 @@ public class User {
                 && (surname != null ? surname.equals(user.surname) : user.surname == null)
                 && gender == user.gender
                 && (birthday != null ? birthday.equals(user.birthday) : user.birthday == null)
-                && role == user.role;
+                && role == user.role
+                && isDeleted == user.isDeleted;
     }
 
     @Override
@@ -126,6 +137,7 @@ public class User {
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (isDeleted ? 1 : 0);
         return result;
     }
 
