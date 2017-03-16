@@ -6,13 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
@@ -35,11 +34,10 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PreAuthorize("#oauth2.clientHasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('GUEST')")
     @RequestMapping(value = "/me", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> getUserInfo(Principal principal) {
-        User user = userService.findByEmail(principal.getName());
+    public ResponseEntity<?> getUserInfo(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

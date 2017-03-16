@@ -1,11 +1,12 @@
 package by.triumgroup.recourse.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,6 +37,21 @@ public class User {
     private Role role;
 
     private boolean isDeleted;
+
+    public User() {
+    }
+
+    public User(User user) {
+        id = user.id;
+        email = user.email;
+        passwordHash = user.passwordHash;
+        name = user.name;
+        surname = user.surname;
+        gender = user.gender;
+        birthday = user.birthday;
+        role = user.role;
+        isDeleted = user.isDeleted;
+    }
 
     public long getId() {
         return id;
@@ -139,6 +155,21 @@ public class User {
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (isDeleted ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", gender=" + gender +
+                ", birthday=" + birthday +
+                ", role=" + role +
+                ", isDeleted=" + isDeleted +
+                '}';
     }
 
     public enum Gender {

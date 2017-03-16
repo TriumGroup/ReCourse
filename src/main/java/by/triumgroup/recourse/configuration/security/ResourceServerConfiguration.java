@@ -38,8 +38,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                // allow everybody access to registration rest
-                .antMatchers("/register/**").permitAll()
+                // here can be provided access to some url's
                 .anyRequest().authenticated();
     }
 }
