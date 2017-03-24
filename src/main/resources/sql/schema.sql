@@ -50,15 +50,15 @@ CREATE TABLE `course` (
   DEFAULT CHARSET = utf8;
 
 
-DROP TABLE IF EXISTS `course_user` CASCADE;
-CREATE TABLE `course_user` (
-  `course_id` INT NOT NULL,
-  `user_id`   INT NOT NULL,
-  CONSTRAINT `PK_course_user` PRIMARY KEY (`course_id` ASC, `user_id` ASC),
-  CONSTRAINT `FK_course_user_course`
+DROP TABLE IF EXISTS `course_student` CASCADE;
+CREATE TABLE `course_student` (
+  `course_id`  INT NOT NULL,
+  `student_id` INT NOT NULL,
+  CONSTRAINT `PK_course_student` PRIMARY KEY (`course_id` ASC, `student_id` ASC),
+  CONSTRAINT `FK_course_student_course`
   FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-  CONSTRAINT `FK_course_user_user`
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `FK_course_student_student`
+  FOREIGN KEY (`student_id`) REFERENCES `user` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
