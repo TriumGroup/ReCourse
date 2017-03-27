@@ -6,4 +6,8 @@ public interface CrudService<E, ID> {
 
     E findById(ID id) throws ServiceException;
 
+    <S extends E> S save(S entity) throws ServiceException;
+
+    void delete(ID id) throws ServiceException;
+
 }
