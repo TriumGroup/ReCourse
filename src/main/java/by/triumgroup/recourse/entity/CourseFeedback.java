@@ -20,7 +20,7 @@ public class CourseFeedback {
     private User student;
 
     @Column(length = 50)
-    private String header;
+    private String heading;
 
     @Column(columnDefinition = "TEXT")
     private String report;
@@ -34,11 +34,11 @@ public class CourseFeedback {
     public CourseFeedback() {
     }
 
-    public CourseFeedback(long id, long courseId, User student, String header, String report, String pros, String cons) {
+    public CourseFeedback(long id, long courseId, User student, String heading, String report, String pros, String cons) {
         this.id = id;
         this.courseId = courseId;
         this.student = student;
-        this.header = header;
+        this.heading = heading;
         this.report = report;
         this.pros = pros;
         this.cons = cons;
@@ -68,12 +68,12 @@ public class CourseFeedback {
         this.student = student;
     }
 
-    public String getHeader() {
-        return header;
+    public String getHeading() {
+        return heading;
     }
 
-    public void setHeader(String header) {
-        this.header = header;
+    public void setHeading(String heading) {
+        this.heading = heading;
     }
 
     public String getReport() {
@@ -108,7 +108,7 @@ public class CourseFeedback {
         return id == that.id &&
                 courseId == that.courseId &&
                 Objects.equals(student, that.student) &&
-                Objects.equals(header, that.header) &&
+                Objects.equals(heading, that.heading) &&
                 Objects.equals(report, that.report) &&
                 Objects.equals(pros, that.pros) &&
                 Objects.equals(cons, that.cons);
@@ -116,7 +116,7 @@ public class CourseFeedback {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, courseId, student, header, report, pros, cons);
+        return Objects.hash(id, courseId, student, heading, report, pros, cons);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class CourseFeedback {
                 "id=" + id +
                 ", courseId=" + courseId +
                 ", student=" + student +
-                ", header='" + header + '\'' +
+                ", heading='" + heading + '\'' +
                 ", report='" + report + '\'' +
                 ", pros='" + pros + '\'' +
                 ", cons='" + cons + '\'' +

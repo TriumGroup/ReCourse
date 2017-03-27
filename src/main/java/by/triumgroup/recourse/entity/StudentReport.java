@@ -24,7 +24,7 @@ public class StudentReport {
     private long courseId;
 
     @Column(length = 50)
-    private String header;
+    private String heading;
 
     @Column(columnDefinition = "TEXT")
     private String report;
@@ -32,12 +32,12 @@ public class StudentReport {
     public StudentReport() {
     }
 
-    public StudentReport(long id, User student, User teacher, long courseId, String header, String report) {
+    public StudentReport(long id, User student, User teacher, long courseId, String heading, String report) {
         this.id = id;
         this.student = student;
         this.teacher = teacher;
         this.courseId = courseId;
-        this.header = header;
+        this.heading = heading;
         this.report = report;
     }
 
@@ -73,12 +73,12 @@ public class StudentReport {
         this.courseId = courseId;
     }
 
-    public String getHeader() {
-        return header;
+    public String getHeading() {
+        return heading;
     }
 
-    public void setHeader(String header) {
-        this.header = header;
+    public void setHeading(String heading) {
+        this.heading = heading;
     }
 
     public String getReport() {
@@ -98,13 +98,13 @@ public class StudentReport {
                 courseId == that.courseId &&
                 Objects.equals(student, that.student) &&
                 Objects.equals(teacher, that.teacher) &&
-                Objects.equals(header, that.header) &&
+                Objects.equals(heading, that.heading) &&
                 Objects.equals(report, that.report);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, student, teacher, courseId, header, report);
+        return Objects.hash(id, student, teacher, courseId, heading, report);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class StudentReport {
                 ", student=" + student +
                 ", teacher=" + teacher +
                 ", courseId=" + courseId +
-                ", header='" + header + '\'' +
+                ", heading='" + heading + '\'' +
                 ", report='" + report + '\'' +
                 '}';
     }

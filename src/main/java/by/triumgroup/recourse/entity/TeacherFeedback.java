@@ -21,7 +21,7 @@ public class TeacherFeedback {
     private User student;
 
     @Column(length = 50)
-    private String header;
+    private String heading;
 
     @Column(columnDefinition = "TEXT")
     private String report;
@@ -29,10 +29,10 @@ public class TeacherFeedback {
     public TeacherFeedback() {
     }
 
-    public TeacherFeedback(User teacher, User student, String header, String report) {
+    public TeacherFeedback(User teacher, User student, String heading, String report) {
         this.teacher = teacher;
         this.student = student;
-        this.header = header;
+        this.heading = heading;
         this.report = report;
     }
 
@@ -60,12 +60,12 @@ public class TeacherFeedback {
         this.student = student;
     }
 
-    public String getHeader() {
-        return header;
+    public String getHeading() {
+        return heading;
     }
 
-    public void setHeader(String header) {
-        this.header = header;
+    public void setHeading(String heading) {
+        this.heading = heading;
     }
 
     public String getReport() {
@@ -84,13 +84,13 @@ public class TeacherFeedback {
         return id == that.id &&
                 Objects.equals(teacher, that.teacher) &&
                 Objects.equals(student, that.student) &&
-                Objects.equals(header, that.header) &&
+                Objects.equals(heading, that.heading) &&
                 Objects.equals(report, that.report);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, teacher, student, header, report);
+        return Objects.hash(id, teacher, student, heading, report);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class TeacherFeedback {
                 "id=" + id +
                 ", teacher=" + teacher +
                 ", student=" + student +
-                ", header='" + header + '\'' +
+                ", heading='" + heading + '\'' +
                 ", report='" + report + '\'' +
                 '}';
     }
