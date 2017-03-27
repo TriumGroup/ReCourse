@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface CourseFeedbackRepository extends PagingAndSortingRepository<CourseFeedback, Long> {
 
+    List<CourseFeedback> findByCourseIdOrderByIdDesc(long courseId);
+
     List<CourseFeedback> findByCourseIdOrderByIdDesc(long courseId, Pageable pageable);
 
 }
