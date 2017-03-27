@@ -11,16 +11,16 @@ import java.util.List;
 @Repository
 public interface StudentReportRepository extends PagingAndSortingRepository<StudentReport, Long> {
 
-    List<StudentReport> findByTeacherId(long id);
+    List<StudentReport> findByTeacherId(Long id);
 
-    List<StudentReport> findByTeacherId(long id, Pageable pageable);
+    List<StudentReport> findByTeacherId(Long id, Pageable pageable);
 
-    List<StudentReport> findByStudentId(long id);
+    List<StudentReport> findByStudentId(Long id);
 
-    List<StudentReport> findByStudentId(long id, Pageable pageable);
+    List<StudentReport> findByStudentId(Long id, Pageable pageable);
 
-    List<StudentReport> findByCourseId(long id);
+    List<StudentReport> findByCourseId(Long id);
 
-    List<StudentReport> findByCourseId(long id, Pageable pageable);
+    List<StudentReport> findByCourseId(Long id, Pageable pageable);
 
 }

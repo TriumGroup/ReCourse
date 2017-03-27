@@ -10,7 +10,7 @@ public class TeacherFeedback {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long id;
+    private Long id;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "teacher_id")
@@ -36,11 +36,11 @@ public class TeacherFeedback {
         this.report = report;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -81,7 +81,7 @@ public class TeacherFeedback {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TeacherFeedback that = (TeacherFeedback) o;
-        return id == that.id &&
+        return Objects.equals(id, that.id) &&
                 Objects.equals(teacher, that.teacher) &&
                 Objects.equals(student, that.student) &&
                 Objects.equals(heading, that.heading) &&

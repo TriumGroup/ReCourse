@@ -10,7 +10,7 @@ public class StudentReport {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long id;
+    private Long id;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "student_id")
@@ -21,7 +21,7 @@ public class StudentReport {
     private User teacher;
 
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long courseId;
+    private Long courseId;
 
     @Column(length = 50)
     private String heading;
@@ -32,7 +32,7 @@ public class StudentReport {
     public StudentReport() {
     }
 
-    public StudentReport(long id, User student, User teacher, long courseId, String heading, String report) {
+    public StudentReport(Long id, User student, User teacher, Long courseId, String heading, String report) {
         this.id = id;
         this.student = student;
         this.teacher = teacher;
@@ -41,11 +41,11 @@ public class StudentReport {
         this.report = report;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -65,11 +65,11 @@ public class StudentReport {
         this.teacher = teacher;
     }
 
-    public long getCourseId() {
+    public Long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(long courseId) {
+    public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 
@@ -94,8 +94,8 @@ public class StudentReport {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StudentReport that = (StudentReport) o;
-        return id == that.id &&
-                courseId == that.courseId &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(courseId, that.courseId) &&
                 Objects.equals(student, that.student) &&
                 Objects.equals(teacher, that.teacher) &&
                 Objects.equals(heading, that.heading) &&

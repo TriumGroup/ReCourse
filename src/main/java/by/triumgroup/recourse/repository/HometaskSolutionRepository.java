@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface HometaskSolutionRepository extends PagingAndSortingRepository<HometaskSolution, Long> {
 
-    List<HometaskSolution> findByHometaskId(long id);
+    List<HometaskSolution> findByHometaskId(Long id);
 
-    List<HometaskSolution> findByHometaskId(long id, Pageable pageable);
+    List<HometaskSolution> findByHometaskId(Long id, Pageable pageable);
 
-    List<HometaskSolution> findByStudentId(long id);
+    List<HometaskSolution> findByStudentId(Long id);
 
-    List<HometaskSolution> findByStudentId(long id, Pageable pageable);
+    List<HometaskSolution> findByStudentId(Long id, Pageable pageable);
 
 }

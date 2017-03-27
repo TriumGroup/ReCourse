@@ -10,10 +10,10 @@ public class HometaskSolution {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long hometaskId;
+    private Long hometaskId;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "student_id")
@@ -25,26 +25,26 @@ public class HometaskSolution {
     public HometaskSolution() {
     }
 
-    public HometaskSolution(long id, long hometaskId, User student, String solution) {
+    public HometaskSolution(Long id, Long hometaskId, User student, String solution) {
         this.id = id;
         this.hometaskId = hometaskId;
         this.student = student;
         this.solution = solution;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getHometaskId() {
+    public Long getHometaskId() {
         return hometaskId;
     }
 
-    public void setHometaskId(long hometaskId) {
+    public void setHometaskId(Long hometaskId) {
         this.hometaskId = hometaskId;
     }
 
@@ -69,8 +69,8 @@ public class HometaskSolution {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HometaskSolution that = (HometaskSolution) o;
-        return id == that.id &&
-                hometaskId == that.hometaskId &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(hometaskId, that.hometaskId) &&
                 Objects.equals(student, that.student) &&
                 Objects.equals(solution, that.solution);
     }

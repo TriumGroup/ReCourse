@@ -10,10 +10,10 @@ public class Hometask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long lessonId;
+    private Long lessonId;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String task;
@@ -21,25 +21,25 @@ public class Hometask {
     public Hometask() {
     }
 
-    public Hometask(long id, long lessonId, String task) {
+    public Hometask(Long id, long lessonId, String task) {
         this.id = id;
         this.lessonId = lessonId;
         this.task = task;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getLessonId() {
+    public Long getLessonId() {
         return lessonId;
     }
 
-    public void setLessonId(long lessonId) {
+    public void setLessonId(Long lessonId) {
         this.lessonId = lessonId;
     }
 
@@ -56,8 +56,8 @@ public class Hometask {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Hometask hometask = (Hometask) o;
-        return id == hometask.id &&
-                lessonId == hometask.lessonId &&
+        return Objects.equals(id, hometask.id) &&
+                Objects.equals(lessonId, hometask.lessonId) &&
                 Objects.equals(task, hometask.task);
     }
 

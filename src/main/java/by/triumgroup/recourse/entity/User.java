@@ -14,7 +14,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -57,11 +57,11 @@ public class User implements Serializable {
         isDeleted = user.isDeleted;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -134,7 +134,7 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id &&
+        return Objects.equals(id, user.id) &&
                 isDeleted == user.isDeleted &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(passwordHash, user.passwordHash) &&

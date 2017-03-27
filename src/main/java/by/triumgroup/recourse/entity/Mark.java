@@ -10,13 +10,13 @@ public class Mark {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(columnDefinition = "TINYINT", nullable = false)
     private int score;
 
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long solutionId;
+    private Long solutionId;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String comment;
@@ -24,18 +24,18 @@ public class Mark {
     public Mark() {
     }
 
-    public Mark(long id, int score, long solutionId, String comment) {
+    public Mark(Long id, int score, Long solutionId, String comment) {
         this.id = id;
         this.score = score;
         this.solutionId = solutionId;
         this.comment = comment;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,11 +47,11 @@ public class Mark {
         this.score = score;
     }
 
-    public long getSolutionId() {
+    public Long getSolutionId() {
         return solutionId;
     }
 
-    public void setSolutionId(long solutionId) {
+    public void setSolutionId(Long solutionId) {
         this.solutionId = solutionId;
     }
 
@@ -68,9 +68,9 @@ public class Mark {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Mark mark = (Mark) o;
-        return id == mark.id &&
+        return Objects.equals(id, mark.id) &&
                 score == mark.score &&
-                solutionId == mark.solutionId &&
+                Objects.equals(solutionId, mark.solutionId) &&
                 Objects.equals(comment, mark.comment);
     }
 

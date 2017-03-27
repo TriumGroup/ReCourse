@@ -10,10 +10,10 @@ public class CourseFeedback {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long courseId;
+    private Long courseId;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "student_id")
@@ -34,7 +34,7 @@ public class CourseFeedback {
     public CourseFeedback() {
     }
 
-    public CourseFeedback(long id, long courseId, User student, String heading, String report, String pros, String cons) {
+    public CourseFeedback(Long id, Long courseId, User student, String heading, String report, String pros, String cons) {
         this.id = id;
         this.courseId = courseId;
         this.student = student;
@@ -44,19 +44,19 @@ public class CourseFeedback {
         this.cons = cons;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getCourseId() {
+    public Long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(long courseId) {
+    public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 
@@ -105,8 +105,8 @@ public class CourseFeedback {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CourseFeedback that = (CourseFeedback) o;
-        return id == that.id &&
-                courseId == that.courseId &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(courseId, that.courseId) &&
                 Objects.equals(student, that.student) &&
                 Objects.equals(heading, that.heading) &&
                 Objects.equals(report, that.report) &&

@@ -10,7 +10,7 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(length = 50, nullable = false)
     private String title;
@@ -30,12 +30,13 @@ public class Course {
     @Column(columnDefinition = "ENUM ('ONGOING', 'REGISTRATION', 'FINISHED')", nullable = false)
     private Status status;
 
-    private int maxStudents;
+    private Integer maxStudents;
 
     public Course() {
     }
 
-    public Course(String title, String description, User teacher, User organizer, Status status, int maxStudents) {
+    public Course(Long id, String title, String description, User teacher, User organizer, Status status, Integer maxStudents) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.teacher = teacher;
@@ -44,11 +45,11 @@ public class Course {
         this.maxStudents = maxStudents;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -92,11 +93,11 @@ public class Course {
         this.status = status;
     }
 
-    public int getMaxStudents() {
+    public Integer getMaxStudents() {
         return maxStudents;
     }
 
-    public void setMaxStudents(int maxStudents) {
+    public void setMaxStudents(Integer maxStudents) {
         this.maxStudents = maxStudents;
     }
 
@@ -105,8 +106,8 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return id == course.id &&
-                maxStudents == course.maxStudents &&
+        return Objects.equals(id, course.id) &&
+                Objects.equals(maxStudents, course.maxStudents) &&
                 Objects.equals(title, course.title) &&
                 Objects.equals(description, course.description) &&
                 Objects.equals(teacher, course.teacher) &&

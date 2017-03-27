@@ -10,12 +10,12 @@ import java.util.List;
 @Repository
 public interface TeacherFeedbackRepository extends PagingAndSortingRepository<TeacherFeedback, Long> {
 
-    List<TeacherFeedback> findByTeacherIdOrderByIdDesc(long id);
+    List<TeacherFeedback> findByTeacherIdOrderByIdDesc(Long id);
 
-    List<TeacherFeedback> findByTeacherIdOrderByIdDesc(long id, Pageable pageable);
+    List<TeacherFeedback> findByTeacherIdOrderByIdDesc(Long id, Pageable pageable);
 
-    List<TeacherFeedback> findByStudentIdOrderByIdDesc(long id);
+    List<TeacherFeedback> findByStudentIdOrderByIdDesc(Long id);
 
-    List<TeacherFeedback> findByStudentIdOrderByIdDesc(long id, Pageable pageable);
+    List<TeacherFeedback> findByStudentIdOrderByIdDesc(Long id, Pageable pageable);
 
 }

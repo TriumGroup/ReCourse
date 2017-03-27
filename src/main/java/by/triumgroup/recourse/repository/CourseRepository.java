@@ -12,13 +12,13 @@ public interface CourseRepository extends PagingAndSortingRepository<Course, Lon
 
     List<Course> findByTitleContainingIgnoreCaseOrderByIdDesc(String title, Pageable pageable);
 
-    List<Course> findByTeacherIdOrderByIdDesc(long id, Pageable pageable);
+    List<Course> findByTeacherIdOrderByIdDesc(Long id, Pageable pageable);
 
-    List<Course> findByTeacherIdAndStatusOrderByIdDesc(long id, Course.Status status, Pageable pageable);
+    List<Course> findByTeacherIdAndStatusOrderByIdDesc(Long id, Course.Status status, Pageable pageable);
 
-    List<Course> findByOrganizerIdOrderByIdDesc(long id, Pageable pageable);
+    List<Course> findByOrganizerIdOrderByIdDesc(Long id, Pageable pageable);
 
-    List<Course> findByOrganizerIdAndStatusOrderByIdDesc(long id, Course.Status status, Pageable pageable);
+    List<Course> findByOrganizerIdAndStatusOrderByIdDesc(Long id, Course.Status status, Pageable pageable);
 
     List<Course> findByStatusOrderByIdDesc(Course.Status status, Pageable pageable);
 }

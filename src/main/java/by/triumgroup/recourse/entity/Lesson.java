@@ -12,7 +12,7 @@ public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long id;
+    private Long id;
 
     @Column(columnDefinition = "DATETIME", nullable = false)
     private Timestamp startTime;
@@ -21,7 +21,7 @@ public class Lesson {
     private Time duration;
 
     @Column(columnDefinition = "INT(11)", nullable = false)
-    private long courseId;
+    private Long courseId;
 
     @Column(length = 50)
     private String topic;
@@ -33,7 +33,7 @@ public class Lesson {
     public Lesson() {
     }
 
-    public Lesson(Timestamp startTime, Time duration, long courseId, String topic, User teacher) {
+    public Lesson(Timestamp startTime, Time duration, Long courseId, String topic, User teacher) {
         this.startTime = startTime;
         this.duration = duration;
         this.courseId = courseId;
@@ -41,11 +41,11 @@ public class Lesson {
         this.teacher = teacher;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -65,11 +65,11 @@ public class Lesson {
         this.duration = duration;
     }
 
-    public long getCourseId() {
+    public Long getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(long courseId) {
+    public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
 
@@ -94,8 +94,8 @@ public class Lesson {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Lesson lesson = (Lesson) o;
-        return id == lesson.id &&
-                courseId == lesson.courseId &&
+        return Objects.equals(id, lesson.id) &&
+                Objects.equals(courseId, lesson.courseId) &&
                 Objects.equals(startTime, lesson.startTime) &&
                 Objects.equals(duration, lesson.duration) &&
                 Objects.equals(topic, lesson.topic) &&

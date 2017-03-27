@@ -5,6 +5,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface MarkRepository extends PagingAndSortingRepository<Mark, Long> {
 
-    Mark findBySolutionId(long id);
+    Mark findBySolutionId(Long id);
 
 }
