@@ -7,27 +7,13 @@ import by.triumgroup.recourse.service.exception.ServiceException;
 
 import static by.triumgroup.recourse.service.exception.wrapper.ServiceExceptionWrapper.tryCallJPA;
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractCrudService<User, Long> implements UserService {
 
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
+        super(userRepository);
         this.userRepository = userRepository;
-    }
-
-    @Override
-    public User findById(Long id) {
-        return userRepository.findOne(id);
-    }
-
-    @Override
-    public <S extends User> S save(S entity) throws ServiceException {
-        return tryCallJPA(() -> userRepository.save(entity));
-    }
-
-    @Override
-    public void delete(Long id) throws ServiceException {
-        tryCallJPA(() -> userRepository.delete(id));
     }
 
     @Override

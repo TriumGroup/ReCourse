@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-public class AbstractCrudController<E, ID> implements CrudController<E, ID> {
+public abstract class AbstractCrudController<E, ID> implements CrudController<E, ID> {
 
     private final Logger logger;
     private final CrudService<E, ID> crudService;
