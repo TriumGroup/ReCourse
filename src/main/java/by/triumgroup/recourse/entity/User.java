@@ -29,6 +29,7 @@ public class User extends BaseEntity<Integer> {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM ('MALE', 'FEMALE')", nullable = false)
+    @NotNull
     private Gender gender;
 
     @Column(columnDefinition = "DATE")
@@ -36,6 +37,7 @@ public class User extends BaseEntity<Integer> {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM ('GUEST', 'STUDENT', 'TEACHER', 'ORGANIZER')")
+    @NotNull
     private Role role;
 
     private boolean isDeleted;
