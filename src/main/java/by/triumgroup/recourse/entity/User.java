@@ -3,19 +3,11 @@ package by.triumgroup.recourse.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user")
-public class User implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(columnDefinition = "INT(11)", nullable = false)
-    private Long id;
-
+public class User extends BaseEntity<Integer> {
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -46,7 +38,6 @@ public class User implements Serializable {
     }
 
     public User(User user) {
-        id = user.id;
         email = user.email;
         passwordHash = user.passwordHash;
         name = user.name;
@@ -55,14 +46,6 @@ public class User implements Serializable {
         birthday = user.birthday;
         role = user.role;
         isDeleted = user.isDeleted;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -127,42 +110,6 @@ public class User implements Serializable {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                isDeleted == user.isDeleted &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(passwordHash, user.passwordHash) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(surname, user.surname) &&
-                gender == user.gender &&
-                Objects.equals(birthday, user.birthday) &&
-                role == user.role;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, passwordHash, name, surname, gender, birthday, role, isDeleted);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                //", passwordHash='" + passwordHash + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", gender=" + gender +
-                ", birthday=" + birthday +
-                ", role=" + role +
-                ", isDeleted=" + isDeleted +
-                '}';
     }
 
     public enum Gender {
