@@ -24,6 +24,7 @@ public class UserServiceImpl extends AbstractCrudService<User, Integer> implemen
     @Override
     public <S extends User> S update(S entity, Integer integer) throws ServiceException {
         User existing = tryCallJPA(() -> userRepository.findOne(integer));
+
         entity.setPasswordHash(existing.getPasswordHash());
         return super.update(entity, integer);
     }

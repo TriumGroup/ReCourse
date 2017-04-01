@@ -34,7 +34,11 @@ public abstract class AbstractCrudService<E extends BaseEntity<ID>, ID extends S
 
     @Override
     public <S extends E> S update(S entity, ID id) throws ServiceException {
-        entity.setId(id);
-        return tryCallJPA(() -> repository.save(entity));
+        S savedEntity = null;
+        if (tryCallJPA(() -> repository.exists(id))){
+            entity.setId(id);
+            savedEntity = tryCallJPA(() -> repository.save(entity));
+        }
+        return savedEntity;
     }
 }

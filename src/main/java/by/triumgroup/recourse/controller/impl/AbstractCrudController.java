@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
+
 public abstract class AbstractCrudController<E extends BaseEntity<ID>, ID> implements CrudController<E, ID> {
 
     private final Logger logger;
@@ -25,7 +27,7 @@ public abstract class AbstractCrudController<E extends BaseEntity<ID>, ID> imple
         try {
             entity = crudService.findById(id);
             if (entity == null) {
-                logger.trace("User with id " + id + " not found");
+                logger.trace("Entity with id " + id + " not found");
                 throw new EntityNotFoundException();
             }
         } catch (ServiceException e) {
@@ -37,7 +39,7 @@ public abstract class AbstractCrudController<E extends BaseEntity<ID>, ID> imple
     }
 
     @Override
-    public <S extends E> S create(@RequestBody S entity) throws ControllerException {
+    public <S extends E> S create(@Valid @RequestBody S entity) throws ControllerException {
         try {
             return crudService.save(entity);
         } catch (ServiceException e) {
@@ -47,13 +49,19 @@ public abstract class AbstractCrudController<E extends BaseEntity<ID>, ID> imple
     }
 
     @Override
-    public <S extends E> S update(@RequestBody S entity, @PathVariable("id") ID id) throws ControllerException {
+    public <S extends E> S update(@Valid @RequestBody S entity, @PathVariable("id") ID id) throws ControllerException {
+        S updatedEntity;
         try {
-            return crudService.update(entity, id);
+            updatedEntity = crudService.update(entity, id);
+            if (updatedEntity == null) {
+                logger.trace("Entity with id " + id + " not found");
+                throw new EntityNotFoundException();
+            }
         } catch (ServiceException e) {
             logger.warn("Cannot update entity with \n" + entity + "\n", e);
             throw new ControllerException(e);
         }
+        return updatedEntity;
     }
 
     @Override
