@@ -1,6 +1,7 @@
 package by.triumgroup.recourse.controller;
 
 import by.triumgroup.recourse.configuration.MainConfiguration;
+import by.triumgroup.recourse.controller.exception.RestExceptionHandler;
 import by.triumgroup.recourse.entity.BaseEntity;
 import by.triumgroup.recourse.entity.supplier.EntitySupplier;
 import by.triumgroup.recourse.service.CrudService;
@@ -21,6 +22,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -50,7 +52,10 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Before
     public void initTests() {
-        mockMvc = MockMvcBuilders.standaloneSetup(crudController)
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(crudController)
+                .setControllerAdvice(new RestExceptionHandler())
+                .alwaysDo(print())
                 .build();
     }
 
@@ -93,6 +98,6 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
                 .content(TestUtil.toJson(entitySupplier.getInvalidEntity()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 }

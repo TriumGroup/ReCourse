@@ -17,6 +17,6 @@ public class UserSupplier implements EntitySupplier<User,Integer> {
 
     @Override
     public User getInvalidEntity() {
-        return null;
+        return new User();
     }
 }
