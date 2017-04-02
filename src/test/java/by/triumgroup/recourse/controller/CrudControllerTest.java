@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Matchers.any;
@@ -63,41 +64,44 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
     public void getExistingEntityTest() throws Exception {
         when(crudService.findById(any())).thenReturn(entitySupplier.getValidEntity());
 
-        mockMvc.perform(get(singleEntityRequest)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        getJson(singleEntityRequest)
+            .andExpect(status().isOk());
     }
 
     @Test
     public void getNotExistingEntityTest() throws Exception {
         when(crudService.findById(any())).thenReturn(null);
 
-        mockMvc.perform(get(singleEntityRequest)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+        getJson(singleEntityRequest)
+            .andExpect(status().isNotFound());
     }
 
     @Test
     public void createValidEntityTest() throws Exception {
         when(crudService.save(any())).thenReturn(entitySupplier.getValidEntity());
 
-        mockMvc.perform(post(baseUrlRequest)
-                .content(TestUtil.toJson(entitySupplier.getValidEntity()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        postJson(baseUrlRequest, TestUtil.toJson(entitySupplier.getValidEntity()))
+            .andExpect(status().isOk());
     }
 
     @Test
     public void createInvalidEntityTest() throws Exception {
         when(crudService.save(any())).thenReturn(entitySupplier.getInvalidEntity());
 
-        mockMvc.perform(post(baseUrlRequest)
-                .content(TestUtil.toJson(entitySupplier.getInvalidEntity()))
+        postJson(baseUrlRequest, TestUtil.toJson(entitySupplier.getInvalidEntity()))
+            .andExpect(status().isBadRequest());
+    }
+
+    private ResultActions postJson(String url, String content) throws Exception {
+        return mockMvc.perform(post(url)
+                .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .accept(MediaType.APPLICATION_JSON));
+    }
+
+    private ResultActions getJson(String url) throws Exception {
+        return mockMvc.perform(get(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
     }
 }
