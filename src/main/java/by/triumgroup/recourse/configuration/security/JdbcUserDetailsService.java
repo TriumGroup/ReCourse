@@ -35,7 +35,7 @@ public class JdbcUserDetailsService implements UserDetailsService {
             logger.debug("Username '" + username + "' not found");
             throw new UsernameNotFoundException("User '" + username + "' not found in database.");
         }
-        return new CustomUserDetails(user);
+        return new UserAuthDetails(user);
 
     }
 

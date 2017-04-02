@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
 import java.util.Collection;
 
-public class CustomUserDetails extends User implements UserDetails, Serializable {
+public class UserAuthDetails extends User implements UserDetails, Serializable {
 
-    CustomUserDetails(User user) {
+    UserAuthDetails(User user) {
         super(user);
     }
 
