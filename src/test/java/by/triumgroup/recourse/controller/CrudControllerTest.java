@@ -1,0 +1,98 @@
+package by.triumgroup.recourse.controller;
+
+import by.triumgroup.recourse.configuration.MainConfiguration;
+import by.triumgroup.recourse.entity.BaseEntity;
+import by.triumgroup.recourse.entity.supplier.EntitySupplier;
+import by.triumgroup.recourse.service.CrudService;
+import by.triumgroup.recourse.util.TestBeansSupplier;
+import by.triumgroup.recourse.util.TestUtil;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration
+@SpringBootTest(classes = MainConfiguration.class)
+public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
+    private EntitySupplier<E, ID> entitySupplier;
+
+    protected MockMvc mockMvc;
+
+    private CrudService<E, ID> crudService;
+
+    private CrudController<E, ID> crudController;
+
+    private String singleEntityRequest;
+
+    private String baseUrlRequest;
+
+    CrudControllerTest(EntitySupplier<E, ID> entitySupplier, TestBeansSupplier<E, ID> testBeansSupplier, String baseUrl){
+        this.entitySupplier = entitySupplier;
+        this.singleEntityRequest = String.format("/%s/1", baseUrl);
+        this.baseUrlRequest = String.format("/%s/", baseUrl);
+        this.crudController = testBeansSupplier.getController();
+        this.crudService = testBeansSupplier.getService();
+    }
+
+    @Before
+    public void initTests() {
+        mockMvc = MockMvcBuilders.standaloneSetup(crudController)
+                .build();
+    }
+
+    @Test
+    public void getExistingEntityTest() throws Exception {
+        when(crudService.findById(any())).thenReturn(entitySupplier.getValidEntity());
+
+        mockMvc.perform(get(singleEntityRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getNotExistingEntityTest() throws Exception {
+        when(crudService.findById(any())).thenReturn(null);
+
+        mockMvc.perform(get(singleEntityRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void createValidEntityTest() throws Exception {
+        when(crudService.save(any())).thenReturn(entitySupplier.getValidEntity());
+
+        mockMvc.perform(post(baseUrlRequest)
+                .content(TestUtil.toJson(entitySupplier.getValidEntity()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void createInvalidEntityTest() throws Exception {
+        when(crudService.save(any())).thenReturn(entitySupplier.getInvalidEntity());
+
+        mockMvc.perform(post(baseUrlRequest)
+                .content(TestUtil.toJson(entitySupplier.getInvalidEntity()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+}
