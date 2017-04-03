@@ -41,7 +41,7 @@ public abstract class AbstractCrudController<E extends BaseEntity<ID>, ID> imple
     @Override
     public <S extends E> S create(@Valid @RequestBody S entity) throws ControllerException {
         try {
-            return crudService.save(entity);
+            return crudService.add(entity);
         } catch (ServiceException e) {
             logger.warn("Cannot create entity with \n" + entity + "\n", e);
             throw new ControllerException(e);

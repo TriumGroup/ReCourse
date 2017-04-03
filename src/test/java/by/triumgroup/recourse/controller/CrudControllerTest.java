@@ -78,7 +78,7 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Test
     public void createValidEntityTest() throws Exception {
-        when(crudService.save(any())).thenReturn(entitySupplier.getValidEntity());
+        when(crudService.add(any())).thenReturn(entitySupplier.getValidEntity());
 
         postJson(baseUrlRequest, TestUtil.toJson(entitySupplier.getValidEntity()))
             .andExpect(status().isOk());
@@ -86,7 +86,7 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Test
     public void createInvalidEntityTest() throws Exception {
-        when(crudService.save(any())).thenReturn(entitySupplier.getInvalidEntity());
+        when(crudService.add(any())).thenReturn(entitySupplier.getInvalidEntity());
 
         postJson(baseUrlRequest, TestUtil.toJson(entitySupplier.getInvalidEntity()))
             .andExpect(status().isBadRequest());
