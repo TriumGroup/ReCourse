@@ -12,7 +12,7 @@ public class RepositoryCallWrapper {
     public static <T> Optional<T> wrapToOptional(RepositoryFunction<T> function) throws ServiceException {
         Optional<T> result;
         try {
-            result = Optional.of(function.call());
+            result = Optional.ofNullable(function.call());
         } catch (EmptyResultDataAccessException e){
             result = Optional.empty();
         } catch (DataAccessException e){
