@@ -19,10 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Optional;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,7 +63,7 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Test
     public void getExistingEntityTest() throws Exception {
-        when(crudService.findById(any())).thenReturn(entitySupplier.getValidEntity());
+        when(crudService.findById(any())).thenReturn(Optional.of(entitySupplier.getValidEntity()));
 
         getJson(singleEntityRequest)
             .andExpect(status().isOk());
@@ -70,7 +71,7 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Test
     public void getNotExistingEntityTest() throws Exception {
-        when(crudService.findById(any())).thenReturn(null);
+        when(crudService.findById(any())).thenReturn(Optional.empty());
 
         getJson(singleEntityRequest)
             .andExpect(status().isNotFound());
@@ -78,7 +79,7 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Test
     public void createValidEntityTest() throws Exception {
-        when(crudService.add(any())).thenReturn(entitySupplier.getValidEntity());
+        when(crudService.add(any())).thenReturn(Optional.of(entitySupplier.getValidEntity()));
 
         postJson(baseUrlRequest, TestUtil.toJson(entitySupplier.getValidEntity()))
             .andExpect(status().isOk());
@@ -86,10 +87,53 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Test
     public void createInvalidEntityTest() throws Exception {
-        when(crudService.add(any())).thenReturn(entitySupplier.getInvalidEntity());
-
         postJson(baseUrlRequest, TestUtil.toJson(entitySupplier.getInvalidEntity()))
             .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateNotExistingEntityTest() throws Exception {
+        when(crudService.update(any(), any())).thenReturn(Optional.empty());
+
+        putJson(singleEntityRequest, TestUtil.toJson(entitySupplier.getValidEntity()))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void updateEntityValidDataTest() throws Exception {
+        when(crudService.update(any(), any())).thenReturn(Optional.of(entitySupplier.getValidEntity()));
+
+        putJson(singleEntityRequest, TestUtil.toJson(entitySupplier.getValidEntity()))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateEntityInvalidDataTest() throws Exception {
+        when(crudService.update(any(), any())).thenReturn(Optional.empty());
+
+        putJson(singleEntityRequest, TestUtil.toJson(entitySupplier.getInvalidEntity()))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteExistingEntityTest() throws Exception {
+        when(crudService.delete(any())).thenReturn(Optional.of(true));
+
+        deleteJson(singleEntityRequest).
+                andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteNotExistingEntityTest() throws Exception {
+        when(crudService.delete(any())).thenReturn(Optional.empty());
+        deleteJson(singleEntityRequest).
+                andExpect(status().isNotFound());
+    }
+
+    private ResultActions deleteJson(String url) throws Exception {
+        return mockMvc.perform(delete(url)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON));
     }
 
     private ResultActions postJson(String url, String content) throws Exception {
@@ -101,6 +145,13 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     private ResultActions getJson(String url) throws Exception {
         return mockMvc.perform(get(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+    }
+
+    private ResultActions putJson(String url, String content) throws Exception {
+        return mockMvc.perform(put(url)
+                .content(content)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
     }
