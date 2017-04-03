@@ -109,8 +109,6 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Test
     public void updateEntityInvalidDataTest() throws Exception {
-        when(crudService.update(any(), any())).thenReturn(Optional.empty());
-
         putJson(singleEntityRequest, TestUtil.toJson(entitySupplier.getInvalidEntity()))
             .andExpect(status().isBadRequest());
     }
