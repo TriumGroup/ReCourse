@@ -1,7 +1,7 @@
-package by.triumgroup.recourse.entity.supplier.impl;
+package by.triumgroup.recourse.supplier.entity.impl;
 
 import by.triumgroup.recourse.entity.User;
-import by.triumgroup.recourse.entity.supplier.EntitySupplier;
+import by.triumgroup.recourse.supplier.entity.EntitySupplier;
 
 public class UserSupplier implements EntitySupplier<User,Integer> {
     @Override

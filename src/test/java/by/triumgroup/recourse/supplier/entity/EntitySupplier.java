@@ -1,4 +1,4 @@
-package by.triumgroup.recourse.entity.supplier;
+package by.triumgroup.recourse.supplier.entity;
 
 import by.triumgroup.recourse.entity.BaseEntity;
 

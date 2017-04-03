@@ -1,4 +1,4 @@
-package by.triumgroup.recourse.util;
+package by.triumgroup.recourse.supplier.bean;
 
 import by.triumgroup.recourse.controller.CrudController;
 import by.triumgroup.recourse.entity.BaseEntity;
@@ -10,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 public class TestBeansSupplier<E extends BaseEntity<ID>, ID> {
     private CrudController<E, ID> crudController;
     private CrudService<E, ID> crudService;
-
 
     public TestBeansSupplier(Class<? extends CrudController<E, ID>> controllerClass, Class<? extends CrudService<E, ID>> serviceClass) {
         crudService = Mockito.mock(serviceClass);
