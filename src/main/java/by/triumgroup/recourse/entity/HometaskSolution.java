@@ -2,6 +2,8 @@ package by.triumgroup.recourse.entity;
 
 import javax.persistence.*;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "hometask_solution")
 public class HometaskSolution extends BaseEntity<Integer>{
@@ -15,13 +17,17 @@ public class HometaskSolution extends BaseEntity<Integer>{
     @Column(columnDefinition = "TEXT", nullable = false)
     private String solution;
 
+    @OneToOne(mappedBy = "hometask_solution", cascade = {REFRESH, REMOVE, MERGE, DETACH})
+    private Mark mark;
+
     public HometaskSolution() {
     }
 
-    public HometaskSolution(Long hometaskId, User student, String solution) {
+    public HometaskSolution(Long hometaskId, User student, String solution, Mark mark) {
         this.hometaskId = hometaskId;
         this.student = student;
         this.solution = solution;
+        this.mark = mark;
     }
 
     public Long getHometaskId() {
@@ -46,5 +52,13 @@ public class HometaskSolution extends BaseEntity<Integer>{
 
     public void setSolution(String solution) {
         this.solution = solution;
+    }
+
+    public Mark getMark() {
+        return mark;
+    }
+
+    public void setMark(Mark mark) {
+        this.mark = mark;
     }
 }

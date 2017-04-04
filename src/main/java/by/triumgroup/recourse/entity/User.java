@@ -36,7 +36,7 @@ public class User extends BaseEntity<Integer> {
     private Timestamp birthday;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM ('GUEST', 'STUDENT', 'TEACHER', 'ORGANIZER')")
+    @Column(columnDefinition = "ENUM ('STUDENT', 'TEACHER', 'ORGANIZER')")
     @NotNull
     private Role role;
 
@@ -125,6 +125,6 @@ public class User extends BaseEntity<Integer> {
     }
 
     public enum Role {
-        GUEST, STUDENT, TEACHER, ORGANIZER
+        STUDENT, TEACHER, ORGANIZER
     }
 }
