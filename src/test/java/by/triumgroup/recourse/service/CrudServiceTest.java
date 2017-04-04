@@ -5,6 +5,7 @@ import by.triumgroup.recourse.service.exception.ServiceException;
 import by.triumgroup.recourse.supplier.bean.TestBeansSupplier;
 import by.triumgroup.recourse.supplier.entity.EntitySupplier;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,9 +22,7 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 
@@ -48,6 +47,10 @@ public abstract class CrudServiceTest<
         this.crudService = testBeansSupplier.getBeanUnderTest();
         this.crudRepository = testBeansSupplier.getMockedBean();
         this.entitySupplier = entitySupplier;
+    }
+
+    @Before
+    public void initTests() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -60,17 +63,17 @@ public abstract class CrudServiceTest<
         Optional<E> actualResult = crudService.findById(id);
 
         verify(crudRepository, times(1)).findOne(id);
-        Assert.assertTrue(actualResult.isPresent());
-        Assert.assertEquals(expectedEntity, actualResult.get());
+        Assert.assertEquals(expectedEntity, actualResult.orElse(null));
     }
 
     @Test
     public void findNotExistingEntityTest() throws Exception {
-        when(crudRepository.findOne(any())).thenReturn(null);
+        ID id = entitySupplier.getAnyId();
+        when(crudRepository.findOne(id)).thenReturn(null);
 
-        Optional<E> entity = crudService.findById(entitySupplier.getAnyId());
+        Optional<E> entity = crudService.findById(id);
 
-        verify(crudRepository, times(1)).findOne(any());
+        verify(crudRepository, times(1)).findOne(id);
         Assert.assertFalse(entity.isPresent());
     }
 
@@ -81,9 +84,8 @@ public abstract class CrudServiceTest<
 
         Optional<E> actualResult = crudService.add(expectedEntity);
 
-        verify(crudRepository, times(1)).save(Matchers.<E>any());
-        Assert.assertTrue(actualResult.isPresent());
-        Assert.assertEquals(expectedEntity, actualResult.get());
+        verify(crudRepository, times(1)).save(expectedEntity);
+        Assert.assertEquals(expectedEntity, actualResult.orElse(null));
     }
 
     @Test
@@ -94,7 +96,7 @@ public abstract class CrudServiceTest<
         crudService.add(entity);
 
         verify(crudRepository).save(captor.capture());
-        verify(crudRepository, times(1)).save(Matchers.<E>any());
+        verify(crudRepository, times(1)).save(entity);
         Assert.assertNull(captor.getValue().getId());
     }
 
@@ -110,17 +112,16 @@ public abstract class CrudServiceTest<
     @Test
     public void updateEntityWithoutIdTest() throws Exception {
         E expectedEntity = entitySupplier.getValidEntityWithoutId();
-        ID expectedId = entitySupplier.getAnyId();
+        ID parameterId = entitySupplier.getAnyId();
         when(crudRepository.save(expectedEntity)).thenReturn(expectedEntity);
-        when(crudRepository.exists(expectedId)).thenReturn(true);
+        when(crudRepository.exists(parameterId)).thenReturn(true);
 
-        Optional<E> actualResult = crudService.update(expectedEntity, expectedId);
+        Optional<E> actualResult = crudService.update(expectedEntity, parameterId);
 
         verify(crudRepository).save(captor.capture());
-        verify(crudRepository, times(1)).exists(expectedId);
-        Assert.assertTrue(actualResult.isPresent());
-        Assert.assertEquals(expectedEntity, actualResult.get());
-        Assert.assertEquals(expectedId, captor.getValue().getId());
+        verifyCallsForUpdate();
+        Assert.assertEquals(expectedEntity, actualResult.orElse(null));
+        Assert.assertEquals(parameterId, captor.getValue().getId());
     }
 
     @Test
@@ -136,9 +137,8 @@ public abstract class CrudServiceTest<
         Optional<E> actualResult = crudService.update(expectedEntity, parameterId);
 
         verify(crudRepository).save(captor.capture());
-        verify(crudRepository, times(1)).exists(parameterId);
-        Assert.assertTrue(actualResult.isPresent());
-        Assert.assertEquals(expectedEntity, actualResult.get());
+        verifyCallsForUpdate();
+        Assert.assertEquals(expectedEntity, actualResult.orElse(null));
         Assert.assertEquals(parameterId, captor.getValue().getId());
     }
 
@@ -151,8 +151,7 @@ public abstract class CrudServiceTest<
 
         crudService.update(entitySupplier.getInvalidEntity(), entitySupplier.getAnyId());
 
-        verify(crudRepository, times(1)).exists(any());
-        verify(crudRepository, times(1)).save(Matchers.<E>any());
+        verifyCallsForUpdate();
     }
 
     @Test
@@ -170,5 +169,10 @@ public abstract class CrudServiceTest<
 
         verify(crudRepository, times(1)).delete(Matchers.<ID>any());
         Assert.assertFalse(actual.isPresent());
+    }
+
+    private void verifyCallsForUpdate(){
+        verify(crudRepository, times(1)).exists(any());
+        verify(crudRepository, times(1)).save(Matchers.<E>any());
     }
 }
