@@ -8,7 +8,10 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Matchers;
+import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -34,6 +37,9 @@ public abstract class CrudServiceTest<
     @Rule
     public ExpectedException thrown= ExpectedException.none();
 
+    @Captor
+    private ArgumentCaptor<E> captor;
+
     private TService crudService;
     private TRepository crudRepository;
     private EntitySupplier<E, ID> entitySupplier;
@@ -42,6 +48,7 @@ public abstract class CrudServiceTest<
         this.crudService = testBeansSupplier.getBeanUnderTest();
         this.crudRepository = testBeansSupplier.getMockedBean();
         this.entitySupplier = entitySupplier;
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -52,6 +59,7 @@ public abstract class CrudServiceTest<
 
         Optional<E> actualResult = crudService.findById(id);
 
+        verify(crudRepository, times(1)).findOne(id);
         Assert.assertTrue(actualResult.isPresent());
         Assert.assertEquals(expectedEntity, actualResult.get());
     }
@@ -62,6 +70,7 @@ public abstract class CrudServiceTest<
 
         Optional<E> entity = crudService.findById(entitySupplier.getAnyId());
 
+        verify(crudRepository, times(1)).findOne(any());
         Assert.assertFalse(entity.isPresent());
     }
 
@@ -72,6 +81,7 @@ public abstract class CrudServiceTest<
 
         Optional<E> actualResult = crudService.add(expectedEntity);
 
+        verify(crudRepository, times(1)).save(Matchers.<E>any());
         Assert.assertTrue(actualResult.isPresent());
         Assert.assertEquals(expectedEntity, actualResult.get());
     }
@@ -83,7 +93,9 @@ public abstract class CrudServiceTest<
 
         crudService.add(entity);
 
-        Assert.assertNull(entity.getId());
+        verify(crudRepository).save(captor.capture());
+        verify(crudRepository, times(1)).save(Matchers.<E>any());
+        Assert.assertNull(captor.getValue().getId());
     }
 
     @Test
@@ -104,9 +116,11 @@ public abstract class CrudServiceTest<
 
         Optional<E> actualResult = crudService.update(expectedEntity, expectedId);
 
+        verify(crudRepository).save(captor.capture());
+        verify(crudRepository, times(1)).exists(expectedId);
         Assert.assertTrue(actualResult.isPresent());
         Assert.assertEquals(expectedEntity, actualResult.get());
-        Assert.assertEquals(expectedEntity.getId(), expectedId);
+        Assert.assertEquals(expectedId, captor.getValue().getId());
     }
 
     @Test
@@ -121,9 +135,11 @@ public abstract class CrudServiceTest<
 
         Optional<E> actualResult = crudService.update(expectedEntity, parameterId);
 
+        verify(crudRepository).save(captor.capture());
+        verify(crudRepository, times(1)).exists(parameterId);
         Assert.assertTrue(actualResult.isPresent());
         Assert.assertEquals(expectedEntity, actualResult.get());
-        Assert.assertEquals(expectedEntity.getId(), parameterId);
+        Assert.assertEquals(parameterId, captor.getValue().getId());
     }
 
     @Test
@@ -134,6 +150,9 @@ public abstract class CrudServiceTest<
         thrown.expect(ServiceException.class);
 
         crudService.update(entitySupplier.getInvalidEntity(), entitySupplier.getAnyId());
+
+        verify(crudRepository, times(1)).exists(any());
+        verify(crudRepository, times(1)).save(Matchers.<E>any());
     }
 
     @Test
@@ -149,6 +168,7 @@ public abstract class CrudServiceTest<
 
         Optional<Boolean> actual = crudService.delete(entitySupplier.getAnyId());
 
+        verify(crudRepository, times(1)).delete(Matchers.<ID>any());
         Assert.assertFalse(actual.isPresent());
     }
 }
