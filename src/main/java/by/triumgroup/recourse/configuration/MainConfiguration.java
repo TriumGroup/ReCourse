@@ -36,7 +36,7 @@ public class MainConfiguration extends SpringBootServletInitializer {
     }
 
     @Bean
-    RestExceptionHandler restExceptionExceptionHandler() {
+    RestExceptionHandler restExceptionHandler() {
         return new RestExceptionHandler();
     }
 }
