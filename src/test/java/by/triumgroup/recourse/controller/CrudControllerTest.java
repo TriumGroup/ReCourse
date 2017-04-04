@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ContextConfiguration
 @SpringBootTest(classes = MainConfiguration.class)
-public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
+public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID, TController extends CrudController<E, ID>, TService extends CrudService<E, ID>> {
     private EntitySupplier<E, ID> entitySupplier;
 
     protected MockMvc mockMvc;
@@ -44,12 +44,12 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     private String baseUrlRequest;
 
-    CrudControllerTest(EntitySupplier<E, ID> entitySupplier, TestBeansSupplier<E, ID> testBeansSupplier, String baseUrl){
+    CrudControllerTest(EntitySupplier<E, ID> entitySupplier, TestBeansSupplier<TController, TService> testBeansSupplier, String baseUrl){
         this.entitySupplier = entitySupplier;
         this.singleEntityRequest = String.format("/%s/1", baseUrl);
         this.baseUrlRequest = String.format("/%s/", baseUrl);
-        this.crudController = testBeansSupplier.getController();
-        this.crudService = testBeansSupplier.getService();
+        this.crudController = testBeansSupplier.getBeanUnderTest();
+        this.crudService = testBeansSupplier.getMockedBean();
     }
 
     @Before
@@ -63,7 +63,7 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Test
     public void getExistingEntityTest() throws Exception {
-        when(crudService.findById(any())).thenReturn(Optional.of(entitySupplier.getValidEntity()));
+        when(crudService.findById(any())).thenReturn(Optional.of(entitySupplier.getValidEntityWithId()));
 
         getJson(singleEntityRequest)
             .andExpect(status().isOk());
@@ -79,9 +79,9 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
 
     @Test
     public void createValidEntityTest() throws Exception {
-        when(crudService.add(any())).thenReturn(Optional.of(entitySupplier.getValidEntity()));
+        when(crudService.add(any())).thenReturn(Optional.of(entitySupplier.getValidEntityWithId()));
 
-        postJson(baseUrlRequest, TestUtil.toJson(entitySupplier.getValidEntity()))
+        postJson(baseUrlRequest, TestUtil.toJson(entitySupplier.getValidEntityWithoutId()))
             .andExpect(status().isOk());
     }
 
@@ -95,15 +95,15 @@ public abstract class CrudControllerTest<E extends BaseEntity<ID>, ID> {
     public void updateNotExistingEntityTest() throws Exception {
         when(crudService.update(any(), any())).thenReturn(Optional.empty());
 
-        putJson(singleEntityRequest, TestUtil.toJson(entitySupplier.getValidEntity()))
+        putJson(singleEntityRequest, TestUtil.toJson(entitySupplier.getValidEntityWithoutId()))
             .andExpect(status().isNotFound());
     }
 
     @Test
     public void updateEntityValidDataTest() throws Exception {
-        when(crudService.update(any(), any())).thenReturn(Optional.of(entitySupplier.getValidEntity()));
+        when(crudService.update(any(), any())).thenReturn(Optional.of(entitySupplier.getValidEntityWithId()));
 
-        putJson(singleEntityRequest, TestUtil.toJson(entitySupplier.getValidEntity()))
+        putJson(singleEntityRequest, TestUtil.toJson(entitySupplier.getValidEntityWithoutId()))
             .andExpect(status().isOk());
     }
 

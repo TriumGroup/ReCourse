@@ -1,30 +1,27 @@
 package by.triumgroup.recourse.supplier.bean;
 
-import by.triumgroup.recourse.controller.CrudController;
-import by.triumgroup.recourse.entity.BaseEntity;
-import by.triumgroup.recourse.service.CrudService;
 import org.mockito.Mockito;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class TestBeansSupplier<E extends BaseEntity<ID>, ID> {
-    private CrudController<E, ID> crudController;
-    private CrudService<E, ID> crudService;
+public class TestBeansSupplier<TBeanUnderTest, TBeanToMock> {
+    private TBeanUnderTest beanUnderTest;
+    private TBeanToMock mockedBean;
 
-    public TestBeansSupplier(Class<? extends CrudController<E, ID>> controllerClass, Class<? extends CrudService<E, ID>> serviceClass) {
-        crudService = Mockito.mock(serviceClass);
+    public TestBeansSupplier(Class<? extends TBeanUnderTest> beanUnderTestClass, Class<? extends TBeanToMock> beanToMockClass) {
+        mockedBean = Mockito.mock(beanToMockClass);
         try {
-            crudController = controllerClass.getDeclaredConstructor(serviceClass).newInstance(crudService);
+            beanUnderTest = beanUnderTestClass.getDeclaredConstructor(beanToMockClass).newInstance(mockedBean);
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public CrudController<E, ID> getController() {
-        return crudController;
+    public TBeanUnderTest getBeanUnderTest() {
+        return beanUnderTest;
     }
 
-    public CrudService<E, ID> getService() {
-        return crudService;
+    public TBeanToMock getMockedBean() {
+        return mockedBean;
     }
 }

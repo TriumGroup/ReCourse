@@ -7,7 +7,7 @@ import by.triumgroup.recourse.service.UserService;
 import by.triumgroup.recourse.supplier.bean.TestBeansSupplier;
 
 
-public class UserControllerTest extends CrudControllerTest<User, Integer> {
+public class UserControllerTest extends CrudControllerTest<User, Integer, UserController, UserService> {
 
     public UserControllerTest() {
         super(new UserSupplier(), new TestBeansSupplier<>(UserControllerImpl.class, UserService.class), "user");
