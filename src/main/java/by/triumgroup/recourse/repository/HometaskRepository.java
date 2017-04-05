@@ -10,8 +10,6 @@ import java.util.List;
 @Repository
 public interface HometaskRepository extends PagingAndSortingRepository<Hometask, Integer> {
 
-    List<Hometask> findByLessonId(Integer id);
-
     List<Hometask> findByLessonId(Integer id, Pageable pageable);
 
 }
