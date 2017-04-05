@@ -12,4 +12,6 @@ public interface LessonRepository extends PagingAndSortingRepository<Lesson, Int
 
     List<Lesson> findByTeacherIdOrderByStartTimeDesc(Integer id, Pageable pageable);
 
+    List<Lesson> findByTeacherIdAndCourseIdOrderByStartTimeDesc(Integer teacherId, Integer courseId, Pageable pageable);
+
 }

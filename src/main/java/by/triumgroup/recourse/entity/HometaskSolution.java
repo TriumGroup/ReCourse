@@ -1,23 +1,34 @@
 package by.triumgroup.recourse.entity;
 
-import javax.persistence.*;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.SafeHtml;
 
-import static javax.persistence.CascadeType.*;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import java.util.Objects;
 
 @Entity
 @Table(name = "hometask_solution")
-public class HometaskSolution extends BaseEntity<Integer>{
+public class HometaskSolution extends BaseEntity<Integer> {
+
+    @NotNull
     @Column(columnDefinition = "INT(11)", nullable = false)
     private Long hometaskId;
 
+    @NotNull
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "student_id")
     private User student;
 
+    @NotNull
+    @SafeHtml
+    @NotEmpty
     @Column(columnDefinition = "TEXT", nullable = false)
     private String solution;
 
-    @OneToOne(mappedBy = "hometask_solution", cascade = {REFRESH, REMOVE, MERGE, DETACH})
+    @Null
+    @OneToOne(mappedBy = "hometask_solution")
     private Mark mark;
 
     public HometaskSolution() {
@@ -60,5 +71,22 @@ public class HometaskSolution extends BaseEntity<Integer>{
 
     public void setMark(Mark mark) {
         this.mark = mark;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        HometaskSolution that = (HometaskSolution) o;
+        return Objects.equals(hometaskId, that.hometaskId) &&
+                Objects.equals(student, that.student) &&
+                Objects.equals(solution, that.solution) &&
+                Objects.equals(mark, that.mark);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), hometaskId, student, solution, mark);
     }
 }
