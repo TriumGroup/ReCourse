@@ -28,4 +28,10 @@ public interface CourseController extends CrudController<Course, Integer> {
     @GetMapping("search")
     List<Course> searchByTitle(@RequestParam("title") String title, Pageable pageable);
 
+    @GetMapping("all")
+    List<Course> getAll(
+            @RequestParam(value = "status", required = false) Course.Status status,
+            Pageable pageable
+    );
+
 }

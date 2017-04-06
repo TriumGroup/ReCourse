@@ -12,4 +12,6 @@ public interface HometaskSolutionRepository extends PagingAndSortingRepository<H
 
     List<HometaskSolution> findByStudentId(Integer id, Pageable pageable);
 
+    HometaskSolution findByStudentIdAndLessonId(Integer studentId, Integer lessonId);
+
 }
