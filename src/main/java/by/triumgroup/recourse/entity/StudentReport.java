@@ -1,5 +1,6 @@
 package by.triumgroup.recourse.entity;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.*;
@@ -31,9 +32,8 @@ public class StudentReport extends BaseEntity<Integer>{
     @Column(length = 50)
     private String heading;
 
-    @NotNull
+    @NotBlank
     @SafeHtml
-    @Size(min = 1)
     @Column(columnDefinition = "TEXT")
     private String report;
 
