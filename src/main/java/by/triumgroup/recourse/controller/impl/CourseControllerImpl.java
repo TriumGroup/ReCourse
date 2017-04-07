@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+import static by.triumgroup.recourse.util.ServiceCallWrapper.wrapServiceCall;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class CourseControllerImpl
@@ -42,32 +43,34 @@ public class CourseControllerImpl
 
     @Override
     public List<Lesson> getLessonsForCourse(@PathVariable("courseId") Integer courseId, Pageable pageable) {
-        return lessonService.findByCourseId(courseId, pageable);
+        return wrapServiceCall(logger, () -> lessonService.findByCourseId(courseId, pageable));
     }
 
     @Override
     public List<CourseFeedback> getFeedbacksForCourse(@PathVariable("courseId") Integer courseId, Pageable pageable) {
-        return courseFeedbackService.findByCourseId(courseId, pageable);
+        return wrapServiceCall(logger, () -> courseFeedbackService.findByCourseId(courseId, pageable));
     }
 
     @Override
     public List<StudentReport> getReportsForCourse(@PathVariable("courseId") Integer courseId, Pageable pageable) {
-        return studentReportService.findByCourseId(courseId, pageable);
+        return wrapServiceCall(logger, () -> studentReportService.findByCourseId(courseId, pageable));
     }
 
     @Override
     public List<Course> searchByTitle(@RequestParam("title") String title, Pageable pageable) {
-        return courseService.searchByTitle(title, pageable);
+        return wrapServiceCall(logger, () -> courseService.searchByTitle(title, pageable));
     }
 
     @Override
     public List<Course> getAll(@RequestParam(value = "status", required = false) Course.Status status, Pageable pageable) {
-        List<Course> courses;
-        if (status == null) {
-            courses = courseService.findAll(pageable);
-        } else {
-            courses = courseService.findByStatus(status, pageable);
-        }
-        return courses;
+        return wrapServiceCall(logger, () -> {
+            List<Course> courses;
+            if (status == null) {
+                courses = courseService.findAll(pageable);
+            } else {
+                courses = courseService.findByStatus(status, pageable);
+            }
+            return courses;
+        });
     }
 }

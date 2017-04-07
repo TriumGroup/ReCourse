@@ -9,14 +9,19 @@ import by.triumgroup.recourse.service.CourseService;
 import by.triumgroup.recourse.service.LessonService;
 import by.triumgroup.recourse.service.StudentReportService;
 import by.triumgroup.recourse.service.TeacherFeedbackService;
+import org.slf4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+import static by.triumgroup.recourse.util.ServiceCallWrapper.wrapServiceCall;
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class TeacherControllerImpl implements TeacherController {
 
+    private static final Logger logger = getLogger(TeacherControllerImpl.class);
     private final CourseService courseService;
     private final LessonService lessonService;
     private final StudentReportService studentReportService;
@@ -40,13 +45,15 @@ public class TeacherControllerImpl implements TeacherController {
             @RequestParam(value = "status", required = false) Course.Status status,
             Pageable pageable
     ) {
-        List<Course> courses;
-        if (status == null) {
-            courses = courseService.findByTeacherId(teacherId, pageable);
-        } else {
-            courses = courseService.findByTeacherIdAndStatus(teacherId, status, pageable);
-        }
-        return courses;
+        return wrapServiceCall(logger, () -> {
+            List<Course> courses;
+            if (status == null) {
+                courses = courseService.findByTeacherId(teacherId, pageable);
+            } else {
+                courses = courseService.findByTeacherIdAndStatus(teacherId, status, pageable);
+            }
+            return courses;
+        });
     }
 
     @Override
@@ -55,22 +62,24 @@ public class TeacherControllerImpl implements TeacherController {
             @RequestParam(value = "courseId", required = false) Integer courseId,
             Pageable pageable
     ) {
-        List<Lesson> lessons;
-        if (courseId == null) {
-            lessons = lessonService.findByTeacherId(teacherId, pageable);
-        } else {
-            lessons = lessonService.findByTeacherIdAndCourseId(teacherId, courseId, pageable);
-        }
-        return lessons;
+        return wrapServiceCall(logger, () -> {
+            List<Lesson> lessons;
+            if (courseId == null) {
+                lessons = lessonService.findByTeacherId(teacherId, pageable);
+            } else {
+                lessons = lessonService.findByTeacherIdAndCourseId(teacherId, courseId, pageable);
+            }
+            return lessons;
+        });
     }
 
     @Override
     public List<StudentReport> getReports(@PathVariable("teacherId") Integer teacherId, Pageable pageable) {
-        return studentReportService.findByTeacherId(teacherId, pageable);
+        return wrapServiceCall(logger, () -> studentReportService.findByTeacherId(teacherId, pageable));
     }
 
     @Override
     public List<TeacherFeedback> getFeedbacks(@PathVariable("teacherId") Integer teacherId, Pageable pageable) {
-        return teacherFeedbackService.findByTeacherId(teacherId, pageable);
+        return wrapServiceCall(logger, () -> teacherFeedbackService.findByTeacherId(teacherId, pageable));
     }
 }

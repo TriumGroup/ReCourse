@@ -5,6 +5,7 @@ import by.triumgroup.recourse.entity.Hometask;
 import by.triumgroup.recourse.entity.HometaskSolution;
 import by.triumgroup.recourse.service.HometaskService;
 import by.triumgroup.recourse.service.HometaskSolutionService;
+import by.triumgroup.recourse.util.ServiceCallWrapper;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ public class HometaskControllerImpl
 
     @Override
     public List<HometaskSolution> getSolutions(@PathVariable("hometaskId") Integer hometaskId, Pageable pageable) {
-        return hometaskSolutionService.findByHometaskId(hometaskId, pageable);
+        return ServiceCallWrapper.wrapServiceCall(logger, () ->
+                hometaskSolutionService.findByHometaskId(hometaskId, pageable));
     }
 }
