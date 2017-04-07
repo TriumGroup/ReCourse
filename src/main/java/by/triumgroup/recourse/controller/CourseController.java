@@ -14,15 +14,15 @@ import java.util.List;
 public interface CourseController extends CrudController<Course, Integer> {
 
     @GetMapping("{courseId}/lessons")
-    List<Lesson> getLessonsForCourse(
+    List<Lesson> getLessons(
             @PathVariable("courseId") Integer courseId, Pageable pageable);
 
     @GetMapping("{courseId}/feedbacks")
-    List<CourseFeedback> getFeedbacksForCourse(
+    List<CourseFeedback> getFeedbacks(
             @PathVariable("courseId") Integer courseId, Pageable pageable);
 
     @GetMapping("{courseId}/reports")
-    List<StudentReport> getReportsForCourse(
+    List<StudentReport> getReports(
             @PathVariable("courseId") Integer courseId, Pageable pageable);
 
     @GetMapping("search")

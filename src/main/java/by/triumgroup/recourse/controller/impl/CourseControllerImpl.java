@@ -42,17 +42,17 @@ public class CourseControllerImpl
     }
 
     @Override
-    public List<Lesson> getLessonsForCourse(@PathVariable("courseId") Integer courseId, Pageable pageable) {
+    public List<Lesson> getLessons(@PathVariable("courseId") Integer courseId, Pageable pageable) {
         return wrapServiceCall(logger, () -> lessonService.findByCourseId(courseId, pageable));
     }
 
     @Override
-    public List<CourseFeedback> getFeedbacksForCourse(@PathVariable("courseId") Integer courseId, Pageable pageable) {
+    public List<CourseFeedback> getFeedbacks(@PathVariable("courseId") Integer courseId, Pageable pageable) {
         return wrapServiceCall(logger, () -> courseFeedbackService.findByCourseId(courseId, pageable));
     }
 
     @Override
-    public List<StudentReport> getReportsForCourse(@PathVariable("courseId") Integer courseId, Pageable pageable) {
+    public List<StudentReport> getReports(@PathVariable("courseId") Integer courseId, Pageable pageable) {
         return wrapServiceCall(logger, () -> studentReportService.findByCourseId(courseId, pageable));
     }
 
