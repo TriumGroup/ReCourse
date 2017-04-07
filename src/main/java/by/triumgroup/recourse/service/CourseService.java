@@ -17,6 +17,8 @@ public interface CourseService extends CrudService<Course, Integer> {
 
     List<Course> findByOrganizerIdAndStatus(Integer id, Course.Status status, Pageable pageable);
 
+    List<Course> findAll(Pageable pageable);
+
     List<Course> findByStatus(Course.Status status, Pageable pageable);
 
 }

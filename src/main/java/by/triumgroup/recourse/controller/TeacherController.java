@@ -22,20 +22,20 @@ public interface TeacherController {
 
     @GetMapping("{teacherId}/lessons")
     List<Lesson> getLessons(
-            @PathVariable("teacherId") String teacherId,
+            @PathVariable("teacherId") Integer teacherId,
             @RequestParam(value = "courseId", required = false) Integer courseId,
             Pageable pageable
     );
 
     @GetMapping("{teacherId}/reports")
     List<StudentReport> getReports(
-            @PathVariable("teacherId") String teacherId,
+            @PathVariable("teacherId") Integer teacherId,
             Pageable pageable
     );
 
     @GetMapping("{teacherId}/feedbacks")
     List<TeacherFeedback> getFeedbacks(
-            @PathVariable("teacherId") String teacherId,
+            @PathVariable("teacherId") Integer teacherId,
             Pageable pageable
     );
 

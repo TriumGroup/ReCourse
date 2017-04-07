@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/student/report")
-public interface StudentReportService extends CrudController<StudentReport, Integer> {
+public interface StudentReportController extends CrudController<StudentReport, Integer> {
 }

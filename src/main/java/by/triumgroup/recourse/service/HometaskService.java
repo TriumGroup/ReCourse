@@ -1,10 +1,11 @@
 package by.triumgroup.recourse.service;
 
 import by.triumgroup.recourse.entity.Hometask;
-import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
 
 public interface HometaskService extends CrudService<Hometask, Integer> {
 
-    Hometask findByLessonId(Integer id, Pageable pageable);
+    Optional<Hometask> findByLessonId(Integer id);
 
 }

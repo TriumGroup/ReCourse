@@ -12,7 +12,7 @@ public interface OrganizerController {
 
     @GetMapping("{organizerId}/courses")
     List<Course> getCourses(
-            @PathVariable("organizerId") Integer teacherId,
+            @PathVariable("organizerId") Integer organizerId,
             @RequestParam(value = "status", required = false) Course.Status status,
             Pageable pageable
     );

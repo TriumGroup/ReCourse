@@ -8,9 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.io.Serializable;
 import java.util.Optional;
 
-import static by.triumgroup.recourse.service.exception.wrapper.ServiceExceptionWrapper.tryCallJPA;
-import static by.triumgroup.recourse.service.util.RepositoryCallWrapper.wrapToBoolean;
-import static by.triumgroup.recourse.service.util.RepositoryCallWrapper.wrapToOptional;
+import static by.triumgroup.recourse.service.util.RepositoryCallWrapper.*;
 
 public abstract class AbstractCrudService<E extends BaseEntity<ID>, ID extends Serializable> implements CrudService<E, ID> {
 
