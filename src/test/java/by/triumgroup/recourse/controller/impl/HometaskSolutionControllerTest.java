@@ -36,14 +36,14 @@ public class HometaskSolutionControllerTest extends CrudControllerTest<HometaskS
     }
 
     @Test
-    public void getMarkTest() throws Exception {
+    public void getMarkExistingSolutionTest() throws Exception {
         when(markService.findBySolutionId(any())).thenReturn(Optional.of(markSupplier.getValidEntityWithId()));
         sendGet(MARK_REQUEST)
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void getSolutionsNotExistingHometaskTest() throws Exception {
+    public void getMarkNotExistingSolutionTest() throws Exception {
         when(markService.findBySolutionId(any())).thenReturn(Optional.empty());
         sendGet(MARK_REQUEST)
                 .andExpect(status().isNotFound());

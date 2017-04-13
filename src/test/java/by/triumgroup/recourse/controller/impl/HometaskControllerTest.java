@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class HometaskControllerTest extends CrudControllerTest<Hometask, Integer> {
-    private static final String HOMETASK_REQUEST = "/hometask/1/solutions";
+    private static final String SOLUTIONS_REQUEST = "/hometask/1/solutions";
     private HometaskController hometaskController;
     private HometaskService hometaskService;
     private HometaskSupplier hometaskSupplier;
@@ -34,16 +34,16 @@ public class HometaskControllerTest extends CrudControllerTest<Hometask, Integer
     }
 
     @Test
-    public void getSolutionsTest() throws Exception {
+    public void getSolutionsExistingHometaskTest() throws Exception {
         when(hometaskSolutionService.findByHometaskId(any(), any())).thenReturn(Optional.of(Lists.emptyList()));
-        sendGet(HOMETASK_REQUEST)
+        sendGet(SOLUTIONS_REQUEST)
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getSolutionsNotExistingHometaskTest() throws Exception {
         when(hometaskSolutionService.findByHometaskId(any(), any())).thenReturn(Optional.empty());
-        sendGet(HOMETASK_REQUEST)
+        sendGet(SOLUTIONS_REQUEST)
                 .andExpect(status().isNotFound());
     }
 
