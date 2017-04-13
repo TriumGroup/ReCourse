@@ -1,7 +1,7 @@
-package by.triumgroup.recourse.supplier.entity.model;
+package by.triumgroup.recourse.supplier.entity.model.impl;
 
-import by.triumgroup.recourse.entity.model.BaseEntity;
 import by.triumgroup.recourse.entity.model.Hometask;
+import by.triumgroup.recourse.supplier.entity.model.EntityIntegerPKSupplier;
 
 public class HometaskSupplier implements EntityIntegerPKSupplier<Hometask> {
     @Override

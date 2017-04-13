@@ -8,7 +8,7 @@ import by.triumgroup.recourse.service.CrudService;
 import by.triumgroup.recourse.service.HometaskService;
 import by.triumgroup.recourse.service.HometaskSolutionService;
 import by.triumgroup.recourse.supplier.entity.model.EntitySupplier;
-import by.triumgroup.recourse.supplier.entity.model.HometaskSupplier;
+import by.triumgroup.recourse.supplier.entity.model.impl.HometaskSupplier;
 import org.mockito.Mockito;
 
 public class HometaskControllerTest extends CrudControllerTest<Hometask, Integer> {
