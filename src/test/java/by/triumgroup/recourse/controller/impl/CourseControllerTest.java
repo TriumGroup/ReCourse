@@ -3,7 +3,6 @@ package by.triumgroup.recourse.controller.impl;
 import by.triumgroup.recourse.controller.CourseController;
 import by.triumgroup.recourse.controller.CrudController;
 import by.triumgroup.recourse.controller.CrudControllerTest;
-import by.triumgroup.recourse.controller.impl.CourseControllerImpl;
 import by.triumgroup.recourse.entity.model.BaseEntity;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.service.*;

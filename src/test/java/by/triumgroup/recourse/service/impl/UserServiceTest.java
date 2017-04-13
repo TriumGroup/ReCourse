@@ -1,10 +1,12 @@
-package by.triumgroup.recourse.service;
+package by.triumgroup.recourse.service.impl;
 
 import by.triumgroup.recourse.entity.dto.RegistrationDetails;
 import by.triumgroup.recourse.entity.model.User;
 import by.triumgroup.recourse.repository.UserRepository;
+import by.triumgroup.recourse.service.CrudService;
+import by.triumgroup.recourse.service.CrudServiceTest;
+import by.triumgroup.recourse.service.UserService;
 import by.triumgroup.recourse.service.exception.ServiceException;
-import by.triumgroup.recourse.service.impl.UserServiceImpl;
 import by.triumgroup.recourse.supplier.entity.dto.RegistrationDetailsSupplier;
 import by.triumgroup.recourse.supplier.entity.model.EntitySupplier;
 import by.triumgroup.recourse.supplier.entity.model.impl.UserSupplier;
