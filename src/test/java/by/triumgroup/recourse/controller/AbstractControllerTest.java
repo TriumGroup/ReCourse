@@ -6,6 +6,7 @@ import by.triumgroup.recourse.util.TestUtil;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,6 +31,7 @@ public abstract class AbstractControllerTest {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(getController())
                 .setControllerAdvice(new RestExceptionHandler())
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
                 .alwaysDo(print())
                 .build();
     }
