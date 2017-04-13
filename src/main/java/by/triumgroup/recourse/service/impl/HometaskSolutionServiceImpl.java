@@ -47,7 +47,7 @@ public class HometaskSolutionServiceImpl
 
     @Override
     public Optional<HometaskSolution> findByStudentIdAndHometaskId(Integer studentId, Integer hometaskId) {
-        return wrapJPACallToOptional(() -> (ifExistsWithRole(userRepository, studentId, User.Role.STUDENT) && hometaskRepository.findOne(hometaskId) != null)
+        return wrapJPACallToOptional(() -> (ifExistsWithRole(userRepository, studentId, User.Role.STUDENT) && hometaskRepository.exists(hometaskId))
                 ? repository.findByStudentIdAndHometaskId(studentId, hometaskId)
                 : null
         );
