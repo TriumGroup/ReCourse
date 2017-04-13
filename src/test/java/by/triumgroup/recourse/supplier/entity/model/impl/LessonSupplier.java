@@ -14,8 +14,9 @@ public class LessonSupplier implements EntityIntegerPKSupplier<Lesson> {
         Lesson lesson = new Lesson();
         lesson.setCourseId(1);
         lesson.setDuration(Time.valueOf("1:00:00"));
-        lesson.setStartTime(Timestamp.valueOf("2017-04-13 10:10:10.0"));
+        lesson.setStartTime(new Timestamp(Long.MAX_VALUE));
         lesson.setTeacher(userSupplier.getValidEntityWithId());
+        lesson.setTopic("topic");
         return lesson;
     }
 
