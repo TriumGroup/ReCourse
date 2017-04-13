@@ -2,6 +2,7 @@ package by.triumgroup.recourse.service.impl;
 
 import by.triumgroup.recourse.entity.model.TeacherFeedback;
 import by.triumgroup.recourse.repository.TeacherFeedbackRepository;
+import by.triumgroup.recourse.repository.UserRepository;
 import by.triumgroup.recourse.service.CrudService;
 import by.triumgroup.recourse.service.CrudServiceTest;
 import by.triumgroup.recourse.service.TeacherFeedbackService;
@@ -14,10 +15,12 @@ public class TeacherFeedbackServiceTest extends CrudServiceTest<TeacherFeedback,
     private TeacherFeedbackService teacherFeedbackService;
     private TeacherFeedbackRepository teacherFeedbackRepository;
     private TeacherFeedbackSupplier teacherFeedbackSupplier;
+    private UserRepository userRepository;
 
     public TeacherFeedbackServiceTest() {
         teacherFeedbackRepository = Mockito.mock(TeacherFeedbackRepository.class);
-        teacherFeedbackService = new TeacherFeedbackServiceImpl(teacherFeedbackRepository);
+        userRepository = Mockito.mock(UserRepository.class);
+        teacherFeedbackService = new TeacherFeedbackServiceImpl(teacherFeedbackRepository, userRepository);
         teacherFeedbackSupplier = new TeacherFeedbackSupplier();
     }
 
