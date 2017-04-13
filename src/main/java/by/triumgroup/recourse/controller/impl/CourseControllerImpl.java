@@ -73,7 +73,7 @@ public class CourseControllerImpl
     }
 
     @Override
-    public List<Course> getAll(@RequestParam(value = "status", required = false) Course.Status status, Pageable pageable) {
+    public List<Course> searchByStatus(@RequestParam("status") Course.Status status, Pageable pageable) {
         return wrapServiceCall(logger, () -> courseService.findByStatus(status, pageable));
     }
 }

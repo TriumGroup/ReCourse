@@ -66,14 +66,6 @@ public class CourseServiceImpl
 
     @Override
     public List<Course> findByStatus(Course.Status status, Pageable pageable) {
-        return wrapJPACall(() -> {
-            List<Course> courses;
-            if (status == null) {
-                courses = repository.findAllByOrderByIdDesc(pageable);
-            } else {
-                courses = repository.findByStatusOrderByIdDesc(status, pageable);
-            }
-            return courses;
-        });
+        return wrapJPACall(() -> repository.findByStatusOrderByIdDesc(status, pageable));
     }
 }
