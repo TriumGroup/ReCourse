@@ -1,5 +1,8 @@
-package by.triumgroup.recourse.controller;
+package by.triumgroup.recourse.controller.impl;
 
+import by.triumgroup.recourse.controller.CourseFeedbackController;
+import by.triumgroup.recourse.controller.CrudController;
+import by.triumgroup.recourse.controller.CrudControllerTest;
 import by.triumgroup.recourse.controller.impl.CourseFeedbackControllerImpl;
 import by.triumgroup.recourse.entity.model.CourseFeedback;
 import by.triumgroup.recourse.service.CourseFeedbackService;
