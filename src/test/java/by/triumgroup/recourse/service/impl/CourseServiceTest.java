@@ -154,20 +154,8 @@ public class CourseServiceTest extends CrudServiceTest<Course, Integer> {
         assertTrue(courses.isPresent());
     }
 
-
     @Test
-    public void findByNullStatusTest() throws Exception {
-        when(courseRepository.findAllByOrderByIdDesc(any()))
-                .thenReturn(Collections.emptyList());
-
-        List<Course> status = courseService.findByStatus(null, null);
-
-        verify(courseRepository, times(1))
-                .findAllByOrderByIdDesc(any());
-    }
-
-    @Test
-    public void findByNormalStatusTest() throws Exception {
+    public void findByStatusTest() throws Exception {
         when(courseRepository.findByStatusOrderByIdDesc(any(), any()))
                 .thenReturn(Collections.emptyList());
 
