@@ -12,32 +12,45 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ServiceConfiguration {
 
     @Bean
-    public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService userService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
         return new UserServiceImpl(userRepository, passwordEncoder);
     }
 
     @Bean
-    public CourseService courseService(CourseRepository courseRepository, UserRepository userRepository) {
+    public CourseService courseService(
+            CourseRepository courseRepository,
+            UserRepository userRepository) {
         return new CourseServiceImpl(courseRepository, userRepository);
     }
 
     @Bean
-    public CourseFeedbackService courseFeedbackService(CourseFeedbackRepository courseFeedbackRepository, CourseRepository courseRepository) {
+    public CourseFeedbackService courseFeedbackService(
+            CourseFeedbackRepository courseFeedbackRepository,
+            CourseRepository courseRepository) {
         return new CourseFeedbackServiceImpl(courseFeedbackRepository, courseRepository);
     }
 
     @Bean
-    public HometaskService hometaskService(HometaskRepository hometaskRepository) {
+    public HometaskService hometaskService(
+            HometaskRepository hometaskRepository) {
         return new HometaskServiceImpl(hometaskRepository);
     }
 
     @Bean
-    public HometaskSolutionService hometaskSolutionService(HometaskSolutionRepository hometaskSolutionRepository, HometaskRepository hometaskRepository, UserRepository userRepository) {
+    public HometaskSolutionService hometaskSolutionService(
+            HometaskSolutionRepository hometaskSolutionRepository,
+            HometaskRepository hometaskRepository,
+            UserRepository userRepository) {
         return new HometaskSolutionServiceImpl(hometaskSolutionRepository, hometaskRepository, userRepository);
     }
 
     @Bean
-    public LessonService lessonService(LessonRepository lessonRepository, CourseRepository courseRepository, UserRepository userRepository) {
+    public LessonService lessonService(
+            LessonRepository lessonRepository,
+            CourseRepository courseRepository,
+            UserRepository userRepository) {
         return new LessonServiceImpl(lessonRepository, courseRepository, userRepository);
     }
 
@@ -47,12 +60,17 @@ public class ServiceConfiguration {
     }
 
     @Bean
-    public StudentReportService studentReportService(StudentReportRepository studentReportRepository, CourseRepository courseRepository, UserRepository userRepository) {
+    public StudentReportService studentReportService(
+            StudentReportRepository studentReportRepository,
+            CourseRepository courseRepository,
+            UserRepository userRepository) {
         return new StudentReportServiceImpl(studentReportRepository, courseRepository, userRepository);
     }
 
     @Bean
-    public TeacherFeedbackService teacherFeedbackService(TeacherFeedbackRepository teacherFeedbackRepository, UserRepository userRepository) {
+    public TeacherFeedbackService teacherFeedbackService(
+            TeacherFeedbackRepository teacherFeedbackRepository,
+            UserRepository userRepository) {
         return new TeacherFeedbackServiceImpl(teacherFeedbackRepository, userRepository);
     }
 
