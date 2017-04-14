@@ -66,6 +66,28 @@ public class UserServiceTest extends CrudServiceTest<User, Integer> {
         userService.register(registrationDetails);
     }
 
+    @Test
+    public void findByExistingEmailTest() throws Exception {
+        User user = userSupplier.getValidEntityWithId();
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+
+        Optional<User> result = userService.findByEmail(user.getEmail());
+
+        verify(userRepository, times(1)).findByEmail(user.getEmail());
+        Assert.assertEquals(user, result.orElse(null));
+    }
+
+    @Test
+    public void findByNotExistingEmailTest() throws Exception {
+        User user = userSupplier.getValidEntityWithId();
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
+
+        Optional<User> result = userService.findByEmail(user.getEmail());
+
+        verify(userRepository, times(1)).findByEmail(user.getEmail());
+        Assert.assertFalse(result.isPresent());
+    }
+
 
     @Override
     protected CrudService<User, Integer> getCrudService() {
