@@ -1,6 +1,7 @@
 package by.triumgroup.recourse.service.impl;
 
 import by.triumgroup.recourse.entity.model.TeacherFeedback;
+import by.triumgroup.recourse.entity.model.User;
 import by.triumgroup.recourse.repository.TeacherFeedbackRepository;
 import by.triumgroup.recourse.repository.UserRepository;
 import by.triumgroup.recourse.service.TeacherFeedbackService;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static by.triumgroup.recourse.util.RepositoryCallWrapper.wrapJPACallToOptional;
+import static by.triumgroup.recourse.util.RoleUtil.ifExistsWithRole;
 
 public class TeacherFeedbackServiceImpl
         extends AbstractCrudService<TeacherFeedback, Integer>
@@ -26,7 +28,7 @@ public class TeacherFeedbackServiceImpl
 
     @Override
     public Optional<List<TeacherFeedback>> findByTeacherId(Integer id, Pageable pageable) {
-        return wrapJPACallToOptional(() -> (userRepository.findOne(id) != null)
+        return wrapJPACallToOptional(() -> (ifExistsWithRole(userRepository, id, User.Role.TEACHER))
                 ? repository.findByTeacherIdOrderByIdDesc(id, pageable)
                 : null
         );
@@ -34,7 +36,7 @@ public class TeacherFeedbackServiceImpl
 
     @Override
     public Optional<List<TeacherFeedback>> findByStudentId(Integer id, Pageable pageable) {
-        return wrapJPACallToOptional(() -> (userRepository.findOne(id) != null)
+        return wrapJPACallToOptional(() -> (ifExistsWithRole(userRepository, id, User.Role.STUDENT))
                 ? repository.findByStudentIdOrderByIdDesc(id, pageable)
                 : null
         );
