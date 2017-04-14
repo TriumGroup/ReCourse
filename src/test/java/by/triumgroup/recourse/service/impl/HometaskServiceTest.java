@@ -45,7 +45,7 @@ public class HometaskServiceTest extends CrudServiceTest<Hometask, Integer> {
     }
 
     @Test
-    public void findByExistingLessonId() throws Exception {
+    public void findByExistingLessonIdTest() throws Exception {
         when(hometaskRepository.findByLessonId(anyInt())).thenReturn(hometaskSupplier.getValidEntityWithId());
 
         Optional<Hometask> hometask = hometaskService.findByLessonId(1);
@@ -55,7 +55,7 @@ public class HometaskServiceTest extends CrudServiceTest<Hometask, Integer> {
     }
 
     @Test
-    public void findByNotExistingLessonId() throws Exception {
+    public void findByNotExistingLessonIdTest() throws Exception {
         when(hometaskRepository.findByLessonId(anyInt())).thenReturn(null);
 
         Optional<Hometask> hometask = hometaskService.findByLessonId(1);
