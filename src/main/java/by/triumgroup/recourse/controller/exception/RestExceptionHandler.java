@@ -3,7 +3,6 @@ package by.triumgroup.recourse.controller.exception;
 import by.triumgroup.recourse.entity.dto.ErrorMessage;
 import by.triumgroup.recourse.entity.dto.OauthError;
 import by.triumgroup.recourse.entity.dto.RestError;
-import by.triumgroup.recourse.util.Util;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -20,6 +19,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 
+import static by.triumgroup.recourse.validation.support.Constants.DEFAULT_ERROR_TITLE;
+
 @ControllerAdvice
 public class RestExceptionHandler extends BaseResponseEntityExceptionHandler {
 
@@ -34,7 +35,9 @@ public class RestExceptionHandler extends BaseResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         Throwable cause = ex.getCause();
         ErrorMessage errorMessage;
-        if (cause instanceof InvalidFormatException) {
+        if (cause == null) {
+            errorMessage = new ErrorMessage(DEFAULT_ERROR_TITLE, "Required request body is missing");
+        } else if (cause instanceof InvalidFormatException) {
             InvalidFormatException e = (InvalidFormatException) cause;
             errorMessage = new ErrorMessage(
                     "Invalid entity",
@@ -46,16 +49,10 @@ public class RestExceptionHandler extends BaseResponseEntityExceptionHandler {
             JsonMappingException e = (JsonMappingException) cause;
             List<JsonMappingException.Reference> references = e.getPath();
             StringBuilder message = new StringBuilder("Invalid values in fields");
-            references.forEach(reference -> message
-                    .append(" '")
-                    .append(reference.getFieldName())
-                    .append("'"));
+            references.forEach(reference -> message.append(" '").append(reference.getFieldName()).append("'"));
             errorMessage = new ErrorMessage("Invalid JSON", message.toString());
         } else {
-            errorMessage = new ErrorMessage(
-                    "Message not readable",
-                    Util.ifNullDefault(cause.getMessage(), "Unknown error")
-            );
+            errorMessage = new ErrorMessage("Message not readable", "Unknown error");
         }
         return handleExceptionInternal(ex, createRestError(status, errorMessage), headers, status, request);
     }
@@ -70,13 +67,19 @@ public class RestExceptionHandler extends BaseResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(RequestException.class)
-    protected ResponseEntity<Object> handleServiceException(RequestException ex) {
+    protected ResponseEntity<Object> handleRequestException(RequestException ex) {
         return createResponseEntity(ex.getStatus(), ex.getErrors());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     protected ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
         return new ResponseEntity<>(new OauthError("access_denied", "Access is denied"), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ControllerException.class)
+    protected ResponseEntity<Object> handleControllerException(ControllerException ex) {
+        return createResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR,
+                new ErrorMessage(DEFAULT_ERROR_TITLE, "Internal server error"));
     }
 
 }

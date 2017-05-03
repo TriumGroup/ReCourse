@@ -1,11 +1,12 @@
 package by.triumgroup.recourse.entity.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -14,26 +15,31 @@ import java.util.Set;
 @Table(name = "course")
 public class Course extends BaseEntity<Integer> {
 
-    @NotNull
+    @NotNull(message = "Title is not specified")
     @SafeHtml
     @Column(length = 50, nullable = false)
     private String title;
 
-    @NotNull
+    @NotNull(message = "Description is not specified")
     @SafeHtml
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @NotNull
+    @NotNull(message = "Status is not specified")
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM ('ONGOING', 'REGISTRATION', 'FINISHED')", nullable = false)
+    @Column(columnDefinition = "ENUM ('DRAFT', 'PUBLISHED', 'FINISHED')", nullable = false)
     private Status status;
 
-    @NotNull
-    @Min(1)
-    @Max(100)
+    @NotNull(message = "Registration end is not specified")
+    @Column(columnDefinition = "DATETIME", nullable = false)
+    private Timestamp registrationEnd;
+
+
+    @NotNull(message = "Max students count is not specified")
+    @Range(min = 1, max = 100, message = "Max students count must be in range 1-100")
     private Integer maxStudents;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name="course_student",
@@ -44,10 +50,11 @@ public class Course extends BaseEntity<Integer> {
     public Course() {
     }
 
-    public Course(String title, String description, Status status, Integer maxStudents) {
+    public Course(String title, String description, Status status, Timestamp registrationEnd, Integer maxStudents) {
         this.title = title;
         this.description = description;
         this.status = status;
+        this.registrationEnd = registrationEnd;
         this.maxStudents = maxStudents;
     }
 
@@ -90,6 +97,18 @@ public class Course extends BaseEntity<Integer> {
         return students;
     }
 
+    public void setStudents(Set<User> students) {
+        this.students = students;
+    }
+
+    public Timestamp getRegistrationEnd() {
+        return registrationEnd;
+    }
+
+    public void setRegistrationEnd(Timestamp registrationEnd) {
+        this.registrationEnd = registrationEnd;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,15 +118,16 @@ public class Course extends BaseEntity<Integer> {
         return Objects.equals(title, course.title) &&
                 Objects.equals(description, course.description) &&
                 status == course.status &&
+                Objects.equals(registrationEnd, course.registrationEnd) &&
                 Objects.equals(maxStudents, course.maxStudents);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), title, description, status, maxStudents);
+        return Objects.hash(super.hashCode(), title, description, status, registrationEnd, maxStudents);
     }
 
     public enum Status {
-        ONGOING, REGISTRATION, FINISHED
+        DRAFT, PUBLISHED, FINISHED
     }
 }

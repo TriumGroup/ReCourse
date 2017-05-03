@@ -67,7 +67,8 @@ public class LessonControllerTest extends CrudControllerTest<Lesson, Integer> {
 
     @Override
     protected User prepareAuthorizedUser(Lesson entity, User validUserWithId) {
-        validUserWithId.setId(entity.getTeacher().getId());
+//        validUserWithId.setId(entity.getTeacher().getId());
+        validUserWithId.setRole(User.Role.ADMIN);
         return validUserWithId;
     }
 }
