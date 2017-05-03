@@ -93,6 +93,12 @@ function AppStates($stateProvider, $urlRouterProvider) {
             controller: 'StudentCoursesController as self',
             templateUrl: 'templates/student/courses/index.html'
         },
+        {
+            name: 'profile',
+            url: '/profile',
+            controller: 'ProfileController as self',
+            templateUrl: 'templates/users/profile.html'
+        },
         { name: 'otherwise', url: '/otherwise', template: '<h1>404</h1>' }
     ].forEach(function(state) { $stateProvider.state(state) });
 

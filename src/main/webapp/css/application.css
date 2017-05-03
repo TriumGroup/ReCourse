@@ -29,3 +29,11 @@ md-nav-bar .md-nav-bar {
 .md-button.sign-out-button:hover {
     background-color: transparent;
 }
+
+.profile-navbar-item {
+    text-transform: none;
+}
+
+.profile-card {
+    align-self: center;
+}
