@@ -8,6 +8,7 @@ function AuthService($q, $http, $state, $cookies, UserFactory) {
         prepareAuthInfo: prepareAuthInfo,
         tryAuthorize: tryAuthorize,
         unauthorize: unauthorize,
+        refreshUserInfo: refreshUserInfo,
         signIn: signIn,
         signUp: signUp,
         signOut: signOut,
@@ -26,6 +27,12 @@ function AuthService($q, $http, $state, $cookies, UserFactory) {
                 resolve();
             }
         })
+    }
+
+    function refreshUserInfo() {
+        return $q(function (resolve) {
+            trySetCurrentUser().then(resolve);
+        });
     }
 
     function tryAuthorize() {
