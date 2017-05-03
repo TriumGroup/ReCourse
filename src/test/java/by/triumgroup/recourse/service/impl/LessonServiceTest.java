@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.util.Pair;
 import org.springframework.validation.Errors;
 
@@ -274,13 +274,25 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
     }
 
     @Override
-    protected CrudRepository<Lesson, Integer> getCrudRepository() {
+    protected PagingAndSortingRepository<Lesson, Integer> getCrudRepository() {
         return lessonRepository;
     }
 
     @Override
     protected EntitySupplier<Lesson, Integer> getEntitySupplier() {
         return lessonSupplier;
+    }
+
+    @Override
+    public void addValidEntityTest() throws Exception {
+        Lesson expectedEntity = getEntitySupplier().getValidEntityWithoutId();
+        when(getCrudRepository().save(expectedEntity)).thenReturn(expectedEntity);
+        setupAllowedRoles(expectedEntity);
+
+        Optional<Lesson> actualResult = getCrudService().add(expectedEntity);
+
+        verify(getCrudRepository(), times(1)).save(expectedEntity);
+        Assert.assertEquals(expectedEntity, actualResult.orElse(null));
     }
 
     @Override

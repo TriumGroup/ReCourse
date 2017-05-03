@@ -16,7 +16,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -75,7 +75,7 @@ public class CourseFeedbackServiceTest extends CrudServiceTest<CourseFeedback, I
     }
 
     @Override
-    protected CrudRepository<CourseFeedback, Integer> getCrudRepository() {
+    protected PagingAndSortingRepository<CourseFeedback, Integer> getCrudRepository() {
         return courseFeedbackRepository;
     }
 

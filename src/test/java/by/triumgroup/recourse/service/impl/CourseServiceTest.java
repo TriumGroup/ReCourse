@@ -9,7 +9,7 @@ import by.triumgroup.recourse.supplier.entity.model.EntitySupplier;
 import by.triumgroup.recourse.supplier.entity.model.impl.CourseSupplier;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +42,7 @@ public class CourseServiceTest extends CrudServiceTest<Course, Integer> {
     }
 
     @Override
-    protected CrudRepository<Course, Integer> getCrudRepository() {
+    protected PagingAndSortingRepository<Course, Integer> getCrudRepository() {
         return courseRepository;
     }
 

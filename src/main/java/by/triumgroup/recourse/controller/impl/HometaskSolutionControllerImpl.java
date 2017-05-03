@@ -51,6 +51,16 @@ public class HometaskSolutionControllerImpl
     }
 
     @Override
+    public HometaskSolution update(HometaskSolution entity, Integer id, UserAuthDetails authDetails) {
+        validateNestedEntities(entity);
+        checkAuthority(entity, authDetails, this::hasAuthorityToEdit);
+        return wrapServiceCall(logger, () -> {
+            Optional<HometaskSolution> callResult = hometaskSolutionService.update(entity, id, authDetails.isAdmin());
+            return callResult.orElseThrow(NotFoundException::new);
+        });
+    }
+
+    @Override
     public Iterable<HometaskSolution> getAll(Pageable pageable, @Auth UserAuthDetails authDetails) {
         Iterable<HometaskSolution> result;
         if (!authDetails.isAdmin()) {

@@ -10,14 +10,12 @@ import by.triumgroup.recourse.supplier.entity.model.impl.MarkSupplier;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MarkServiceTest extends CrudServiceTest<Mark, Integer> {
     private MarkService markService;
@@ -57,7 +55,7 @@ public class MarkServiceTest extends CrudServiceTest<Mark, Integer> {
     }
 
     @Override
-    protected CrudRepository<Mark, Integer> getCrudRepository() {
+    protected PagingAndSortingRepository<Mark, Integer> getCrudRepository() {
         return markRepository;
     }
 
