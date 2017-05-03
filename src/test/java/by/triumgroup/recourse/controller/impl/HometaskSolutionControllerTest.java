@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static by.triumgroup.recourse.util.Util.allItemsPage;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,6 +99,31 @@ public class HometaskSolutionControllerTest extends CrudControllerTest<HometaskS
         User student = userSupplier.getWithRole(User.Role.STUDENT);
         sendGet(STUDENT_ID_REQUEST_PARAMS, student, student.getId(), "lessonId", 1)
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Override
+    public void updateNotExistingEntityTest() throws Exception {
+        when(hometaskSolutionService.update(any(), any(), anyBoolean())).thenReturn(Optional.empty());
+
+        putEntityByIdAuthorized(getEntitySupplier().getAnyId(), getEntitySupplier().getValidEntityWithoutId())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Override
+    public void updateEntityValidDataTest() throws Exception {
+        when(hometaskSolutionService.update(any(), any(), anyBoolean())).thenReturn(Optional.of(getEntitySupplier().getValidEntityWithId()));
+
+        putEntityByIdAuthorized(getEntitySupplier().getAnyId(), getEntitySupplier().getValidEntityWithoutId())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @Override
+    public void updateEntityInvalidDataTest() throws Exception {
+        putEntityById(getEntitySupplier().getAnyId(), getEntitySupplier().getInvalidEntity())
+                .andExpect(status().isBadRequest());
     }
 
     @Override

@@ -51,6 +51,7 @@ public class LessonServiceImpl
 
     @Override
     public <S extends Lesson> Optional<S> add(S entity) {
+        entity.setId(null);
         Course course = wrapJPACall(() -> courseRepository.findOne(entity.getCourseId()));
         User teacher = wrapJPACall(() -> userRepository.findOne(entity.getTeacher().getId()));
         checkUserAndCourseExistence(teacher, course);

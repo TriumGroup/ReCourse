@@ -87,8 +87,8 @@ public class HometaskSolutionServiceTest extends CrudServiceTest<HometaskSolutio
     public void addValidEntityTest() throws Exception {
         HometaskSolution expectedEntity = getEntitySupplier().getValidEntityWithoutId();
         Lesson lesson = lessonSupplier.getValidEntityWithId();
-        lesson.setStartTime(Timestamp.from(Instant.MAX));
-        User user = userSupplier.getValidEntityWithId();
+        lesson.setStartTime(Timestamp.from(Instant.MIN));
+        User user = userSupplier.getWithRole(User.Role.STUDENT);
         expectedEntity.setStudent(user);
         Course course = courseSupplier.getValidEntityWithId();
         Set<User> students = new HashSet<>();
@@ -98,7 +98,6 @@ public class HometaskSolutionServiceTest extends CrudServiceTest<HometaskSolutio
         when(lessonRepository.findOne(expectedEntity.getLessonId())).thenReturn(lesson);
         when(userRepository.findOne(expectedEntity.getStudent().getId())).thenReturn(user);
         when(courseRepository.findOne(lesson.getCourseId())).thenReturn(course);
-        setupAllowedRoles(expectedEntity);
 
         Optional<HometaskSolution> actualResult = getCrudService().add(expectedEntity);
 
@@ -106,12 +105,13 @@ public class HometaskSolutionServiceTest extends CrudServiceTest<HometaskSolutio
         Assert.assertEquals(expectedEntity, actualResult.orElse(null));
     }
 
+    @Test
     @Override
     public void addEntityWithExistingIdTest() throws Exception {
         HometaskSolution entity = getEntitySupplier().getValidEntityWithId();
         Lesson lesson = lessonSupplier.getValidEntityWithId();
-        lesson.setStartTime(Timestamp.from(Instant.MAX));
-        User user = userSupplier.getValidEntityWithId();
+        lesson.setStartTime(Timestamp.from(Instant.MIN));
+        User user = userSupplier.getWithRole(User.Role.STUDENT);
         entity.setStudent(user);
         Course course = courseSupplier.getValidEntityWithId();
         Set<User> students = new HashSet<>();
@@ -121,7 +121,7 @@ public class HometaskSolutionServiceTest extends CrudServiceTest<HometaskSolutio
         when(lessonRepository.findOne(entity.getLessonId())).thenReturn(lesson);
         when(userRepository.findOne(entity.getStudent().getId())).thenReturn(user);
         when(courseRepository.findOne(lesson.getCourseId())).thenReturn(course);
-        setupAllowedRoles(entity);
+//        setupAllowedRoles(entity);
 
         getCrudService().add(entity);
 
@@ -130,6 +130,7 @@ public class HometaskSolutionServiceTest extends CrudServiceTest<HometaskSolutio
         Assert.assertNull(captor.getValue().getId());
     }
 
+    @Test
     @Override
     public void updateEntityWithDifferentParameterIdTest() throws Exception {
         Pair<Integer, Integer> ids = getEntitySupplier().getDifferentIds();

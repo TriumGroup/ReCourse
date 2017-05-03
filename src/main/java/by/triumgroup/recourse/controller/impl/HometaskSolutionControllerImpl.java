@@ -16,8 +16,10 @@ import by.triumgroup.recourse.service.MarkService;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -51,7 +53,7 @@ public class HometaskSolutionControllerImpl
     }
 
     @Override
-    public HometaskSolution update(HometaskSolution entity, Integer id, UserAuthDetails authDetails) {
+    public HometaskSolution update(@RequestBody @Valid HometaskSolution entity, @PathVariable("id") Integer id, @Auth UserAuthDetails authDetails) {
         validateNestedEntities(entity);
         checkAuthority(entity, authDetails, this::hasAuthorityToEdit);
         return wrapServiceCall(logger, () -> {

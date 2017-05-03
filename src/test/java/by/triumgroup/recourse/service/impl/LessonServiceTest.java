@@ -1,5 +1,6 @@
 package by.triumgroup.recourse.service.impl;
 
+import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.model.User;
 import by.triumgroup.recourse.repository.CourseRepository;
@@ -11,6 +12,7 @@ import by.triumgroup.recourse.service.LessonService;
 import by.triumgroup.recourse.service.exception.ServiceBadRequestException;
 import by.triumgroup.recourse.service.exception.ServiceException;
 import by.triumgroup.recourse.supplier.entity.model.EntitySupplier;
+import by.triumgroup.recourse.supplier.entity.model.impl.CourseSupplier;
 import by.triumgroup.recourse.supplier.entity.model.impl.LessonSupplier;
 import by.triumgroup.recourse.supplier.entity.model.impl.UserSupplier;
 import by.triumgroup.recourse.validation.validator.LessonTimeValidator;
@@ -36,6 +38,7 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
     private LessonRepository lessonRepository;
     private LessonService lessonService;
     private LessonSupplier lessonSupplier;
+    private CourseSupplier courseSupplier;
     private CourseRepository courseRepository;
     private UserRepository userRepository;
     private UserSupplier userSupplier;
@@ -50,6 +53,7 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
         lessonService = new LessonServiceImpl(lessonRepository, courseRepository, userRepository, lessonTimeValidator);
         lessonSupplier = new LessonSupplier();
         userSupplier = new UserSupplier();
+        courseSupplier = new CourseSupplier();
     }
 
     @Test
@@ -286,13 +290,32 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
     @Override
     public void addValidEntityTest() throws Exception {
         Lesson expectedEntity = getEntitySupplier().getValidEntityWithoutId();
+        Course course = courseSupplier.getValidEntityWithoutId();
+        course.setId(expectedEntity.getCourseId());
         when(getCrudRepository().save(expectedEntity)).thenReturn(expectedEntity);
+        when(courseRepository.findOne(expectedEntity.getCourseId())).thenReturn(course);
         setupAllowedRoles(expectedEntity);
 
         Optional<Lesson> actualResult = getCrudService().add(expectedEntity);
 
         verify(getCrudRepository(), times(1)).save(expectedEntity);
         Assert.assertEquals(expectedEntity, actualResult.orElse(null));
+    }
+
+    @Override
+    public void addEntityWithExistingIdTest() throws Exception {
+        Lesson entity = getEntitySupplier().getValidEntityWithId();
+        Course course = courseSupplier.getValidEntityWithoutId();
+        course.setId(entity.getCourseId());
+        when(getCrudRepository().save(entity)).thenReturn(entity);
+        when(courseRepository.findOne(entity.getCourseId())).thenReturn(course);
+        setupAllowedRoles(entity);
+
+        getCrudService().add(entity);
+
+        verify(getCrudRepository()).save(captor.capture());
+        verify(getCrudRepository(), times(1)).save(entity);
+        Assert.assertNull(captor.getValue().getId());
     }
 
     @Override
