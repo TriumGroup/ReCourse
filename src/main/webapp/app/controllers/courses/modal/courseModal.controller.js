@@ -2,26 +2,13 @@ angular
     .module('app')
     .controller('CourseModalController', CourseModalController);
 
-function CourseModalController($mdDialog, CourseFactory, course) {
-    var self = this;
-
-    self.course = course;
-    self.saveCourse = saveCourse;
-    self.cancel = cancel;
-    self.updateMode = !!self.course;
-
-    self.isAdminCourses = isAdminCourses;
-    self.isAvailableStudentCourses = isAvailableStudentCourses;
-
+function CourseModalController(self, $state, $mdDialog) {
+    self.title = '';
     self.statuses = ['DRAFT', 'PUBLISHED', 'FINISHED'];
 
-    function saveCourse() {
-        if (self.updateMode){
-            CourseFactory.update(self.course, $mdDialog.hide);
-        } else {
-            CourseFactory.save(self.course, $mdDialog.hide);
-        }
-    }
+    self.cancel = cancel;
+    self.isAdminCourses = isAdminCourses;
+    self.isAvailableStudentCourses = isAvailableStudentCourses;
 
     function isAdminCourses() {
         return $state.current.name === 'admin-courses';
@@ -29,10 +16,6 @@ function CourseModalController($mdDialog, CourseFactory, course) {
 
     function isAvailableStudentCourses() {
         return $state.current.name === 'student-available-courses';
-    }
-
-    function showLessons(course) {
-        $state.go('course-lessons', { course: course.id });
     }
 
     function cancel() {

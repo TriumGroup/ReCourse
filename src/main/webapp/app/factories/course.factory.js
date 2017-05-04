@@ -33,7 +33,16 @@ function CourseFactory($resource) {
             method: 'GET',
             url: 'api/courses/registered/:id',
             isArray: true
+        },
+        availableForStudent: {
+            method: 'GET',
+            url: 'api/courses/available/:studentId',
+            isArray: true
+        },
+        registerSelf: {
+            method: 'POST',
+            url: 'api/courses/:id/register',
+            isArray: true
         }
-
     });
 }
