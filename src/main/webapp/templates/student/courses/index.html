@@ -18,7 +18,7 @@
                 </tr>
                 </thead>
                 <tbody md-body>
-                <tr md-row ng-repeat="course in self.ongoingCourses">
+                <tr md-row ng-repeat="course in self.ongoingCourses | limitTo: self.pagination.limit : (self.pagination.page - 1) * self.pagination.limit">
                     <td md-cell>{{course.id}}</td>
                     <td md-cell>{{course.title}}</td>
                     <td md-cell>{{course.description | strLengthLimit : 70}}</td>
@@ -54,5 +54,6 @@
                 </tbody>
             </table>
         </md-table-container>
+        <md-table-pagination md-limit="self.pagination.limit" md-page="self.pagination.page" md-total="{{self.ongoingCourses.length}}"></md-table-pagination>
     </md-card>
 </ui-view>
