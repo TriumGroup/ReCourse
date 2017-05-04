@@ -83,6 +83,19 @@
       <artifactId>jsoup</artifactId>
       <version>1.7.2</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>3.16</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itextpdf</artifactId>
+      <version>5.0.6</version>
+    </dependency>
+
   </dependencies>
 
   <build>

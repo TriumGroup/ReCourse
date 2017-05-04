@@ -26,7 +26,8 @@ import static by.triumgroup.recourse.util.Util.allItemsPage;
         ServiceConfiguration.class,
         ControllerConfiguration.class,
         SecurityConfiguration.class,
-        PageRequestConfiguration.class
+        PageRequestConfiguration.class,
+        GeneratorConfiguration.class
 })
 @EnableAutoConfiguration(exclude = {
         org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class,
