@@ -44,7 +44,7 @@ function AdminCourseListController($controller, $mdDialog, CourseFactory, $state
     }
 
     function showFeedbacks(course) {
-        $state.go('course-feedbacks', { course: course.id });
+        $state.go('feedbacks', { course: course.id });
     }
 
     function openModal(course) {
