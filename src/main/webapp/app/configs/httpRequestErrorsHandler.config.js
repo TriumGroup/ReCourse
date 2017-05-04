@@ -10,8 +10,8 @@ function HttpRequestErrorsHandler($httpProvider) {
             responseError: function(response) {
                 var errors = [];
                 if (!!response.data.errors) {
-                    errors.concat(response.data.errors);
-                } else if (!!response.data.error_description) {
+                    errors = errors.concat(response.data.errors);
+                } else if (!!response.data.errors) {
                     errors.push({ title: 'Auth', message: response.data.error_description })
                 }
                 $rootScope.$broadcast('httpError', errors);

@@ -25,7 +25,14 @@ function AdminCourseListController($controller, $mdDialog, CourseFactory, $state
     }
 
     function deleteCourse(course) {
-        CourseFactory.delete(course, refresh);
+        var confirm = $mdDialog.confirm()
+            .title('Would you like to delete this course?')
+            .ok('Yes!')
+            .cancel('No');
+
+        $mdDialog.show(confirm).then(function () {
+            CourseFactory.delete(course, refresh);
+        }, function() {});
     }
 
     function editCourse(course) {

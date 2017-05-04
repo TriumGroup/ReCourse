@@ -29,7 +29,14 @@ function AdminLessonListController($controller, $mdDialog, $stateParams, CourseF
     }
 
     function deleteLesson(lesson ) {
-        LessonFactory.delete(lesson, refresh);
+        var confirm = $mdDialog.confirm()
+            .title('Would you like to delete this lesson from course?')
+            .ok('Yes!')
+            .cancel('No');
+
+        $mdDialog.show(confirm).then(function () {
+            LessonFactory.delete(lesson, refresh);
+        }, function() {});
     }
 
     function editLesson (lesson) {
