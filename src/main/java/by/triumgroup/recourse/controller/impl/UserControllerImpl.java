@@ -94,7 +94,7 @@ public class UserControllerImpl extends AbstractCrudController<User, Integer> im
     }
 
     @Override
-    public void changePassword(@RequestBody PasswordChanging passwordChanging, @Auth UserAuthDetails userAuthDetails) throws ControllerException {
+    public void changePassword(@RequestBody @Valid PasswordChanging passwordChanging, @Auth UserAuthDetails userAuthDetails) throws ControllerException {
         wrapServiceCall(logger, () -> userService.changePassword(userAuthDetails.getId(), passwordChanging));
     }
 
