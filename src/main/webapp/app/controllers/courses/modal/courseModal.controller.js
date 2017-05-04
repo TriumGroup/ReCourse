@@ -10,6 +10,9 @@ function CourseModalController($mdDialog, CourseFactory, course) {
     self.cancel = cancel;
     self.updateMode = !!self.course;
 
+    self.isAdminCourses = isAdminCourses;
+    self.isAvailableStudentCourses = isAvailableStudentCourses;
+
     self.statuses = ['DRAFT', 'PUBLISHED', 'FINISHED'];
 
     function saveCourse() {
@@ -18,6 +21,18 @@ function CourseModalController($mdDialog, CourseFactory, course) {
         } else {
             CourseFactory.save(self.course, $mdDialog.hide);
         }
+    }
+
+    function isAdminCourses() {
+        return $state.current.name === 'admin-courses';
+    }
+
+    function isAvailableStudentCourses() {
+        return $state.current.name === 'student-available-courses';
+    }
+
+    function showLessons(course) {
+        $state.go('course-lessons', { course: course.id });
     }
 
     function cancel() {

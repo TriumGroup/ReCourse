@@ -15,7 +15,8 @@ public interface CourseRepository extends PagingAndSortingRepository<Course, Int
 
     List<Course> findByStatusOrderByIdDesc(Course.Status status, Pageable pageable);
 
-    @Query(value = "SELECT *\n" +
+    //FIXME This query responses with already registered courses
+    @Query(value = "SELECT id, title, description, status, registration_end, max_students\n" +
             "FROM course\n" +
             "  LEFT JOIN course_student ON ((course.id = course_student.course_id) AND\n" +
             "                              (course_student.student_id != ?1) OR (course_student.course_id IS NULL))\n" +
