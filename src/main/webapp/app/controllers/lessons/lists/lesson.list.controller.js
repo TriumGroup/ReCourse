@@ -2,7 +2,7 @@ angular
     .module('app')
     .controller('LessonListController', LessonListController);
 
-function LessonListController($state, self) {
+function LessonListController($state, AuthService, self) {
     self.title = '';
     self.lessons = [];
     self.pagination = { page: 1, limit: 7 };
@@ -16,6 +16,7 @@ function LessonListController($state, self) {
     self.isTeacherLessons = isTeacherLessons;
     self.isStudentLessons = isStudentLessons;
     self.isAdminLessons = isAdminLessons;
+    // self.
     // self.courseId = $stateParams.course;
 
     // self.refresh();
@@ -41,15 +42,18 @@ function LessonListController($state, self) {
     // }
 
     function isTeacherLessons() {
-        return $state.current.name === 'teacher-lessons';
+        // return $state.current.name === 'teacher-lessons';
+        return AuthService.role === 'TEACHER';
     }
 
     function isAdminLessons() {
-        return $state.current.name === 'course-lessons';
+        // return $state.current.name === 'course-lessons';
+        return AuthService.role === 'ADMIN';
     }
 
     function isStudentLessons() {
-        return $state.current.name === 'student-lessons';
+        // return $state.current.name === 'student-lessons';
+        return AuthService.role === 'STUDENT';
     }
 
     // function addLesson() {

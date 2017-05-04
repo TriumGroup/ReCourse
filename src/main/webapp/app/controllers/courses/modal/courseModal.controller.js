@@ -9,6 +9,7 @@ function CourseModalController(self, $state, $mdDialog) {
     self.cancel = cancel;
     self.isAdminCourses = isAdminCourses;
     self.isAvailableStudentCourses = isAvailableStudentCourses;
+    self.isStudentMyCourses = isStudentMyCourses;
 
     function isAdminCourses() {
         return $state.current.name === 'admin-courses';
@@ -16,6 +17,10 @@ function CourseModalController(self, $state, $mdDialog) {
 
     function isAvailableStudentCourses() {
         return $state.current.name === 'student-available-courses';
+    }
+
+    function isStudentMyCourses() {
+        return $state.current.name === 'student-my-courses';
     }
 
     function cancel() {

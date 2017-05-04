@@ -28,6 +28,7 @@
                 </div>
                 <div ng-if="self.getRole() === 'STUDENT'">
                     <md-nav-item md-nav-sref="student-available-courses" name="student-available-courses">Available Courses</md-nav-item>
+                    <md-nav-item md-nav-sref="student-my-courses" name="student-my-courses">My Courses</md-nav-item>
                     <md-nav-item md-nav-sref="student-lessons" name="student-lessons">My Lessons</md-nav-item>
                 </div>
                 <md-nav-item md-nav-sref="profile" name="profile">
@@ -84,21 +85,30 @@
     <script type="text/javascript" src="app/factories/feedback.factory.js"></script>
 
     <script type="text/javascript" src="app/controllers/root.controller.js"></script>
+
     <script type="text/javascript" src="app/controllers/signIn.controller.js"></script>
     <script type="text/javascript" src="app/controllers/signUp.controller.js"></script>
+
     <script type="text/javascript" src="app/controllers/users/lists/user.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/users/lists/all.user.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/users/lists/course.user.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/users/userModal.controller.js"></script>
     <script type="text/javascript" src="app/controllers/users/profile.controller.js"></script>
+
     <script type="text/javascript" src="app/controllers/courses/lists/courseList.controller.js"></script>
     <script type="text/javascript" src="app/controllers/courses/lists/adminCourseList.controller.js"></script>
     <script type="text/javascript" src="app/controllers/courses/lists/studentAvailableCourseList.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/lists/studentMyCoursesList.controller.js"></script>
     <script type="text/javascript" src="app/controllers/courses/modal/courseModal.controller.js"></script>
     <script type="text/javascript" src="app/controllers/courses/modal/adminCourseModal.controller.js"></script>
     <script type="text/javascript" src="app/controllers/courses/modal/studentCourseRegistrationModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/modal/studentOngoingCourseModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/modal/studentFinishedCourseModal.controller.js"></script>
     <script type="text/javascript" src="app/controllers/courses/feedbacks/courseFeedbackList.controller.js"></script>
     <script type="text/javascript" src="app/controllers/courses/feedbacks/courseFeedbackModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/feedbacks/studentCourseFeedbackModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/feedbacks/adminCourseFeedbackModal.controller.js"></script>
+
     <script type="text/javascript" src="app/controllers/lessons/lists/lesson.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/lessons/lists/admin.lesson.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/lessons/lists/teacher.lesson.list.controller.js"></script>
@@ -109,15 +119,14 @@
     <script type="text/javascript" src="app/controllers/lessons/lists/student.past.lesson.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/lessons/lessonModal.controller.js"></script>
     <script type="text/javascript" src="app/controllers/lessons/studentLessonModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/lessons/teacherLessonModal.controller.js"></script>
+
     <script type="text/javascript" src="app/controllers/navigation.controller.js"></script>
 
     <script type="text/javascript" src="app/controllers/solutions/lists/admin.solution.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/solutions/lists/teacher.solution.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/solutions/lists/solution.list.controller.js"></script>
-
     <script type="text/javascript" src="app/controllers/solutions/lessonSolutionModal.controller.js"></script>
-    <script type="text/javascript" src="app/controllers/lessons/teacherLessonModal.controller.js"></script>
-
     <script type="text/javascript" src="app/controllers/solutions/teacherSolutionModal.controller.js"></script>
 
     <script type="text/javascript" src="app/filters/propertyFilter.js"></script>

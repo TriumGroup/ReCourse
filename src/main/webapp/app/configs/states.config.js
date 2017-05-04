@@ -87,6 +87,12 @@ function AppStates($stateProvider, $urlRouterProvider) {
             templateUrl: 'templates/courses/index.html'
         },
         {
+            name: 'student-my-courses',
+            url: '/student/courses',
+            controller: 'StudentMyCoursesListController as self',
+            templateUrl: 'templates/courses/index.html'
+        },
+        {
             name: 'student-lessons',
             url: '/student/lessons',
             views: {

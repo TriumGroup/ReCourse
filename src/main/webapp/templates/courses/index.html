@@ -9,7 +9,7 @@
             <table md-table>
                 <thead md-head>
                 <tr md-row>
-                    <th md-column>#</th>
+                    <th md-column ng-if="self.isAdminCourses()">#</th>
                     <th md-column>Title</th>
                     <th md-column>Description</th>
                     <th ng-if="self.isAdminCourses()" md-column>Status</th>
@@ -18,7 +18,7 @@
                 </thead>
                 <tbody md-body>
                 <tr md-row ng-repeat="course in self.courses | limitTo: self.pagination.limit : (self.pagination.page - 1) * self.pagination.limit">
-                    <td md-cell>{{course.id}}</td>
+                    <td md-cell ng-if="self.isAdminCourses()">{{course.id}}</td>
                     <td md-cell>{{course.title}}</td>
                     <td md-cell>{{course.description | strLengthLimit : 70}}</td>
                     <td md-cell ng-if="self.isAdminCourses()">{{course.status}}</td>
@@ -39,7 +39,7 @@
                                         Students
                                     </md-button>
                                 </md-menu-item>
-                                <md-menu-item ng-if="self.isAdminCourses() || self.isAvailableStudentCourses()">
+                                <md-menu-item ng-if="self.isAdminCourses() || self.isAvailableStudentCourses() || self.isStudentCourses()">
                                     <md-button ng-click="self.showLessons(course)">
                                         <md-icon md-menu-origin>
                                             <i class="material-icons">event_note</i>
@@ -77,6 +77,22 @@
                                             <i class="material-icons">account_balance</i>
                                         </md-icon>
                                         Register
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isStudentCourses() && course.status !== 'FINISHED'">
+                                    <md-button ng-click="self.unregisterStudent(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">remove_shopping_cart</i>
+                                        </md-icon>
+                                        Unregister
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isStudentCourses() && course.status === 'FINISHED' && !course.feedback">
+                                    <md-button ng-click="self.addFeedback(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">feedback</i>
+                                        </md-icon>
+                                        Feedback
                                     </md-button>
                                 </md-menu-item>
                             </md-menu-content>

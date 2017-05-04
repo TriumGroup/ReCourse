@@ -44,8 +44,8 @@ function CourseFeedbackListController($mdDialog, CourseFactory, FeedbackFactory,
 
     function openModal(feedback) {
         $mdDialog.show({
-            controller: 'CourseFeedbackModalController as self',
-            templateUrl: 'templates/crud/courses/feedbacks/modal.html',
+            controller: 'AdminCourseFeedbackModalController as self',
+            templateUrl: 'templates/feedbacks/modal.html',
             parent: angular.element(document.body),
             clickOutsideToClose: true,
             locals: {

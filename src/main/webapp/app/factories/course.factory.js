@@ -41,8 +41,11 @@ function CourseFactory($resource) {
         },
         registerSelf: {
             method: 'POST',
-            url: 'api/courses/:id/register',
-            isArray: true
+            url: 'api/courses/:id/register'
+        },
+        unregisterSelf: {
+            method: 'POST',
+            url: 'api/courses/:id/unregister'
         }
     });
 }

@@ -10,6 +10,7 @@ function CourseListController(self, $state) {
     self.isAdminCourses = isAdminCourses;
     self.isAvailableStudentCourses = isAvailableStudentCourses;
     self.showLessons = showLessons;
+    self.isStudentCourses = isStudentCourses;
 
     function isAdminCourses() {
         return $state.current.name === 'admin-courses';
@@ -17,6 +18,10 @@ function CourseListController(self, $state) {
 
     function isAvailableStudentCourses() {
         return $state.current.name === 'student-available-courses';
+    }
+
+    function isStudentCourses() {
+        return $state.current.name === 'student-my-courses';
     }
 
     function showLessons(course) {
