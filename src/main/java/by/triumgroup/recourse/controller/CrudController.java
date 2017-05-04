@@ -14,7 +14,7 @@ public interface CrudController<E extends BaseEntity<ID>, ID> {
     E getById(@PathVariable("id") ID id, @Auth UserAuthDetails authDetails) throws ControllerException;
 
     @GetMapping
-    Iterable<E> getAll(Pageable pageable, @Auth UserAuthDetails authDetails) throws ControllerException;
+    Iterable<E> getAll(@Auth UserAuthDetails authDetails, Pageable pageable) throws ControllerException;
 
     @PostMapping
     <S extends E> S create(@RequestBody S entity, @Auth UserAuthDetails authDetails) throws ControllerException;

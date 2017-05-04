@@ -14,6 +14,23 @@ public interface LessonRepository extends PagingAndSortingRepository<Lesson, Int
 
     List<Lesson> findByCourseIdOrderByStartTimeAsc(Integer id, Pageable pageable);
 
+    List<Lesson> findByOrderByStartTimeAsc(Pageable pageable);
+
+    @Query(value = "SELECT\n" +
+            "  lesson.id,\n" +
+            "  lesson.start_time,\n" +
+            "  lesson.duration,\n" +
+            "  lesson.course_id,\n" +
+            "  lesson.topic,\n" +
+            "  lesson.teacher_id,\n" +
+            "  lesson.task\n" +
+            "FROM lesson\n" +
+            "  JOIN course ON lesson.course_id = course.id\n" +
+            "WHERE (course.status != 'DRAFT')\n" +
+            "ORDER BY start_time ASC \n#pageable\n",
+            nativeQuery = true)
+    List<Lesson> findAllExcludeDraftOrderByTimeAsc(Pageable pageable);
+
     List<Lesson> findByTeacherIdOrderByStartTimeAsc(Integer id, Pageable pageable);
 
     List<Lesson> findByTeacherIdAndCourseIdOrderByStartTimeAsc(Integer teacherId, Integer courseId, Pageable pageable);

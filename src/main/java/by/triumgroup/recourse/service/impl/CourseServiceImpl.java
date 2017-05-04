@@ -53,8 +53,18 @@ public class CourseServiceImpl
     }
 
     @Override
+    public Optional<List<Course>> searchByTitleExcludingStatus(String title, Course.Status status, Pageable pageable) {
+        return wrapJPACallToOptional(() -> courseRepository.findByTitleContainingIgnoreCaseAndStatusNotOrderByIdDesc(title, status, pageable));
+    }
+
+    @Override
     public Optional<List<Course>> findByStatus(Course.Status status, Pageable pageable) {
         return wrapJPACallToOptional(() -> courseRepository.findByStatusOrderByIdDesc(status, pageable));
+    }
+
+    @Override
+    public Optional<List<Course>> findAllExcludingStatus(Course.Status status, Pageable pageable) {
+        return wrapJPACallToOptional(() -> courseRepository.findByStatusNotOrderByIdDesc(status, pageable));
     }
 
     @Override

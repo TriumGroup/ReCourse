@@ -13,7 +13,11 @@ public interface CourseRepository extends PagingAndSortingRepository<Course, Int
 
     List<Course> findByTitleContainingIgnoreCaseOrderByIdDesc(String title, Pageable pageable);
 
+    List<Course> findByTitleContainingIgnoreCaseAndStatusNotOrderByIdDesc(String title, Course.Status status, Pageable pageable);
+
     List<Course> findByStatusOrderByIdDesc(Course.Status status, Pageable pageable);
+
+    List<Course> findByStatusNotOrderByIdDesc(Course.Status status, Pageable pageable);
 
     @Query(value = "SELECT *\n" +
             "FROM course\n" +

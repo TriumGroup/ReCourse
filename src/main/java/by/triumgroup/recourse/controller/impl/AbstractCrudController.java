@@ -57,7 +57,7 @@ public abstract class AbstractCrudController<E extends BaseEntity<ID>, ID> imple
         });
     }
 
-    public Iterable<E> getAll(Pageable pageable, @Auth UserAuthDetails authDetails) {
+    public Iterable<E> getAll(@Auth UserAuthDetails authDetails, Pageable pageable) {
         return wrapServiceCall(logger, () -> crudService.findAll(pageable));
     }
 

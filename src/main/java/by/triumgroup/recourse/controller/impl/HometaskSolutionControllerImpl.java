@@ -9,7 +9,6 @@ import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.entity.model.HometaskSolution;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.model.Mark;
-import by.triumgroup.recourse.entity.model.User;
 import by.triumgroup.recourse.service.HometaskSolutionService;
 import by.triumgroup.recourse.service.LessonService;
 import by.triumgroup.recourse.service.MarkService;
@@ -63,10 +62,10 @@ public class HometaskSolutionControllerImpl
     }
 
     @Override
-    public Iterable<HometaskSolution> getAll(Pageable pageable, @Auth UserAuthDetails authDetails) {
+    public Iterable<HometaskSolution> getAll(@Auth UserAuthDetails authDetails, Pageable pageable) {
         Iterable<HometaskSolution> result;
         if (!authDetails.isAdmin()) {
-            if (authDetails.getRole() == User.Role.STUDENT) {
+            if (authDetails.isStudent()) {
                 result = wrapServiceCall(logger, () -> {
                     Optional<List<HometaskSolution>> hometaskSolutions = hometaskSolutionService
                             .findByStudentId(authDetails.getId(), pageable);
@@ -76,7 +75,7 @@ public class HometaskSolutionControllerImpl
                 throw new AccessDeniedException();
             }
         } else {
-            result = super.getAll(pageable, authDetails);
+            result = super.getAll(authDetails, pageable);
         }
         return result;
     }
