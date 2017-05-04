@@ -89,13 +89,19 @@ public class CourseControllerImpl
     }
 
     @Override
-    public List<Course> getAvailableForStudent(@PathVariable("studentId") Integer studentId, Pageable pageable) {
+    public List<Course> getAvailableForStudent(@PathVariable("studentId") Integer studentId, @Auth UserAuthDetails authDetails, Pageable pageable) {
+        if (!authDetails.isAdmin() && !studentId.equals(authDetails.getId())) {
+            throw new AccessDeniedException();
+        }
         return wrapServiceCall(logger, () -> courseService.findAvailableForUser(studentId, pageable))
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public List<Course> getRegisteredForStudent(@PathVariable("studentId") Integer studentId, Pageable pageable) {
+    public List<Course> getRegisteredForStudent(@PathVariable("studentId") Integer studentId, @Auth UserAuthDetails authDetails, Pageable pageable) {
+        if (!authDetails.isAdmin() && !studentId.equals(authDetails.getId())) {
+            throw new AccessDeniedException();
+        }
         return wrapServiceCall(logger, () -> courseService.findRegisteredForUser(studentId, pageable))
                 .orElseThrow(NotFoundException::new);
     }

@@ -35,10 +35,10 @@ public interface CourseController extends CrudController<Course, Integer> {
     List<Course> searchByStatus(@RequestParam("status") Course.Status status, Pageable pageable);
 
     @GetMapping(value = "/available/{studentId}")
-    List<Course> getAvailableForStudent(@PathVariable("studentId") Integer studentId, Pageable pageable);
+    List<Course> getAvailableForStudent(@PathVariable("studentId") Integer studentId, @Auth UserAuthDetails authDetails, Pageable pageable);
 
     @GetMapping(value = "/registered/{studentId}")
-    List<Course> getRegisteredForStudent(@PathVariable("studentId") Integer studentId, Pageable pageable);
+    List<Course> getRegisteredForStudent(@PathVariable("studentId") Integer studentId, @Auth UserAuthDetails authDetails, Pageable pageable);
 
 
 
