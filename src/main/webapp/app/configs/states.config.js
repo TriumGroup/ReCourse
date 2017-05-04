@@ -90,8 +90,17 @@ function AppStates($stateProvider, $urlRouterProvider) {
         {
             name: 'student-lessons',
             url: '/student/lessons',
-            controller: 'StudentCoursesController as self',
-            templateUrl: 'templates/student/courses/index.html'
+            views: {
+                '': { templateUrl: 'templates/lessons/lessons.future.past.html' },
+                'future@student-lessons': {
+                    controller: 'StudentFutureLessonListController as self',
+                    templateUrl: 'templates/lessons/index.html'
+                },
+                'past@student-lessons': {
+                    controller: 'StudentPastLessonListController as self',
+                    templateUrl: 'templates/lessons/index.html'
+                }
+            }
         },
         {
             name: 'profile',
