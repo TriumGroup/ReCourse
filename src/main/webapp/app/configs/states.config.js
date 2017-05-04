@@ -35,11 +35,10 @@ function AppStates($stateProvider, $urlRouterProvider) {
             controller: 'CourseUserListController as self',
             templateUrl: 'templates/users/index.html'
         },
-
         {
-            name: 'courses',
+            name: 'admin-courses',
             url: '/courses',
-            controller: 'CourseListController as self',
+            controller: 'AdminCourseListController as self',
             templateUrl: 'templates/courses/index.html'
         },
         {
@@ -82,10 +81,10 @@ function AppStates($stateProvider, $urlRouterProvider) {
             }
         },
         {
-            name: 'student-courses',
-            url: '/student/courses',
-            controller: 'StudentCoursesController as self',
-            templateUrl: 'templates/student/courses/index.html'
+            name: 'student-available-courses',
+            url: '/student/available_courses',
+            controller: 'StudentAvailableCourseListController as self',
+            templateUrl: 'templates/courses/index.html'
         },
         {
             name: 'student-lessons',
