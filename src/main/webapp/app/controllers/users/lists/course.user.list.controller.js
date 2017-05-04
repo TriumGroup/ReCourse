@@ -26,7 +26,14 @@ function CourseUserListController($mdDialog, UserFactory, $stateParams, $control
     }
 
     function unregisterStudent(user) {
-        CourseFactory.unregisterStudent({ id: self.course, studentId: user.id }, refresh);
+        var confirm = $mdDialog.confirm()
+                        .title('Would you like to unregister student from this course?')
+                        .ok('Yes!')
+                        .cancel('No');
+
+        $mdDialog.show(confirm).then(function () {
+            CourseFactory.unregisterStudent({ id: self.course, studentId: user.id }, refresh);
+        }, function() {});
     }
 
     function openRegisterModal() {

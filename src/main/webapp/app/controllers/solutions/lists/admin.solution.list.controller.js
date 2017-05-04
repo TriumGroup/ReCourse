@@ -36,15 +36,21 @@ function AdminSolutionListController($controller, $mdDialog, SolutionFactory, Ma
     }
 
     function deleteSolution(solution) {
-        if (solution.mark.id) {
-            MarkFactory.delete({id: solution.mark.id}, function () {
-                solution.mark = null;
-                SolutionFactory.delete({id: solution.id}, refresh);
-            })
-        } else {
-            SolutionFactory.delete({id: solution.id}, refresh);
-        }
+        var confirm = $mdDialog.confirm()
+            .title('Would you like to delete this solution?')
+            .ok('Yes!')
+            .cancel('No');
 
+        $mdDialog.show(confirm).then(function () {
+            if (solution.mark.id) {
+                MarkFactory.delete({id: solution.mark.id}, function () {
+                    solution.mark = null;
+                    SolutionFactory.delete({id: solution.id}, refresh);
+                })
+            } else {
+                SolutionFactory.delete({id: solution.id}, refresh);
+            }
+        }, function() {});
     }
 
     function showSolution(solution) {

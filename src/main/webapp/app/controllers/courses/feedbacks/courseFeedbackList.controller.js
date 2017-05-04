@@ -28,7 +28,14 @@ function CourseFeedbackListController($mdDialog, CourseFactory, FeedbackFactory,
     }
 
     function deleteFeedback(feedback) {
-        FeedbackFactory.delete({ id: feedback.id }, refresh);
+        var confirm = $mdDialog.confirm()
+            .title('Would you like to delete this feedback?')
+            .ok('Yes!')
+            .cancel('No');
+
+        $mdDialog.show(confirm).then(function () {
+            FeedbackFactory.delete({ id: feedback.id }, refresh);
+        }, function() {});
     }
 
     function editFeedback(feedback) {
