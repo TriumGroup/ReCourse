@@ -10,9 +10,10 @@ function StudentCoursesController($mdDialog, CourseFactory, AuthService, $state)
     self.title = 'Courses';
     self.showLessons = showLessons;
 
-    if (AuthService.user.role === 'STUDENT'){
-        self.studentId = AuthService.user.id;
-    }
+    // if (AuthService.user.role === 'STUDENT'){
+    //     self.studentId = AuthService.user.id;
+    // }
+    self.studentId = 31;
 
     refresh();
 
