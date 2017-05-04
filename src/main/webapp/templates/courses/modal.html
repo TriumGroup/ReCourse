@@ -2,8 +2,7 @@
     <form ng-cloak>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2 ng-if="self.updateMode">Update Course</h2>
-                <h2 ng-if="!self.updateMode">Create Course</h2>
+                <h2>{{self.title}}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="self.cancel()">
                     <i class="material-icons">close</i>
@@ -14,28 +13,29 @@
             <div layout="row">
                 <md-input-container flex>
                     <label>Title</label>
-                    <input ng-model="self.course.title">
+                    <input ng-model="self.course.title" ng-disabled="{{!self.isAdminCourses()}}">
                 </md-input-container>
                 <md-input-container flex>
                     <label>Status</label>
-                    <md-select ng-model="self.course.status">
+                    <md-select ng-model="self.course.status" ng-disabled="{{!self.isAdminCourses()}}">
                         <md-option ng-repeat="status in self.statuses" value="{{status}}">{{status}}</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container flex>
                     <label>Max students</label>
-                    <input ng-model="self.course.maxStudents">
+                    <input ng-model="self.course.maxStudents" ng-disabled="{{!self.isAdminCourses()}}">
                 </md-input-container>
             </div>
             <div layout="row">
                 <md-input-container flex>
                     <label>Description</label>
-                    <textarea ng-model="self.course.description" style="max-height: 120px;" rows="5" md-select-on-focus></textarea>
+                    <textarea ng-model="self.course.description" style="max-height: 120px;" rows="5" md-select-on-focus ng-disabled="{{!self.isAdminCourses()}}"></textarea>
                 </md-input-container>
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
-            <md-button ng-click="self.saveCourse()">Save</md-button>
+            <md-button ng-if="self.isAdminCourses()" ng-click="self.saveCourse()">Save</md-button>
+            <md-button ng-if="self.isAvailableStudentCourses()" ng-click="self.registerOnCourse()">Register</md-button>
             <md-button ng-click="self.cancel()">Cancel</md-button>
         </md-dialog-actions>
     </form>
