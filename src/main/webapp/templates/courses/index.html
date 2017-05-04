@@ -12,7 +12,7 @@
                     <th md-column>#</th>
                     <th md-column>Title</th>
                     <th md-column>Description</th>
-                    <th md-column>Status</th>
+                    <th ng-if="self.isAdminCourses()" md-column>Status</th>
                     <th md-column>Max students</th>
                 </tr>
                 </thead>
@@ -21,7 +21,7 @@
                     <td md-cell>{{course.id}}</td>
                     <td md-cell>{{course.title}}</td>
                     <td md-cell>{{course.description | strLengthLimit : 70}}</td>
-                    <td md-cell>{{course.status}}</td>
+                    <td md-cell ng-if="self.isAdminCourses()">{{course.status}}</td>
                     <td md-cell>{{course.maxStudents}}</td>
                     <td md-cell>
                         <md-menu>
@@ -31,7 +31,7 @@
                                 </md-icon>
                             </md-button>
                             <md-menu-content>
-                                <md-menu-item>
+                                <md-menu-item ng-if="self.isAdminCourses()">
                                     <md-button ng-click="self.showStudents(course)">
                                         <md-icon md-menu-origin>
                                             <i class="material-icons">face</i>
@@ -39,7 +39,7 @@
                                         Students
                                     </md-button>
                                 </md-menu-item>
-                                <md-menu-item>
+                                <md-menu-item ng-if="self.isAdminCourses() || self.isAvailableStudentCourses()">
                                     <md-button ng-click="self.showLessons(course)">
                                         <md-icon md-menu-origin>
                                             <i class="material-icons">event_note</i>
@@ -47,7 +47,7 @@
                                         Lessons
                                     </md-button>
                                 </md-menu-item>
-                                <md-menu-item>
+                                <md-menu-item ng-if="self.isAdminCourses()">
                                     <md-button ng-click="self.showFeedbacks(course)">
                                         <md-icon md-menu-origin>
                                             <i class="material-icons">message</i>
@@ -55,7 +55,7 @@
                                         Feedbacks
                                     </md-button>
                                 </md-menu-item>
-                                <md-menu-item>
+                                <md-menu-item ng-if="self.isAdminCourses()">
                                     <md-button ng-click="self.editCourse(course)">
                                         <md-icon md-menu-origin>
                                             <i class="material-icons">mode_edit</i>
@@ -63,12 +63,20 @@
                                         Edit
                                     </md-button>
                                 </md-menu-item>
-                                <md-menu-item>
+                                <md-menu-item ng-if="self.isAdminCourses()">
                                     <md-button ng-click="self.deleteCourse(course)">
                                         <md-icon md-menu-origin>
                                             <i class="material-icons">delete</i>
                                         </md-icon>
                                         Delete
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isAvailableStudentCourses()">
+                                    <md-button ng-click="self.registerStudent(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">account_balance</i>
+                                        </md-icon>
+                                        Register
                                     </md-button>
                                 </md-menu-item>
                             </md-menu-content>
@@ -80,7 +88,7 @@
         </md-table-container>
         <md-table-pagination md-limit="self.pagination.limit" md-page="self.pagination.page" md-total="{{self.courses.length}}"></md-table-pagination>
     </md-card>
-    <md-button class="md-fab" ng-click="self.addCourse()">
+    <md-button class="md-fab" ng-click="self.addCourse()" ng-if="self.isAdminCourses()">
         <i class="material-icons">add</i>
     </md-button>
 </ui-view>

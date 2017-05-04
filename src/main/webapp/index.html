@@ -17,17 +17,17 @@
 <body ng-app="app" ng-cloak layout="column">
     <md-toolbar layout="row" md-whiteframe="2" layout-align="space-around center" ng-controller="NavigationController as self">
         <p>ReCourse</p>
-        <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+        <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links" md-no-ink-bar="true">
             <div ng-if="self.isAuthorized()">
                 <div ng-if="self.getRole() === 'ADMIN'">
-                    <md-nav-item md-nav-sref="courses" name="courses">courses</md-nav-item>
+                    <md-nav-item md-nav-sref="admin-courses" name="admin-courses">courses</md-nav-item>
                     <md-nav-item md-nav-sref="users" name="users">users</md-nav-item>
                 </div>
                 <div ng-if="self.getRole() === 'TEACHER'">
                     <md-nav-item md-nav-sref="teacher-lessons" name="teacher-lessons">Lessons</md-nav-item>
                 </div>
                 <div ng-if="self.getRole() === 'STUDENT'">
-                    <md-nav-item md-nav-sref="student-courses" name="student-courses">My Courses</md-nav-item>
+                    <md-nav-item md-nav-sref="student-available-courses" name="student-available-courses">Available Courses</md-nav-item>
                     <md-nav-item md-nav-sref="student-lessons" name="student-lessons">My Lessons</md-nav-item>
                 </div>
                 <md-nav-item md-nav-sref="profile" name="profile">
@@ -91,9 +91,12 @@
     <script type="text/javascript" src="app/controllers/users/lists/course.user.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/users/userModal.controller.js"></script>
     <script type="text/javascript" src="app/controllers/users/profile.controller.js"></script>
-    <script type="text/javascript" src="app/controllers/courses/lists/course.list.controller.js"></script>
-    <script type="text/javascript" src="app/controllers/courses/courseModal.controller.js"></script>
-    <script type="text/javascript" src="app/controllers/courses/students/courseStudentModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/lists/courseList.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/lists/adminCourseList.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/lists/studentAvailableCourseList.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/modal/courseModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/modal/adminCourseModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/courses/modal/studentCourseRegistrationModal.controller.js"></script>
     <script type="text/javascript" src="app/controllers/courses/feedbacks/courseFeedbackList.controller.js"></script>
     <script type="text/javascript" src="app/controllers/courses/feedbacks/courseFeedbackModal.controller.js"></script>
     <script type="text/javascript" src="app/controllers/lessons/lists/lesson.list.controller.js"></script>
@@ -116,7 +119,6 @@
     <script type="text/javascript" src="app/controllers/lessons/teacherLessonModal.controller.js"></script>
 
     <script type="text/javascript" src="app/controllers/solutions/teacherSolutionModal.controller.js"></script>
-    <script type="text/javascript" src="app/controllers/courses/studentCourseController.js"></script>
 
     <script type="text/javascript" src="app/filters/propertyFilter.js"></script>
     <script type="text/javascript" src="app/filters/strLengthLimit.js"></script>
