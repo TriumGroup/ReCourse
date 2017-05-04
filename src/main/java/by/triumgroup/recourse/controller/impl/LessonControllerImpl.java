@@ -9,6 +9,7 @@ import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.service.LessonService;
 import org.slf4j.Logger;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -28,6 +29,16 @@ public class LessonControllerImpl
     public LessonControllerImpl(LessonService lessonService) {
         super(lessonService, logger);
         this.lessonService = lessonService;
+    }
+
+    @Override
+    public Iterable<Lesson> getAll(@Auth UserAuthDetails authDetails, Pageable pageable) {
+        if (authDetails.isStudent()) {
+            return wrapServiceCall(logger, () -> lessonService
+                    .findAllExcludeDraft(pageable).orElseThrow(NotFoundException::new));
+        } else {
+            return super.getAll(authDetails, pageable);
+        }
     }
 
     @Override

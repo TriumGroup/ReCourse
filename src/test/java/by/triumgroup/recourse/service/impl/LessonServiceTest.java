@@ -29,6 +29,7 @@ import org.springframework.validation.Errors;
 import java.util.List;
 import java.util.Optional;
 
+import static by.triumgroup.recourse.util.Util.allItemsPage;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -285,6 +286,15 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
     @Override
     protected EntitySupplier<Lesson, Integer> getEntitySupplier() {
         return lessonSupplier;
+    }
+
+    @Override
+    public void findAllEntitiesTest() throws Exception {
+        when(lessonRepository.findByOrderByStartTimeAsc(allItemsPage())).thenReturn(Lists.newArrayList(getEntitySupplier().getValidEntityWithId()));
+        List<Lesson> list = Lists.newArrayList(lessonRepository.findByOrderByStartTimeAsc(allItemsPage()));
+
+        verify(lessonRepository, times(1)).findByOrderByStartTimeAsc(allItemsPage());
+        Assert.assertEquals(1, list.size());
     }
 
     @Override

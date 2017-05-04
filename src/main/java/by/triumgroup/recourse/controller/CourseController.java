@@ -18,27 +18,27 @@ public interface CourseController extends CrudController<Course, Integer> {
 
     @GetMapping("{courseId}/lessons")
     List<Lesson> getLessons(
-            @PathVariable("courseId") Integer courseId, Pageable pageable);
+            @PathVariable("courseId") Integer courseId, @Auth UserAuthDetails authDetails, Pageable pageable);
 
     @GetMapping("{courseId}/feedbacks")
     List<CourseFeedback> getFeedbacks(
-            @PathVariable("courseId") Integer courseId, Pageable pageable);
+            @PathVariable("courseId") Integer courseId, @Auth UserAuthDetails authDetails, Pageable pageable);
 
     @GetMapping("{courseId}/students")
     List<User> getStudents(
             @PathVariable("courseId") Integer courseId, @Auth UserAuthDetails authDetails);
 
     @GetMapping(value = "/search", params = "title")
-    List<Course> searchByTitle(@RequestParam("title") String title, Pageable pageable);
+    List<Course> searchByTitle(@RequestParam("title") String title, @Auth UserAuthDetails authDetails, Pageable pageable);
 
     @GetMapping(value = "/search", params = "status")
-    List<Course> searchByStatus(@RequestParam("status") Course.Status status, Pageable pageable);
+    List<Course> searchByStatus(@RequestParam("status") Course.Status status, @Auth UserAuthDetails authDetails, Pageable pageable);
 
     @GetMapping(value = "/available/{studentId}")
-    List<Course> getAvailableForStudent(@PathVariable("studentId") Integer studentId, Pageable pageable);
+    List<Course> getAvailableForStudent(@PathVariable("studentId") Integer studentId, @Auth UserAuthDetails authDetails, Pageable pageable);
 
     @GetMapping(value = "/registered/{studentId}")
-    List<Course> getRegisteredForStudent(@PathVariable("studentId") Integer studentId, Pageable pageable);
+    List<Course> getRegisteredForStudent(@PathVariable("studentId") Integer studentId, @Auth UserAuthDetails authDetails, Pageable pageable);
 
 
 

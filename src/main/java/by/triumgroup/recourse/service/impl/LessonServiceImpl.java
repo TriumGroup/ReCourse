@@ -134,6 +134,10 @@ public class LessonServiceImpl
         }
     }
 
+    @Override
+    public Iterable<Lesson> findAll(Pageable pageable) {
+        return repository.findByOrderByStartTimeAsc(pageable);
+    }
 
     @Override
     public Optional<List<Lesson>> findByCourseId(Integer id, Pageable pageable) {
@@ -141,6 +145,11 @@ public class LessonServiceImpl
                 ? repository.findByCourseIdOrderByStartTimeAsc(id, pageable)
                 : null
         );
+    }
+
+    @Override
+    public Optional<List<Lesson>> findAllExcludeDraft(Pageable pageable) {
+        return wrapJPACallToOptional(() -> repository.findAllExcludeDraftOrderByTimeAsc(pageable));
     }
 
     @Override
