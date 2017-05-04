@@ -45,7 +45,7 @@ function AppStates($stateProvider, $urlRouterProvider) {
             name: 'feedbacks',
             url: '/feedbacks?course',
             controller: 'CourseFeedbackListController as self',
-            templateUrl: 'templates/courses/feedbacks/index.html'
+            templateUrl: 'templates/feedbacks/index.html'
         },
         {
             name: 'course-lessons',
