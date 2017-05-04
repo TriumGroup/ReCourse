@@ -10,7 +10,7 @@ import java.util.List;
 @Configuration
 public class PageRequestConfiguration extends WebMvcConfigurerAdapter {
 
-    public static final int MAX_PAGE_SIZE = 20;
+    public static final int MAX_PAGE_SIZE = 2000;
     private PageableHandlerMethodArgumentResolver resolver;
 
     public PageRequestConfiguration(PageableHandlerMethodArgumentResolver resolver) {
