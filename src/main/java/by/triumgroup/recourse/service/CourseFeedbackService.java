@@ -10,4 +10,6 @@ public interface CourseFeedbackService extends CrudService<CourseFeedback, Integ
 
     Optional<List<CourseFeedback>> findByCourseId(Integer id, Pageable pageable);
 
+    Optional<CourseFeedback> findByCourseIdAndStudentId(Integer courseId, Integer studentId);
+
 }

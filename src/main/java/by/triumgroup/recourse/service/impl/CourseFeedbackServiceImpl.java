@@ -63,6 +63,12 @@ public class CourseFeedbackServiceImpl
     }
 
     @Override
+    public Optional<CourseFeedback> findByCourseIdAndStudentId(Integer courseId, Integer studentId) {
+        return wrapJPACallToOptional(() -> courseFeedbackRepository
+                .findByCourseIdAndStudentIdOrderByIdDesc(courseId, studentId));
+    }
+
+    @Override
     protected String getEntityName() {
         return "course feedback";
     }
