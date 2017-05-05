@@ -65,8 +65,8 @@ public class LessonServiceImpl
         if (entity.getStartTime().before(Timestamp.from(Instant.now()))) {
             messages.add(new ErrorMessage("startTime", "Start time must be in future"));
         }
-        if (course.getRegistrationEnd().before(entity.getStartTime())) {
-            messages.add(new ErrorMessage("startTime", "Start time must be after course registration end"));
+        if (entity.getStartTime().before(Timestamp.from(Instant.now()))) {
+            throw new ServiceBadRequestException("startTime", "Start time must be in future");
         }
         rejectIfNeed(messages);
     }
@@ -166,6 +166,16 @@ public class LessonServiceImpl
                 ? repository.findByTeacherIdAndCourseIdOrderByStartTimeAsc(teacherId, courseId, pageable)
                 : null
         );
+    }
+
+    @Override
+    public Optional<List<Lesson>> findFutureLessonsByUserId(Integer userId, Pageable pageable) {
+        return wrapJPACallToOptional(() -> repository.findFutureLessonsByUserId(userId, pageable));
+    }
+
+    @Override
+    public Optional<List<Lesson>> findPastLessonsByUserId(Integer userId, Pageable pageable) {
+        return wrapJPACallToOptional(() -> repository.findPastLessonsByUserId(userId, pageable));
     }
 
     @Override

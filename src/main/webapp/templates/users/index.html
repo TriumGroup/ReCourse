@@ -1,0 +1,47 @@
+<md-card flex>
+    <md-toolbar class="md-table-toolbar md-default">
+        <div class="md-toolbar-tools">
+            <span>{{self.title}}</span>
+            <i ng-if="self.isCourseUsers()" class="material-icons">keyboard_arrow_right</i>
+            <span ng-if="self.isCourseUsers()">{{self.subtitle}}</span>
+        </div>
+    </md-toolbar>
+    <md-table-container>
+        <table md-table>
+            <thead md-head>
+            <tr md-row>
+                <th md-column>#</th>
+                <th md-column>Email</th>
+                <th hide show-gt-xs md-column>Name</th>
+                <th hide show-gt-md md-column>Gender</th>
+                <th hide show-gt-sm md-column>Role</th>
+                <th hide show-gt-sm md-column>Birthday</th>
+            </tr>
+            </thead>
+            <tbody md-body>
+            <tr md-row ng-repeat="user in self.users | limitTo: self.pagination.limit : (self.pagination.page - 1) * self.pagination.limit">
+                <td md-cell>{{user.id}}</td>
+                <td md-cell hide show-gt-xs >{{user.email}}</td>
+                <td md-cell hide show-xs ng-click="self.editUser(user)" ng-if="!self.course">{{user.email}}</td>
+                <td md-cell hide show-xs ng-click="self.unregisterStudent(user)" ng-if="self.course">{{user.email}}</td>
+                <td hide show-gt-xs md-cell>{{user.name}} {{user.surname}}</td>
+                <td hide show-gt-md md-cell>{{user.gender}}</td>
+                <td hide show-gt-sm md-cell>{{user.role}}</td>
+                <td hide show-gt-sm md-cell>{{(user.birthday | date : 'MM/dd/yyyy') || 'N/A' }}</td>
+                <td md-cell hide show-gt-xs>
+                    <md-button class="md-icon-button" ng-click="self.editUser(user)" ng-if="!self.course">
+                        <i class="material-icons" style="color: rgba(0, 0, 0, 0.54);">mode_edit</i>
+                    </md-button>
+                    <md-button class="md-icon-button" ng-click="self.unregisterStudent(user)" ng-if="self.course">
+                        <i class="material-icons" style="color: rgba(0, 0, 0, 0.54);">clear</i>
+                    </md-button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="self.pagination.limit" md-page="self.pagination.page" md-total="{{self.users.length}}"></md-table-pagination>
+</md-card>
+<md-button class="md-fab" ng-click="self.registerStudent()" ng-if="self.course">
+    <i class="material-icons">add</i>
+</md-button>

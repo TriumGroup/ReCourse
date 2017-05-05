@@ -12,7 +12,6 @@ public class PasswordChanging {
     private String password;
 
     @NotNull(message = "Password confirmation is not specified")
-    @Size(min = 8, max = 50, message = "Password confirmation length must be in range 8-50")
     @SafeHtml
     private String passwordConfirmation;
 

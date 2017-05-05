@@ -43,7 +43,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/api/users/register").permitAll()
 
                 .antMatchers(HttpMethod.GET, "/api/courses/**").authenticated()
-                .antMatchers( "/api/courses/**").hasAuthority(User.Role.ADMIN.name())
+                //TODO Hotfix here to allow student to register self
+                .antMatchers( "/api/courses/**").hasAnyAuthority(User.Role.ADMIN.name(), User.Role.STUDENT.name())
 
                 .antMatchers(HttpMethod.GET, "/api/lessons/**").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/lessons/**").hasAnyAuthority(User.Role.TEACHER.name(), User.Role.ADMIN.name())

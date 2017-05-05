@@ -1,0 +1,39 @@
+<md-dialog class="md-dialog-modal" flex-xs="90">
+    <form ng-cloak>
+        <md-dialog-content class="md-dialog-content">
+            <h2 class="md-title">{{self.title}}</h2>
+            <div layout="column">
+                <md-input-container flex>
+                    <label>Title</label>
+                    <input ng-model="self.course.title" ng-disabled="{{!self.isAdminCourses()}}">
+                </md-input-container>
+                <div layout="row">
+                    <md-input-container flex>
+                        <label>Status</label>
+                        <md-select ng-model="self.course.status" ng-disabled="{{!self.isAdminCourses()}}">
+                            <md-option ng-repeat="status in self.statuses" value="{{status}}">{{status}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Max students</label>
+                        <input ng-model="self.course.maxStudents" ng-disabled="{{!self.isAdminCourses()}}">
+                    </md-input-container>
+                </div>
+                <md-input-container flex>
+                    <label>Booking end</label>
+                    <md-datepicker md-hide-icons="calendar" md-date-filter="" ng-model="self.course.registrationEnd" ng-disabled="!self.isAdminCourses()"></md-datepicker>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Description</label>
+                    <textarea ng-model="self.course.description" rows="3" md-select-on-focus ng-disabled="{{!self.isAdminCourses()}}"></textarea>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-if="self.isAdminCourses()" ng-click="self.saveCourse()">Save</md-button>
+            <md-button ng-if="self.isAvailableStudentCourses()" ng-click="self.registerOnCourse()">Register</md-button>
+            <md-button ng-if="self.isStudentMyCourses() && self.course.status !== 'FINISHED'" ng-click="self.unregisterFromCourse()">Unregister</md-button>
+            <md-button ng-click="self.cancel()">Cancel</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

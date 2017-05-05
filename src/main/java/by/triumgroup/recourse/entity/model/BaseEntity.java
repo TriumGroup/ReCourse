@@ -34,7 +34,7 @@ public class BaseEntity<ID> implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BaseEntity that = (BaseEntity) o;
-        return id == that.id;
+        return id.equals(that.id);
     }
 
     @Override

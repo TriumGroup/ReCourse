@@ -9,6 +9,7 @@ function CourseFeedbackListController($mdDialog, CourseFactory, FeedbackFactory,
     self.courseId = $stateParams.course;
     self.feedbacks = [];
     self.isUpdatingChosen = false;
+    self.pagination = { page: 1, limit: 7 };
 
     self.addFeedback = addFeedback;
     self.deleteFeedback = deleteFeedback;
@@ -27,7 +28,14 @@ function CourseFeedbackListController($mdDialog, CourseFactory, FeedbackFactory,
     }
 
     function deleteFeedback(feedback) {
-        FeedbackFactory.delete({ id: feedback.id }, refresh);
+        var confirm = $mdDialog.confirm()
+            .title('Would you like to delete this feedback?')
+            .ok('Yes!')
+            .cancel('No');
+
+        $mdDialog.show(confirm).then(function () {
+            FeedbackFactory.delete({ id: feedback.id }, refresh);
+        }, function() {});
     }
 
     function editFeedback(feedback) {
@@ -36,8 +44,8 @@ function CourseFeedbackListController($mdDialog, CourseFactory, FeedbackFactory,
 
     function openModal(feedback) {
         $mdDialog.show({
-            controller: 'CourseFeedbackModalController as self',
-            templateUrl: 'templates/crud/courses/feedbacks/modal.html',
+            controller: 'AdminCourseFeedbackModalController as self',
+            templateUrl: 'templates/feedbacks/modal.html',
             parent: angular.element(document.body),
             clickOutsideToClose: true,
             locals: {

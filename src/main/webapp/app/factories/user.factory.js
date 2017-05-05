@@ -5,9 +5,18 @@ angular
 function UserFactory($resource) {
     return $resource('api/users/:id', { id: '@id' }, {
         update: { method: 'PUT' },
-        me: {
+        getForCourse: {
             method: 'GET',
-            url: 'api/users/me',
+            url: 'api/courses/:id/students',
+            isArray: true
+        },
+        getCurrentUser: {
+            method: 'GET',
+            url: 'api/users/me'
+        },
+        updatePassword: {
+            method: 'POST',
+            url: 'api/users/password/change'
         }
     });
 }

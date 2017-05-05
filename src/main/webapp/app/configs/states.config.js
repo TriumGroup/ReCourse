@@ -4,9 +4,12 @@ angular
 
 function AppStates($stateProvider, $urlRouterProvider) {
     [
-        { name: 'root', url: '/', redirectTo: 'home' },
-        { name: 'home', url: '/home', templateUrl: 'templates/home.html' },
         { name: 'about', url: '/about', templateUrl: 'templates/about.html' },
+        {
+            name: 'root',
+            url: '/',
+            controller: 'RootController'
+        },
         {
             name: 'signIn',
             url: '/sign_in',
@@ -20,71 +23,101 @@ function AppStates($stateProvider, $urlRouterProvider) {
             templateUrl: 'templates/sign_up.html'
         },
         {
-            name: 'crud',
-            url: '/crud',
-            templateUrl: 'templates/crud/index.html',
-            redirectTo: 'crud.users'
+            name: 'users',
+            url: '/users',
+            controller: 'AdminUserListController as self',
+            templateUrl: 'templates/users/index.html'
+        },
+
+        {
+            name: 'course-users',
+            url: '/courses/:id/users',
+            controller: 'CourseUserListController as self',
+            templateUrl: 'templates/users/index.html'
         },
         {
-            name: 'crud.users',
-            url: '/users?course',
-            controller: 'UserListController as self',
-            templateUrl: 'templates/crud/users/index.html'
-        },
-        {
-            name: 'crud.courses',
+            name: 'admin-courses',
             url: '/courses',
-            controller: 'CourseListController as self',
-            templateUrl: 'templates/crud/courses/index.html'
+            controller: 'AdminCourseListController as self',
+            templateUrl: 'templates/courses/index.html'
         },
         {
-            name: 'crud.feedbacks',
+            name: 'feedbacks',
             url: '/feedbacks?course',
             controller: 'CourseFeedbackListController as self',
-            templateUrl: 'templates/crud/courses/feedbacks/index.html'
+            templateUrl: 'templates/feedbacks/index.html'
         },
         {
-            name: 'crud.lessons.solutions',
-            url: '/:id/solutions',
-            controller: 'LessonSolutionListController as self',
-            templateUrl: 'templates/crud/lessons/solutions/index.html'
+            name: 'course-lessons',
+            url: '/lessons?course',
+            controller: 'AdminLessonListController as self',
+            templateUrl: 'templates/lessons/index.html'
         },
         {
-            name: 'crud.lessons',
-            url: '/lessons?course&teacher',
-            controller: 'LessonListController as self',
-            templateUrl: 'templates/crud/lessons/index.html'
+            name: 'lesson-solutions',
+            url: '/lessons/:id/solutions',
+            controller: 'AdminSolutionListController as self',
+            templateUrl: 'templates/solutions/index.html'
         },
         {
-            name: 'lessons',
-            url: '/lessons/teacher/:teacher',
-            controller: 'LessonListController as self',
-            templateUrl: 'templates/crud/lessons/index.html'
+            name: 'teacher-solutions',
+            url: '/teacher/lessons/:id/solutions',
+            controller: 'TeacherSolutionListController as self',
+            templateUrl: 'templates/solutions/index.html'
         },
         {
-            name: 'teacher',
+            name: 'teacher-lessons',
             url: '/teacher/lessons',
-            controller: 'LessonListController as self',
-            templateUrl: 'templates/crud/lessons/index.html'
+            views: {
+                '': { templateUrl: 'templates/lessons/lessons.future.past.html'},
+                'future@teacher-lessons':{
+                    controller: 'TeacherFutureLessonListController as self',
+                    templateUrl: 'templates/lessons/index.html'
+                },
+                'past@teacher-lessons': {
+                    controller: 'TeacherPastLessonListController as self',
+                    templateUrl: 'templates/lessons/index.html'
+                }
+            }
         },
         {
-            name: 'teacher.solutions',
-            url: '/:id/solutions',
-            controller: 'LessonSolutionListController as self',
-            templateUrl: 'templates/crud/lessons/solutions/index.html'
+            name: 'student-available-courses',
+            url: '/student/available_courses',
+            controller: 'StudentAvailableCourseListController as self',
+            templateUrl: 'templates/courses/index.html'
         },
         {
-            name: 'student',
-            url: '/student/mycourses',
-            controller: 'StudentCoursesController as self',
-            templateUrl: 'templates/student/courses/index.html'
+            name: 'student-available-lessons',
+            url: '/available_courses/lessons?course',
+            controller: 'StudentCourseLessonsListController as self',
+            templateUrl: 'templates/lessons/index.html'
         },
         {
-            //TODO fix
-            name: 'student.lessons',
-            url: '/:id/lesson',
-            controller: 'StudentCoursesController as self',
-            templateUrl: 'templates/student/courses/index.html'
+            name: 'student-my-courses',
+            url: '/student/courses',
+            controller: 'StudentMyCoursesListController as self',
+            templateUrl: 'templates/courses/index.html'
+        },
+        {
+            name: 'student-lessons',
+            url: '/student/lessons',
+            views: {
+                '': { templateUrl: 'templates/lessons/lessons.future.past.html' },
+                'future@student-lessons': {
+                    controller: 'StudentFutureLessonListController as self',
+                    templateUrl: 'templates/lessons/index.html'
+                },
+                'past@student-lessons': {
+                    controller: 'StudentPastLessonListController as self',
+                    templateUrl: 'templates/lessons/index.html'
+                }
+            }
+        },
+        {
+            name: 'profile',
+            url: '/profile',
+            controller: 'ProfileController as self',
+            templateUrl: 'templates/users/profile.html'
         },
         { name: 'otherwise', url: '/otherwise', template: '<h1>404</h1>' }
     ].forEach(function(state) { $stateProvider.state(state) });
