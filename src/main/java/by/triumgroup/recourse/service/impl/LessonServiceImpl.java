@@ -65,8 +65,8 @@ public class LessonServiceImpl
         if (entity.getStartTime().before(Timestamp.from(Instant.now()))) {
             messages.add(new ErrorMessage("startTime", "Start time must be in future"));
         }
-        if (course.getRegistrationEnd().before(entity.getStartTime())) {
-            messages.add(new ErrorMessage("startTime", "Start time must be after course registration end"));
+        if (entity.getStartTime().before(Timestamp.from(Instant.now()))) {
+            throw new ServiceBadRequestException("startTime", "Start time must be in future");
         }
         rejectIfNeed(messages);
     }
