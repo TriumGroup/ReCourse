@@ -4,10 +4,9 @@ angular
 
 function StudentCourseRegistrationModalController($controller, $mdDialog, CourseFactory, course) {
     var self = this;
-    $controller('CourseModalController', { self: self });
+    $controller('CourseModalController', { self: self, course: course });
 
     self.title = 'Register on Course';
-    self.course = course;
     self.registerOnCourse = registerOnCourse;
 
     function registerOnCourse() {

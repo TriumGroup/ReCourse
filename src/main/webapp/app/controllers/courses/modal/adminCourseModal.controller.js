@@ -4,9 +4,8 @@ angular
 
 function AdminCourseModalController($controller, $mdDialog, CourseFactory, course) {
     var self = this;
-    $controller('CourseModalController', { self: self });
+    $controller('CourseModalController', { self: self, course: course });
 
-    self.course = course;
     self.saveCourse = saveCourse;
     self.updateMode = !!self.course;
 

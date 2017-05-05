@@ -4,10 +4,9 @@ angular
 
 function StudentFinishedCourseModalController($controller, $mdDialog, FeedbackFactory, course) {
     var self = this;
-    $controller('CourseModalController', { self: self });
+    $controller('CourseModalController', { self: self, course: course });
 
     self.title = 'Finished course';
-    self.course = course;
     self.addFeedback = addFeedback;
 
     function addFeedback () {

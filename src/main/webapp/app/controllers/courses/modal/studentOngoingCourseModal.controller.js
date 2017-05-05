@@ -4,10 +4,9 @@ angular
 
 function StudentOngoingCourseModalController($controller, $mdDialog, CourseFactory, course) {
     var self = this;
-    $controller('CourseModalController', { self: self });
+    $controller('CourseModalController', { self: self, course: course });
 
     self.title = 'Course';
-    self.course = course;
     self.unregisterFromCourse = unregisterFromCourse;
 
     function unregisterFromCourse () {
