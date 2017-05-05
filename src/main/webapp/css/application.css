@@ -10,10 +10,6 @@
     left: 16.5px;
 }
 
-/*md-sidenav {*/
-    /*width: 250px;*/
-/*}*/
-
 md-nav-bar div {
     display: flex;
 }
@@ -34,9 +30,6 @@ md-nav-bar .md-nav-bar {
     text-transform: none;
 }
 
-.profile-card {
-    align-self: center;
-}
 
 md-table-pagination.md-table-pagination {
     justify-content: flex-start;
