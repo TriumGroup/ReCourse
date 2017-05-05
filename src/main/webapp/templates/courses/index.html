@@ -11,18 +11,18 @@
                 <tr md-row>
                     <th md-column ng-if="self.isAdminCourses()">#</th>
                     <th md-column>Title</th>
-                    <th md-column>Description</th>
-                    <th ng-if="self.isAdminCourses()" md-column>Status</th>
-                    <th md-column>Max students</th>
+                    <th hide show-gt-xs md-column>Description</th>
+                    <th hide show-gt-xs ng-if="self.isAdminCourses()" md-column>Status</th>
+                    <th hide show-gt-sm md-column>Max students</th>
                 </tr>
                 </thead>
                 <tbody md-body>
                 <tr md-row ng-repeat="course in self.courses | limitTo: self.pagination.limit : (self.pagination.page - 1) * self.pagination.limit">
                     <td md-cell ng-if="self.isAdminCourses()">{{course.id}}</td>
                     <td md-cell>{{course.title}}</td>
-                    <td md-cell>{{course.description | strLengthLimit : 70}}</td>
-                    <td md-cell ng-if="self.isAdminCourses()">{{course.status}}</td>
-                    <td md-cell>{{course.maxStudents}}</td>
+                    <td hide show-gt-xs md-cell>{{course.description | strLengthLimit : 70}}</td>
+                    <td hide show-gt-xs md-cell ng-if="self.isAdminCourses()">{{course.status}}</td>
+                    <td hide show-gt-sm md-cell>{{course.maxStudents}}</td>
                     <td md-cell>
                         <md-menu>
                             <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">

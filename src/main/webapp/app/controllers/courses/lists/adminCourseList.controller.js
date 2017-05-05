@@ -6,6 +6,7 @@ function AdminCourseListController($controller, $mdDialog, CourseFactory, $state
     var self = this;
     $controller('CourseListController', { self: self });
 
+    self.title = 'Courses';
     self.addCourse = addCourse;
     self.deleteCourse = deleteCourse;
     self.editCourse = editCourse;
