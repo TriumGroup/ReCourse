@@ -12,7 +12,7 @@ function HttpRequestErrorsHandler($httpProvider) {
                 if (response.status !== 404) {
                     if (!!response.data.errors) {
                         errors = errors.concat(response.data.errors);
-                    } else if (!!response.data.errors) {
+                    } else if (!!response.data.error) {
                         errors.push({title: 'Auth', message: response.data.error_description})
                     }
                 }
