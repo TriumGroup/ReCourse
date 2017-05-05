@@ -17,7 +17,7 @@ function HttpRequestErrorsHandler($httpProvider) {
                     }
                 }
                 $rootScope.$broadcast('httpError', errors);
-                return $q.reject(response);
+                return $q.resolve(response);
             }
         };
     }
