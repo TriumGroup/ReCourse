@@ -7,7 +7,7 @@ function AdminCourseModalController($controller, $mdDialog, CourseFactory, cours
     $controller('CourseModalController', { self: self, course: course });
 
     self.saveCourse = saveCourse;
-    self.updateMode = !!self.course;
+    self.updateMode = !!course;
 
     if (self.updateMode){
         self.title = 'Update Course';

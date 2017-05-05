@@ -8,7 +8,7 @@ function CourseModalController(self, $state, $mdDialog, course) {
     self.course = course;
 
     if (self.course && self.course.registrationEnd) {
-        self.course = new Date(self.course.registrationEnd)
+        self.course.registrationEnd = new Date(self.course.registrationEnd)
     }
 
     self.cancel = cancel;
