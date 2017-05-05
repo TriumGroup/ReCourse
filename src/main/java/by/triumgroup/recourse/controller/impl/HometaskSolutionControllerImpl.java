@@ -4,25 +4,26 @@ import by.triumgroup.recourse.configuration.security.Auth;
 import by.triumgroup.recourse.configuration.security.UserAuthDetails;
 import by.triumgroup.recourse.controller.HometaskSolutionController;
 import by.triumgroup.recourse.controller.exception.AccessDeniedException;
+import by.triumgroup.recourse.controller.exception.BadRequestException;
 import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.entity.model.HometaskSolution;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.model.Mark;
-import by.triumgroup.recourse.entity.model.User;
 import by.triumgroup.recourse.service.HometaskSolutionService;
 import by.triumgroup.recourse.service.LessonService;
 import by.triumgroup.recourse.service.MarkService;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static by.triumgroup.recourse.util.ServiceCallWrapper.wrapServiceCall;
-import static by.triumgroup.recourse.util.Util.allItemsPage;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class HometaskSolutionControllerImpl
@@ -43,22 +44,38 @@ public class HometaskSolutionControllerImpl
         this.lessonService = lessonService;
     }
 
+    @Override
+    protected void validateNestedEntities(HometaskSolution entity) {
+        if (entity.getStudent().getId() == null) {
+            throw new BadRequestException("student.id", "Student ID is not specified");
+        }
+    }
 
     @Override
-    public Iterable<HometaskSolution> getAll(@Auth UserAuthDetails authDetails) {
+    public HometaskSolution update(@RequestBody @Valid HometaskSolution entity, @PathVariable("id") Integer id, @Auth UserAuthDetails authDetails) {
+        validateNestedEntities(entity);
+        checkAuthority(entity, authDetails, this::hasAuthorityToEdit);
+        return wrapServiceCall(logger, () -> {
+            Optional<HometaskSolution> callResult = hometaskSolutionService.update(entity, id, authDetails.isAdmin());
+            return callResult.orElseThrow(NotFoundException::new);
+        });
+    }
+
+    @Override
+    public Iterable<HometaskSolution> getAll(@Auth UserAuthDetails authDetails, Pageable pageable) {
         Iterable<HometaskSolution> result;
         if (!authDetails.isAdmin()) {
-            if (authDetails.getRole() == User.Role.STUDENT) {
+            if (authDetails.isStudent()) {
                 result = wrapServiceCall(logger, () -> {
                     Optional<List<HometaskSolution>> hometaskSolutions = hometaskSolutionService
-                            .findByStudentId(authDetails.getId(), allItemsPage());
+                            .findByStudentId(authDetails.getId(), pageable);
                     return hometaskSolutions.orElseThrow(NotFoundException::new);
                 });
             } else {
                 throw new AccessDeniedException();
             }
         } else {
-            result = super.getAll(authDetails);
+            result = super.getAll(authDetails, pageable);
         }
         return result;
     }

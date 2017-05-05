@@ -1,5 +1,6 @@
 package by.triumgroup.recourse.service.impl;
 
+import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.model.User;
 import by.triumgroup.recourse.repository.CourseRepository;
@@ -8,11 +9,12 @@ import by.triumgroup.recourse.repository.UserRepository;
 import by.triumgroup.recourse.service.CrudService;
 import by.triumgroup.recourse.service.CrudServiceTest;
 import by.triumgroup.recourse.service.LessonService;
+import by.triumgroup.recourse.service.exception.ServiceBadRequestException;
 import by.triumgroup.recourse.service.exception.ServiceException;
 import by.triumgroup.recourse.supplier.entity.model.EntitySupplier;
+import by.triumgroup.recourse.supplier.entity.model.impl.CourseSupplier;
 import by.triumgroup.recourse.supplier.entity.model.impl.LessonSupplier;
 import by.triumgroup.recourse.supplier.entity.model.impl.UserSupplier;
-import by.triumgroup.recourse.validation.exception.ServiceBadRequestException;
 import by.triumgroup.recourse.validation.validator.LessonTimeValidator;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
@@ -20,13 +22,14 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.util.Pair;
 import org.springframework.validation.Errors;
 
 import java.util.List;
 import java.util.Optional;
 
+import static by.triumgroup.recourse.util.Util.allItemsPage;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -36,6 +39,7 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
     private LessonRepository lessonRepository;
     private LessonService lessonService;
     private LessonSupplier lessonSupplier;
+    private CourseSupplier courseSupplier;
     private CourseRepository courseRepository;
     private UserRepository userRepository;
     private UserSupplier userSupplier;
@@ -50,17 +54,18 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
         lessonService = new LessonServiceImpl(lessonRepository, courseRepository, userRepository, lessonTimeValidator);
         lessonSupplier = new LessonSupplier();
         userSupplier = new UserSupplier();
+        courseSupplier = new CourseSupplier();
     }
 
     @Test
     public void findByExistingCourseId() throws Exception {
         when(courseRepository.exists(any())).thenReturn(true);
-        when(lessonRepository.findByCourseIdOrderByStartTimeDesc(any(), any())).thenReturn(Lists.emptyList());
+        when(lessonRepository.findByCourseIdOrderByStartTimeAsc(any(), any())).thenReturn(Lists.emptyList());
 
         Optional<List<Lesson>> result = lessonService.findByCourseId(lessonSupplier.getAnyId(), null);
 
         verify(courseRepository, times(1)).exists(any());
-        verify(lessonRepository, times(1)).findByCourseIdOrderByStartTimeDesc(any(), any());
+        verify(lessonRepository, times(1)).findByCourseIdOrderByStartTimeAsc(any(), any());
         assertTrue(result.isPresent());
     }
 
@@ -71,7 +76,7 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
         Optional<List<Lesson>> result = lessonService.findByCourseId(lessonSupplier.getAnyId(), null);
 
         verify(courseRepository, times(1)).exists(any());
-        verify(lessonRepository, times(0)).findByCourseIdOrderByStartTimeDesc(any(), any());
+        verify(lessonRepository, times(0)).findByCourseIdOrderByStartTimeAsc(any(), any());
         Assert.assertFalse(result.isPresent());
     }
 
@@ -79,13 +84,13 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
     public void findByExistingTeacherId() throws Exception {
         User teacher = userSupplier.getValidEntityWithId();
         teacher.setRole(User.Role.TEACHER);
-        when(lessonRepository.findByTeacherIdOrderByStartTimeDesc(any(), any())).thenReturn(Lists.emptyList());
+        when(lessonRepository.findByTeacherIdOrderByStartTimeAsc(any(), any())).thenReturn(Lists.emptyList());
         when(userRepository.findOne(any())).thenReturn(teacher);
 
         Optional<List<Lesson>> hometask = lessonService.findByTeacherId(userSupplier.getAnyId(), null);
 
         verify(userRepository, times(1)).findOne(any());
-        verify(lessonRepository, times(1)).findByTeacherIdOrderByStartTimeDesc(any(), any());
+        verify(lessonRepository, times(1)).findByTeacherIdOrderByStartTimeAsc(any(), any());
         Assert.assertTrue(hometask.isPresent());
     }
 
@@ -98,7 +103,7 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
         Optional<List<Lesson>> hometask = lessonService.findByTeacherId(userSupplier.getAnyId(), null);
 
         verify(userRepository, times(1)).findOne(any());
-        verify(lessonRepository, times(0)).findByTeacherIdOrderByStartTimeDesc(any(), any());
+        verify(lessonRepository, times(0)).findByTeacherIdOrderByStartTimeAsc(any(), any());
         Assert.assertFalse(hometask.isPresent());
     }
 
@@ -109,13 +114,13 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
         teacher.setRole(User.Role.TEACHER);
         when(courseRepository.exists(any())).thenReturn(true);
         when(userRepository.findOne(any())).thenReturn(teacher);
-        when(lessonRepository.findByTeacherIdAndCourseIdOrderByStartTimeDesc(any(), any(), any())).thenReturn(Lists.emptyList());
+        when(lessonRepository.findByTeacherIdAndCourseIdOrderByStartTimeAsc(any(), any(), any())).thenReturn(Lists.emptyList());
 
         Optional<List<Lesson>> result = lessonService.findByTeacherIdAndCourseId(userSupplier.getAnyId(), userSupplier.getAnyId(), null);
 
         verify(courseRepository, times(1)).exists(any());
         verify(userRepository, times(1)).findOne(any());
-        verify(lessonRepository, times(1)).findByTeacherIdAndCourseIdOrderByStartTimeDesc(any(), any(), any());
+        verify(lessonRepository, times(1)).findByTeacherIdAndCourseIdOrderByStartTimeAsc(any(), any(), any());
         Assert.assertTrue(result.isPresent());
     }
 
@@ -130,7 +135,7 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
 
         verify(courseRepository, times(1)).exists(any());
         verify(userRepository, times(1)).findOne(any());
-        verify(lessonRepository, times(0)).findByTeacherIdAndCourseIdOrderByStartTimeDesc(any(), any(), any());
+        verify(lessonRepository, times(0)).findByTeacherIdAndCourseIdOrderByStartTimeAsc(any(), any(), any());
         Assert.assertFalse(result.isPresent());
     }
 
@@ -144,7 +149,7 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
         Optional<List<Lesson>> result = lessonService.findByTeacherIdAndCourseId(userSupplier.getAnyId(), userSupplier.getAnyId(), null);
 
         verify(courseRepository, times(1)).exists(any());
-        verify(lessonRepository, times(0)).findByTeacherIdAndCourseIdOrderByStartTimeDesc(any(), any(), any());
+        verify(lessonRepository, times(0)).findByTeacherIdAndCourseIdOrderByStartTimeAsc(any(), any(), any());
         Assert.assertFalse(result.isPresent());
     }
 
@@ -157,7 +162,7 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
 
         Optional<List<Lesson>> result = lessonService.findByTeacherIdAndCourseId(userSupplier.getAnyId(), userSupplier.getAnyId(), null);
 
-        verify(lessonRepository, times(0)).findByTeacherIdAndCourseIdOrderByStartTimeDesc(any(), any(), any());
+        verify(lessonRepository, times(0)).findByTeacherIdAndCourseIdOrderByStartTimeAsc(any(), any(), any());
         Assert.assertFalse(result.isPresent());
     }
 
@@ -274,13 +279,53 @@ public class LessonServiceTest extends CrudServiceTest<Lesson, Integer> {
     }
 
     @Override
-    protected CrudRepository<Lesson, Integer> getCrudRepository() {
+    protected PagingAndSortingRepository<Lesson, Integer> getCrudRepository() {
         return lessonRepository;
     }
 
     @Override
     protected EntitySupplier<Lesson, Integer> getEntitySupplier() {
         return lessonSupplier;
+    }
+
+    @Override
+    public void findAllEntitiesTest() throws Exception {
+        when(lessonRepository.findByOrderByStartTimeAsc(allItemsPage())).thenReturn(Lists.newArrayList(getEntitySupplier().getValidEntityWithId()));
+        List<Lesson> list = Lists.newArrayList(lessonRepository.findByOrderByStartTimeAsc(allItemsPage()));
+
+        verify(lessonRepository, times(1)).findByOrderByStartTimeAsc(allItemsPage());
+        Assert.assertEquals(1, list.size());
+    }
+
+    @Override
+    public void addValidEntityTest() throws Exception {
+        Lesson expectedEntity = getEntitySupplier().getValidEntityWithoutId();
+        Course course = courseSupplier.getValidEntityWithoutId();
+        course.setId(expectedEntity.getCourseId());
+        when(getCrudRepository().save(expectedEntity)).thenReturn(expectedEntity);
+        when(courseRepository.findOne(expectedEntity.getCourseId())).thenReturn(course);
+        setupAllowedRoles(expectedEntity);
+
+        Optional<Lesson> actualResult = getCrudService().add(expectedEntity);
+
+        verify(getCrudRepository(), times(1)).save(expectedEntity);
+        Assert.assertEquals(expectedEntity, actualResult.orElse(null));
+    }
+
+    @Override
+    public void addEntityWithExistingIdTest() throws Exception {
+        Lesson entity = getEntitySupplier().getValidEntityWithId();
+        Course course = courseSupplier.getValidEntityWithoutId();
+        course.setId(entity.getCourseId());
+        when(getCrudRepository().save(entity)).thenReturn(entity);
+        when(courseRepository.findOne(entity.getCourseId())).thenReturn(course);
+        setupAllowedRoles(entity);
+
+        getCrudService().add(entity);
+
+        verify(getCrudRepository()).save(captor.capture());
+        verify(getCrudRepository(), times(1)).save(entity);
+        Assert.assertNull(captor.getValue().getId());
     }
 
     @Override

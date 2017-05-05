@@ -12,11 +12,30 @@ import java.util.List;
 
 public interface LessonRepository extends PagingAndSortingRepository<Lesson, Integer> {
 
-    List<Lesson> findByCourseIdOrderByStartTimeDesc(Integer id, Pageable pageable);
+    List<Lesson> findByCourseIdOrderByStartTimeAsc(Integer id, Pageable pageable);
 
-    List<Lesson> findByTeacherIdOrderByStartTimeDesc(Integer id, Pageable pageable);
+    List<Lesson> findByOrderByStartTimeAsc(Pageable pageable);
 
-    List<Lesson> findByTeacherIdAndCourseIdOrderByStartTimeDesc(Integer teacherId, Integer courseId, Pageable pageable);
+    @Query(value = "SELECT\n" +
+            "  lesson.id,\n" +
+            "  lesson.start_time,\n" +
+            "  lesson.duration,\n" +
+            "  lesson.course_id,\n" +
+            "  lesson.topic,\n" +
+            "  lesson.teacher_id,\n" +
+            "  lesson.task\n" +
+            "FROM lesson\n" +
+            "  JOIN course ON lesson.course_id = course.id\n" +
+            "WHERE (course.status != 'DRAFT')\n" +
+            "ORDER BY start_time ASC \n#pageable\n",
+            nativeQuery = true)
+    List<Lesson> findAllExcludeDraftOrderByTimeAsc(Pageable pageable);
+
+    List<Lesson> findByTeacherIdOrderByStartTimeAsc(Integer id, Pageable pageable);
+
+    List<Lesson> findByTeacherIdAndCourseIdOrderByStartTimeAsc(Integer teacherId, Integer courseId, Pageable pageable);
+
+    Lesson findFirstByCourseIdOrderByStartTimeAsc(Integer id);
 
     @Query(value = "SELECT recourse.can_add_lesson(:teacher_id, :new_lesson_start_time, :duration)", nativeQuery = true)
     boolean canAddLesson(@Param("new_lesson_start_time") Timestamp startTime,
@@ -28,4 +47,30 @@ public interface LessonRepository extends PagingAndSortingRepository<Lesson, Int
                             @Param("teacher_id") Integer teacherId,
                             @Param("duration") Time duration,
                             @Param("lesson_id") Integer lessonId);
+
+    @Query(value = "SELECT lesson.id, lesson.start_time, lesson.duration, lesson.course_id, lesson.topic, lesson.teacher_id, lesson.task\n" +
+            "FROM lesson\n" +
+            "JOIN course JOIN course_student\n" +
+            "ON ((course.id = course_student.course_id) and\n" +
+            "(course_student.student_id = ?1) and\n" +
+            "(course.status = 'PUBLISHED') and\n" +
+            "(lesson.course_id = course.id) and\n" +
+            "(lesson.start_time > now()))\n" +
+            "ORDER BY lesson.start_time ASC\n" +
+            "#pageable\n",
+            nativeQuery = true)
+    List<Lesson> findFutureLessonsByUserId(Integer userId, Pageable pageable);
+
+    @Query(value = "SELECT lesson.id, lesson.start_time, lesson.duration, lesson.course_id, lesson.topic, lesson.teacher_id, lesson.task\n" +
+            "FROM lesson\n" +
+            "JOIN course JOIN course_student\n" +
+            "ON ((course.id = course_student.course_id) and\n" +
+            "(course_student.student_id = ?1) and\n" +
+            "(course.status = 'PUBLISHED') and\n" +
+            "(lesson.course_id = course.id) and\n" +
+            "(lesson.start_time <= now()))\n" +
+            "ORDER BY lesson.start_time ASC\n" +
+            "#pageable\n",
+            nativeQuery = true)
+    List<Lesson> findPastLessonsByUserId(Integer userId, Pageable pageable);
 }

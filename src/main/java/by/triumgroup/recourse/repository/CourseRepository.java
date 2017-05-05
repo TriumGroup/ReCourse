@@ -13,16 +13,20 @@ public interface CourseRepository extends PagingAndSortingRepository<Course, Int
 
     List<Course> findByTitleContainingIgnoreCaseOrderByIdDesc(String title, Pageable pageable);
 
+    List<Course> findByTitleContainingIgnoreCaseAndStatusNotOrderByIdDesc(String title, Course.Status status, Pageable pageable);
+
     List<Course> findByStatusOrderByIdDesc(Course.Status status, Pageable pageable);
+
+    List<Course> findByStatusNotOrderByIdDesc(Course.Status status, Pageable pageable);
 
     @Query(value = "SELECT *\n" +
             "FROM course\n" +
-            "  LEFT JOIN course_student ON ((course.id = course_student.course_id) AND\n" +
-            "                              (course_student.student_id != ?1) OR (course_student.course_id IS NULL))\n" +
-            "WHERE (course.status = 'REGISTRATION')\n" +
-            "GROUP BY id\n" +
-            "ORDER BY id DESC\n" +
-            "#pageable\n",
+            "WHERE (course.status = 'PUBLISHED') AND\n" +
+            "      (course.registration_end > NOW()) AND\n" +
+            "      (?1 NOT IN (SELECT student_id\n" +
+            "                  FROM course_student\n" +
+            "                  WHERE course_id = course.id))\n" +
+            "ORDER BY id DESC \n#pageable\n",
             nativeQuery = true)
     List<Course> findAvailableForUser(Integer userId, Pageable pageable);
 
@@ -31,8 +35,7 @@ public interface CourseRepository extends PagingAndSortingRepository<Course, Int
             "  JOIN course_student ON ((course.id = course_student.course_id) AND\n" +
             "                              (course_student.student_id = ?1))\n" +
             "GROUP BY id\n" +
-            "ORDER BY id DESC\n" +
-            "#pageable\n",
+            "ORDER BY id DESC \n#pageable\n",
             nativeQuery = true)
     List<Course> findRegisteredForUser(Integer userId, Pageable pageable);
 }

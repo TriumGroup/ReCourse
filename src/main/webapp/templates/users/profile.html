@@ -1,0 +1,68 @@
+<md-content layout-gt-xs="row" layout-align="center start" layout-padding flex>
+    <md-card class="profile-card">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Personal information</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <div layout="column">
+                <md-input-container flex>
+                    <label>Email</label>
+                    <input ng-model="self.user.email" type="email">
+                </md-input-container>
+
+                <div layout="row">
+                    <md-input-container flex>
+                        <label>Name</label>
+                        <input ng-model="self.user.name">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Surname</label>
+                        <input ng-model="self.user.surname">
+                    </md-input-container>
+                </div>
+                <div layout="row" layout-align="space-between">
+                    <md-input-container flex>
+                        <label>Gender</label>
+                        <md-select ng-model="self.user.gender">
+                            <md-option ng-repeat="gender in self.genders" value="{{gender}}">{{gender}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Birthday</label>
+                        <md-datepicker md-hide-icons="calendar" md-date-filter="" ng-model="self.user.birthday"></md-datepicker>
+                    </md-input-container>
+                </div>
+            </div>
+        </md-card-content>
+        <md-card-actions layout="row">
+            <md-button ng-click="self.saveUser()">Update</md-button>
+        </md-card-actions>
+    </md-card>
+
+    <md-card class="profile-card">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">Change password</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <div layout="column">
+                <div layout-gt-xs="row">
+                    <md-input-container flex class="md-block">
+                        <label>Password</label>
+                        <input ng-model="self.password" type="password">
+                    </md-input-container>
+                    <md-input-container flex class="md-block">
+                        <label>Confirm passowrd</label>
+                        <input ng-model="self.passwordConfirmation" type="password">
+                    </md-input-container>
+                </div>
+            </div>
+        </md-card-content>
+        <md-card-actions layout="row">
+            <md-button ng-click="self.updatePassword()">Update</md-button>
+        </md-card-actions>
+    </md-card>
+</md-content>

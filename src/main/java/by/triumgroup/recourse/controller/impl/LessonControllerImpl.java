@@ -3,15 +3,17 @@ package by.triumgroup.recourse.controller.impl;
 import by.triumgroup.recourse.configuration.security.Auth;
 import by.triumgroup.recourse.configuration.security.UserAuthDetails;
 import by.triumgroup.recourse.controller.LessonController;
+import by.triumgroup.recourse.controller.exception.AccessDeniedException;
+import by.triumgroup.recourse.controller.exception.BadRequestException;
 import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.service.LessonService;
 import org.slf4j.Logger;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.util.Objects;
 import java.util.Optional;
 
 import static by.triumgroup.recourse.util.ServiceCallWrapper.wrapServiceCall;
@@ -30,8 +32,28 @@ public class LessonControllerImpl
     }
 
     @Override
+    public Iterable<Lesson> getAll(@Auth UserAuthDetails authDetails, Pageable pageable) {
+        if (authDetails.isStudent()) {
+            return wrapServiceCall(logger, () -> lessonService
+                    .findAllExcludeDraft(pageable).orElseThrow(NotFoundException::new));
+        } else {
+            return super.getAll(authDetails, pageable);
+        }
+    }
+
+    @Override
+    protected void validateNestedEntities(Lesson entity) {
+        if (entity.getTeacher().getId() == null) {
+            throw new BadRequestException("teacher.id", "Teacher ID is not specified");
+        }
+    }
+
+    @Override
     public Lesson update(@Valid @RequestBody Lesson entity, @PathVariable("id") Integer id, @Auth UserAuthDetails authDetails) {
-        checkAuthority(entity, authDetails, this::hasAuthorityToEdit);
+        validateNestedEntities(entity);
+        if (!authDetails.isAdmin() && !(authDetails.getId().equals(entity.getTeacher().getId()))) {
+            throw new AccessDeniedException();
+        }
         return wrapServiceCall(logger, () -> {
             Optional<Lesson> callResult = lessonService.update(entity, id, authDetails.getRole());
             return callResult.orElseThrow(NotFoundException::new);
@@ -40,6 +62,6 @@ public class LessonControllerImpl
 
     @Override
     protected boolean hasAuthorityToEdit(Lesson entity, UserAuthDetails authDetails) {
-        return Objects.equals(entity.getTeacher().getId(), authDetails.getId());
+        return false;
     }
 }

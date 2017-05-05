@@ -9,5 +9,5 @@ angular
         'ngMaterial',
         'angular-loading-bar',
         'md.data.table',
-        'permission'
+        'angular-toast'
     ]);

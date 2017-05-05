@@ -25,6 +25,23 @@ public class UserAuthDetails extends User implements UserDetails, Serializable {
         return getRole() == Role.ADMIN;
     }
 
+    public boolean isTeacher() {
+        return getRole() == Role.TEACHER;
+    }
+
+    public boolean isStudent() {
+        return getRole() == Role.STUDENT;
+    }
+
+    public boolean hasAnyRole(Role... roles) {
+        for (Role role : roles) {
+            if (role == getRole()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String getPassword() {
         return getPasswordHash();

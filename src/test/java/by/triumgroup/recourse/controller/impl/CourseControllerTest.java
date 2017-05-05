@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 
 import java.util.Optional;
 
+import static by.triumgroup.recourse.util.Util.allItemsPage;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,6 +42,9 @@ public class CourseControllerTest extends CrudControllerTest<Course, Integer> {
     @Test
     public void getLessonsNotExistingCourseTest() throws Exception{
         when(lessonService.findByCourseId(any(), any())).thenReturn(Optional.empty());
+        Course course = courseSupplier.getValidEntityWithId();
+        course.setStatus(Course.Status.PUBLISHED);
+        when(courseService.findById(any())).thenReturn(Optional.of(course));
         sendGet(COURSE_ID_REQUEST, "lessons")
                 .andExpect(status().isNotFound());
     }
@@ -48,6 +52,9 @@ public class CourseControllerTest extends CrudControllerTest<Course, Integer> {
     @Test
     public void getLessonsExistingCourseTest() throws Exception{
         when(lessonService.findByCourseId(any(), any())).thenReturn(Optional.of(Lists.emptyList()));
+        Course course = courseSupplier.getValidEntityWithId();
+        course.setStatus(Course.Status.PUBLISHED);
+        when(courseService.findById(any())).thenReturn(Optional.of(course));
         sendGet(COURSE_ID_REQUEST,"lessons")
                 .andExpect(status().isOk());
     }
@@ -55,6 +62,9 @@ public class CourseControllerTest extends CrudControllerTest<Course, Integer> {
     @Test
     public void getFeedbacksNotExistingCourseTest() throws Exception{
         when(courseFeedbackService.findByCourseId(any(), any())).thenReturn(Optional.empty());
+        Course course = courseSupplier.getValidEntityWithId();
+        course.setStatus(Course.Status.PUBLISHED);
+        when(courseService.findById(any())).thenReturn(Optional.of(course));
         sendGet(COURSE_ID_REQUEST, "feedbacks")
                 .andExpect(status().isNotFound());
     }
@@ -62,6 +72,9 @@ public class CourseControllerTest extends CrudControllerTest<Course, Integer> {
     @Test
     public void getFeedbacksExistingCourseTest() throws Exception{
         when(courseFeedbackService.findByCourseId(any(), any())).thenReturn(Optional.of(Lists.emptyList()));
+        Course course = courseSupplier.getValidEntityWithId();
+        course.setStatus(Course.Status.PUBLISHED);
+        when(courseService.findById(any())).thenReturn(Optional.of(course));
         sendGet(COURSE_ID_REQUEST, "feedbacks")
                 .andExpect(status().isOk());
     }
@@ -69,14 +82,20 @@ public class CourseControllerTest extends CrudControllerTest<Course, Integer> {
     @Test
     public void searchByTitleTest() throws Exception {
         when(courseService.searchByTitle(any(), any())).thenReturn(Optional.of(Lists.emptyList()));
-        sendGet(COURSE_SEARCH_REQUEST, "title", "title")
+        when(courseService.searchByTitleExcludingStatus(any(), any(), any())).thenReturn(Optional.of(Lists.emptyList()));
+        User user = userSupplier.getValidEntityWithId();
+        user.setRole(User.Role.ADMIN);
+        sendGet(COURSE_SEARCH_REQUEST, user, "title", "title")
                 .andExpect(status().isOk());
     }
 
     @Test
     public void searchByStatusTest() throws Exception {
         when(courseService.findByStatus(any(), any())).thenReturn(Optional.of(Lists.emptyList()));
-        sendGet(COURSE_SEARCH_REQUEST, "status", Course.Status.ONGOING)
+        Course course = courseSupplier.getValidEntityWithId();
+        course.setStatus(Course.Status.PUBLISHED);
+        when(courseService.findById(any())).thenReturn(Optional.of(course));
+        sendGet(COURSE_SEARCH_REQUEST, "status", Course.Status.PUBLISHED)
                 .andExpect(status().isOk());
     }
 
@@ -105,6 +124,14 @@ public class CourseControllerTest extends CrudControllerTest<Course, Integer> {
     @Override
     protected EntitySupplier<Course, Integer> getEntitySupplier() {
         return courseSupplier;
+    }
+
+    @Override
+    public void getAllEntitiesTest() throws Exception {
+        when(getService().findAll(allItemsPage())).thenReturn(Lists.emptyList());
+        User user = userSupplier.getWithRole(User.Role.ADMIN);
+        sendGet(generalRequest, user)
+                .andExpect(status().isOk());
     }
 
     @Override

@@ -14,6 +14,13 @@ public class BaseEntity<ID> implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private ID id;
 
+    public BaseEntity(ID id) {
+        this.id = id;
+    }
+
+    public BaseEntity() {
+    }
+
     public ID getId() {
         return id;
     }
@@ -22,15 +29,12 @@ public class BaseEntity<ID> implements Serializable{
         this.id = id;
     }
 
-    public BaseEntity() {
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BaseEntity that = (BaseEntity) o;
-        return id == that.id;
+        return id.equals(that.id);
     }
 
     @Override

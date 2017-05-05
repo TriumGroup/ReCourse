@@ -13,13 +13,15 @@ import org.junit.rules.ExpectedException;
 import org.mockito.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.util.Pair;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
+import static by.triumgroup.recourse.util.TestUtil.newPage;
+import static by.triumgroup.recourse.util.Util.allItemsPage;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -41,7 +43,7 @@ public abstract class CrudServiceTest<E extends BaseEntity<ID>, ID extends Seria
 
     protected abstract CrudService<E, ID> getCrudService();
 
-    protected abstract CrudRepository<E, ID> getCrudRepository();
+    protected abstract PagingAndSortingRepository<E, ID> getCrudRepository();
 
     protected abstract EntitySupplier<E, ID> getEntitySupplier();
 
@@ -70,11 +72,10 @@ public abstract class CrudServiceTest<E extends BaseEntity<ID>, ID extends Seria
 
     @Test
     public void findAllEntitiesTest() throws Exception {
-        when(getCrudRepository().findAll()).thenReturn(Lists.newArrayList(getEntitySupplier().getValidEntityWithId()));
+        when(getCrudRepository().findAll(allItemsPage())).thenReturn(newPage(getEntitySupplier().getValidEntityWithId()));
+        List<E> list = Lists.newArrayList(getCrudService().findAll(allItemsPage()));
 
-        List<E> list = Lists.newArrayList(getCrudService().findAll());
-
-        verify(getCrudRepository(), times(1)).findAll();
+        verify(getCrudRepository(), times(1)).findAll(allItemsPage());
         Assert.assertEquals(1, list.size());
     }
 

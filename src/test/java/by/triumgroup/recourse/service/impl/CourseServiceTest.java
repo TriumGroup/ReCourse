@@ -1,10 +1,7 @@
 package by.triumgroup.recourse.service.impl;
 
 import by.triumgroup.recourse.entity.model.Course;
-import by.triumgroup.recourse.repository.CourseRepository;
-import by.triumgroup.recourse.repository.HometaskSolutionRepository;
-import by.triumgroup.recourse.repository.LessonRepository;
-import by.triumgroup.recourse.repository.UserRepository;
+import by.triumgroup.recourse.repository.*;
 import by.triumgroup.recourse.service.CourseService;
 import by.triumgroup.recourse.service.CrudService;
 import by.triumgroup.recourse.service.CrudServiceTest;
@@ -12,7 +9,7 @@ import by.triumgroup.recourse.supplier.entity.model.EntitySupplier;
 import by.triumgroup.recourse.supplier.entity.model.impl.CourseSupplier;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +31,8 @@ public class CourseServiceTest extends CrudServiceTest<Course, Integer> {
         courseRepository = Mockito.mock(CourseRepository.class);
         LessonRepository lessonRepository = Mockito.mock(LessonRepository.class);
         HometaskSolutionRepository hometaskSolutionRepository = Mockito.mock(HometaskSolutionRepository.class);
-        courseService = new CourseServiceImpl(courseRepository, userRepository, lessonRepository, hometaskSolutionRepository);
+        CourseFeedbackRepository courseFeedbackRepository = Mockito.mock(CourseFeedbackRepository.class);
+        courseService = new CourseServiceImpl(courseRepository, userRepository, lessonRepository, courseFeedbackRepository, hometaskSolutionRepository);
         courseSupplier = new CourseSupplier();
     }
 
@@ -44,7 +42,7 @@ public class CourseServiceTest extends CrudServiceTest<Course, Integer> {
     }
 
     @Override
-    protected CrudRepository<Course, Integer> getCrudRepository() {
+    protected PagingAndSortingRepository<Course, Integer> getCrudRepository() {
         return courseRepository;
     }
 

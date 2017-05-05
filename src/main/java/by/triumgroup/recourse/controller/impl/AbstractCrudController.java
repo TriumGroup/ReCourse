@@ -9,6 +9,7 @@ import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.entity.model.BaseEntity;
 import by.triumgroup.recourse.service.CrudService;
 import org.slf4j.Logger;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -26,6 +27,9 @@ public abstract class AbstractCrudController<E extends BaseEntity<ID>, ID> imple
     AbstractCrudController(CrudService<E, ID> crudService, Logger logger) {
         this.logger = logger;
         this.crudService = crudService;
+    }
+
+    protected void validateNestedEntities(E entity) {
     }
 
     protected abstract boolean hasAuthorityToEdit(E entity, UserAuthDetails authDetails);
@@ -53,12 +57,13 @@ public abstract class AbstractCrudController<E extends BaseEntity<ID>, ID> imple
         });
     }
 
-    public Iterable<E> getAll(@Auth UserAuthDetails authDetails) {
-        return wrapServiceCall(logger, crudService::findAll);
+    public Iterable<E> getAll(@Auth UserAuthDetails authDetails, Pageable pageable) {
+        return wrapServiceCall(logger, () -> crudService.findAll(pageable));
     }
 
     @Override
     public <S extends E> S create(@Valid @RequestBody S entity, @Auth UserAuthDetails authDetails) {
+        validateNestedEntities(entity);
         checkAuthority(entity, authDetails, this::hasAuthorityToEdit);
         return wrapServiceCall(logger, () -> {
             Optional<S> callResult = crudService.add(entity);
@@ -68,6 +73,7 @@ public abstract class AbstractCrudController<E extends BaseEntity<ID>, ID> imple
 
     @Override
     public E update(@Valid @RequestBody E entity, @PathVariable("id") ID id, @Auth UserAuthDetails authDetails) {
+        validateNestedEntities(entity);
         checkAuthority(entity, authDetails, this::hasAuthorityToEdit);
         return wrapServiceCall(logger, () -> {
             Optional<E> callResult = crudService.update(entity, id);

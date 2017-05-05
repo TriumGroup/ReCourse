@@ -9,6 +9,7 @@ function NavigationController(AuthService) {
     self.signOut = signOut;
     self.getRole = getRole;
     self.getUserId = getUserId;
+    self.getUserName = getUserName;
 
     function isAuthorized() {
         return AuthService.isAuthorized;
@@ -24,5 +25,9 @@ function NavigationController(AuthService) {
 
     function signOut() {
         AuthService.signOut();
+    }
+
+    function getUserName() {
+        return AuthService.user.name + ' ' + AuthService.user.surname;
     }
 }

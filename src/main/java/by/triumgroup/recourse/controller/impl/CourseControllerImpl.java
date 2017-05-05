@@ -4,6 +4,7 @@ import by.triumgroup.recourse.configuration.security.Auth;
 import by.triumgroup.recourse.configuration.security.UserAuthDetails;
 import by.triumgroup.recourse.controller.CourseController;
 import by.triumgroup.recourse.controller.exception.AccessDeniedException;
+import by.triumgroup.recourse.controller.exception.BadRequestException;
 import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.CourseFeedback;
@@ -52,15 +53,36 @@ public class CourseControllerImpl
     }
 
     @Override
-    public List<Lesson> getLessons(@PathVariable("courseId") Integer courseId, Pageable pageable) {
+    public Iterable<Course> getAll(@Auth UserAuthDetails authDetails, Pageable pageable) {
+        if (authDetails.isStudent()) {
+            return wrapServiceCall(logger, () -> {
+                Optional<List<Course>> courses = courseService.findAllExcludingStatus(Course.Status.DRAFT, pageable);
+                return courses.orElseThrow(NotFoundException::new);
+            });
+        } else {
+            return super.getAll(authDetails, pageable);
+        }
+    }
+
+    @Override
+    public List<Lesson> getLessons(@PathVariable("courseId") Integer courseId, @Auth UserAuthDetails authDetails, Pageable pageable) {
+        checkCourseVisibility(courseId, authDetails);
         return wrapServiceCall(logger, () -> {
             Optional<List<Lesson>> lessons = lessonService.findByCourseId(courseId, pageable);
             return lessons.orElseThrow(NotFoundException::new);
         });
     }
 
+    private void checkCourseVisibility(Integer courseId, UserAuthDetails authDetails) {
+        Optional<Course> course = wrapServiceCall(logger, () -> courseService.findById(courseId));
+        if (course.isPresent() && course.get().getStatus() == Course.Status.DRAFT && authDetails.isStudent()) {
+            throw new NotFoundException();
+        }
+    }
+
     @Override
-    public List<CourseFeedback> getFeedbacks(@PathVariable("courseId") Integer courseId, Pageable pageable) {
+    public List<CourseFeedback> getFeedbacks(@PathVariable("courseId") Integer courseId, @Auth UserAuthDetails authDetails, Pageable pageable) {
+        checkCourseVisibility(courseId, authDetails);
         return wrapServiceCall(logger, () -> {
             Optional<List<CourseFeedback>> feedbacks = courseFeedbackService.findByCourseId(courseId, pageable);
             return feedbacks.orElseThrow(NotFoundException::new);
@@ -69,7 +91,7 @@ public class CourseControllerImpl
 
     @Override
     public List<User> getStudents(@PathVariable("courseId") Integer courseId, @Auth UserAuthDetails authDetails) {
-        if (authDetails.isAdmin()) {
+        if (!authDetails.isStudent()) {
             return wrapServiceCall(logger, () -> courseService.findStudentsForCourse(courseId));
         } else {
             throw new AccessDeniedException();
@@ -77,32 +99,46 @@ public class CourseControllerImpl
     }
 
     @Override
-    public List<Course> searchByTitle(@RequestParam("title") String title, Pageable pageable) {
-        return wrapServiceCall(logger, () -> courseService.searchByTitle(title, pageable))
-                .orElseThrow(NotFoundException::new);
+    public List<Course> searchByTitle(@RequestParam("title") String title, @Auth UserAuthDetails authDetails, Pageable pageable) {
+        if (authDetails.isStudent()) {
+            return wrapServiceCall(logger, () -> courseService.searchByTitle(title, pageable))
+                    .orElseThrow(NotFoundException::new);
+        } else {
+            return wrapServiceCall(logger, () -> courseService.searchByTitleExcludingStatus(title, Course.Status.DRAFT, pageable))
+                    .orElseThrow(NotFoundException::new);
+        }
     }
 
     @Override
-    public List<Course> searchByStatus(@RequestParam("status") Course.Status status, Pageable pageable) {
+    public List<Course> searchByStatus(@RequestParam("status") Course.Status status, @Auth UserAuthDetails authDetails, Pageable pageable) {
+        if (status == Course.Status.DRAFT && authDetails.isStudent()) {
+            throw new BadRequestException("Error", "Invalid course type");
+        }
         return wrapServiceCall(logger, () -> courseService.findByStatus(status, pageable))
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public List<Course> getAvailableForStudent(@PathVariable("studentId") Integer studentId, Pageable pageable) {
+    public List<Course> getAvailableForStudent(@PathVariable("studentId") Integer studentId, @Auth UserAuthDetails authDetails, Pageable pageable) {
+        if (!authDetails.isAdmin() && !studentId.equals(authDetails.getId())) {
+            throw new AccessDeniedException();
+        }
         return wrapServiceCall(logger, () -> courseService.findAvailableForUser(studentId, pageable))
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public List<Course> getRegisteredForStudent(@PathVariable("studentId") Integer studentId, Pageable pageable) {
+    public List<Course> getRegisteredForStudent(@PathVariable("studentId") Integer studentId, @Auth UserAuthDetails authDetails, Pageable pageable) {
+        if (!authDetails.isAdmin() && !studentId.equals(authDetails.getId())) {
+            throw new AccessDeniedException();
+        }
         return wrapServiceCall(logger, () -> courseService.findRegisteredForUser(studentId, pageable))
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
     protected boolean hasAuthorityToEdit(Course entity, UserAuthDetails authDetails) {
-        return authDetails.getRole() == User.Role.ADMIN;
+        return authDetails.isAdmin();
     }
 
     public void registerToCourse(@PathVariable("courseId") Integer courseId, @Auth UserAuthDetails authDetails) {

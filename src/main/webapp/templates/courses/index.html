@@ -1,0 +1,110 @@
+<ui-view flex>
+    <md-card flex>
+        <md-toolbar class="md-table-toolbar md-default">
+            <div class="md-toolbar-tools">
+                <span>{{self.title}}</span>
+            </div>
+        </md-toolbar>
+        <md-table-container>
+            <table md-table>
+                <thead md-head>
+                <tr md-row>
+                    <th md-column ng-if="self.isAdminCourses()">#</th>
+                    <th md-column>Title</th>
+                    <th hide show-gt-xs md-column>Description</th>
+                    <th hide show-gt-xs ng-if="self.isAdminCourses()" md-column>Status</th>
+                    <th hide show-gt-sm md-column>Max students</th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row ng-repeat="course in self.courses | limitTo: self.pagination.limit : (self.pagination.page - 1) * self.pagination.limit">
+                    <td md-cell ng-if="self.isAdminCourses()">{{course.id}}</td>
+                    <td md-cell>{{course.title}}</td>
+                    <td hide show-gt-xs md-cell>{{course.description | strLengthLimit : 70}}</td>
+                    <td hide show-gt-xs md-cell ng-if="self.isAdminCourses()">{{course.status}}</td>
+                    <td hide show-gt-sm md-cell>{{course.maxStudents}}</td>
+                    <td md-cell>
+                        <md-menu>
+                            <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">
+                                <md-icon md-menu-origin>
+                                    <i class="material-icons">more_vert</i>
+                                </md-icon>
+                            </md-button>
+                            <md-menu-content>
+                                <md-menu-item ng-if="self.isAdminCourses()">
+                                    <md-button ng-click="self.showStudents(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">face</i>
+                                        </md-icon>
+                                        Students
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isAdminCourses() || self.isAvailableStudentCourses() || self.isStudentCourses()">
+                                    <md-button ng-click="self.showLessons(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">event_note</i>
+                                        </md-icon>
+                                        Lessons
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isAdminCourses()">
+                                    <md-button ng-click="self.showFeedbacks(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">message</i>
+                                        </md-icon>
+                                        Feedbacks
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isAdminCourses()">
+                                    <md-button ng-click="self.editCourse(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">mode_edit</i>
+                                        </md-icon>
+                                        Edit
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isAdminCourses()">
+                                    <md-button ng-click="self.deleteCourse(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">delete</i>
+                                        </md-icon>
+                                        Delete
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isAvailableStudentCourses()">
+                                    <md-button ng-click="self.registerStudent(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">account_balance</i>
+                                        </md-icon>
+                                        Register
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isStudentCourses() && course.status !== 'FINISHED'">
+                                    <md-button ng-click="self.unregisterStudent(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">remove_shopping_cart</i>
+                                        </md-icon>
+                                        Unregister
+                                    </md-button>
+                                </md-menu-item>
+                                <md-menu-item ng-if="self.isStudentCourses() && course.status === 'FINISHED' && !course.feedback">
+                                    <md-button ng-click="self.addFeedback(course)">
+                                        <md-icon md-menu-origin>
+                                            <i class="material-icons">feedback</i>
+                                        </md-icon>
+                                        Feedback
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <md-table-pagination md-limit="self.pagination.limit" md-page="self.pagination.page" md-total="{{self.courses.length}}"></md-table-pagination>
+    </md-card>
+    <md-button class="md-fab" ng-click="self.addCourse()" ng-if="self.isAdminCourses()">
+        <i class="material-icons">add</i>
+    </md-button>
+</ui-view>
