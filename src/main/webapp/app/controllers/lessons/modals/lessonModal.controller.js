@@ -42,7 +42,7 @@ function LessonModalController(self, $mdDialog, lesson, AuthService) {
     }
 
     function canEditHometask() {
-        return !self.isPastLesson() && (self.isTeacherLesson() || self.isAdminLesson());
+        return (!self.isPastLesson() && self.isTeacherLesson()) || self.isAdminLesson();
     }
 
     function now() {
