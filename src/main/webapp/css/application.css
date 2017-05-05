@@ -10,9 +10,9 @@
     left: 16.5px;
 }
 
-md-sidenav {
-    width: 250px;
-}
+/*md-sidenav {*/
+    /*width: 250px;*/
+/*}*/
 
 md-nav-bar div {
     display: flex;
@@ -36,4 +36,12 @@ md-nav-bar .md-nav-bar {
 
 .profile-card {
     align-self: center;
+}
+
+md-table-pagination.md-table-pagination {
+    justify-content: flex-start;
+}
+
+md-dialog.md-dialog-modal {
+    max-height: 95%;
 }

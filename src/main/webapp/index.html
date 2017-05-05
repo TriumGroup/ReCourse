@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
     <title>ReCourse</title>
     <link type="text/css" rel="stylesheet" href="node_modules/angular-material/angular-material.min.css">
     <link type="text/css" rel="stylesheet" href="node_modules/angular-loading-bar/build/loading-bar.min.css">
@@ -17,7 +18,7 @@
 <body ng-app="app" ng-cloak layout="column">
     <md-toolbar layout="row" md-whiteframe="2" layout-align="space-around center" ng-controller="NavigationController as self">
         <p>ReCourse</p>
-        <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links" md-no-ink-bar="true">
+        <md-nav-bar hide show-gt-sm md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links" md-no-ink-bar="true">
             <div ng-if="self.isAuthorized()">
                 <div ng-if="self.getRole() === 'ADMIN'">
                     <md-nav-item md-nav-sref="admin-courses" name="admin-courses">courses</md-nav-item>
@@ -48,8 +49,59 @@
                 <md-nav-item md-nav-sref="signUp" name="signUp">Sign Up</md-nav-item>
             </div>
         </md-nav-bar>
+        <md-menu hide-gt-sm style="margin: 0px;">
+            <md-button class="md-icon-button" ng-click="$mdMenu.open($event)">
+                <md-icon md-menu-origin><i class="material-icons">menu</i></md-icon>
+            </md-button>
+            <md-menu-content width="4">
+                <div ng-if="self.isAuthorized()">
+                    <div ng-if="self.getRole() === 'ADMIN'">
+                        <md-menu-item>
+                            <md-button ui-sref="admin-courses">Courses</md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ui-sref="users">Users</md-button>
+                        </md-menu-item>
+                    </div>
+                    <div ng-if="self.getRole() === 'TEACHER'">
+                        <md-menu-item>
+                            <md-button ui-sref="teacher-lessons">Lessons</md-button>
+                        </md-menu-item>
+                   </div>
+                    <div ng-if="self.getRole() === 'STUDENT'">
+                        <md-menu-item>
+                            <md-button ui-sref="student-available-courses">Available Courses</md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ui-sref="student-my-courses">My Courses</md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ui-sref="student-lessons">My Lessons</md-button>
+                         </md-menu-item>
+                    </div>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button ui-sref="profile" >
+                            My Profile
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="self.signOut()">
+                            Sign Out
+                        </md-button>
+                    </md-menu-item>
+                </div>
+                <div ng-if="!self.isAuthorized()">
+                    <md-menu-item>
+                        <md-button ui-sref="signIn" >Sign In</md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ui-sref="signUp" >Sign Up</md-button>
+                    </md-menu-item>
+                </div>
+            </md-menu-content>
+        </md-menu>
     </md-toolbar>
-
     <md-content ui-view layout="column">Loading...</md-content>
 
     <script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
@@ -117,9 +169,10 @@
     <script type="text/javascript" src="app/controllers/lessons/lists/student.lesson.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/lessons/lists/student.future.lesson.list.controller.js"></script>
     <script type="text/javascript" src="app/controllers/lessons/lists/student.past.lesson.list.controller.js"></script>
-    <script type="text/javascript" src="app/controllers/lessons/lessonModal.controller.js"></script>
-    <script type="text/javascript" src="app/controllers/lessons/studentLessonModal.controller.js"></script>
-    <script type="text/javascript" src="app/controllers/lessons/teacherLessonModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/lessons/modals/lessonModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/lessons/modals/adminLessonModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/lessons/modals/studentLessonModal.controller.js"></script>
+    <script type="text/javascript" src="app/controllers/lessons/modals/teacherLessonModal.controller.js"></script>
 
     <script type="text/javascript" src="app/controllers/navigation.controller.js"></script>
 
