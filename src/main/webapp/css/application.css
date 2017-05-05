@@ -47,3 +47,15 @@ div.md-select-box label {
     color: rgba(0, 0, 0, 0.38);
     margin-bottom: 20px;
 }
+
+@media only screen and (min-width: 600px) {
+    md-dialog {
+        min-width: 350px;
+    }
+}
+
+@media only screen and (min-width: 960px) {
+    md-dialog {
+        min-width: 500px;
+    }
+}

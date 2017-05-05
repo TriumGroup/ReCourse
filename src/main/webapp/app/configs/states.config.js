@@ -25,7 +25,7 @@ function AppStates($stateProvider, $urlRouterProvider) {
         {
             name: 'users',
             url: '/users',
-            controller: 'AllUserListController as self',
+            controller: 'AdminUserListController as self',
             templateUrl: 'templates/users/index.html'
         },
 

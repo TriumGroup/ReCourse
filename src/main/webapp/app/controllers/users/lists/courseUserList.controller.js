@@ -38,8 +38,8 @@ function CourseUserListController($mdDialog, UserFactory, $stateParams, $control
 
     function openRegisterModal() {
         $mdDialog.show({
-            controller: 'CourseStudentModalController as self',
-            templateUrl: 'templates/students/modal.html',
+            controller: 'CourseRegistrationModalController as self',
+            templateUrl: 'templates/users/registrationModal.html',
             parent: angular.element(document.body),
             clickOutsideToClose: true,
             locals: {

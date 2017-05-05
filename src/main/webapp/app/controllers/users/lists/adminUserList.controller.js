@@ -1,8 +1,8 @@
 angular
     .module('app')
-    .controller('AllUserListController', AllUserListController);
+    .controller('AdminUserListController', AdminUserListController);
 
-function AllUserListController($mdDialog, UserFactory, $controller) {
+function AdminUserListController($mdDialog, UserFactory, $controller) {
     var self = this;
 
     $controller('UserListController', {self: self});

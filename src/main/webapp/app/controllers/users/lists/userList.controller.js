@@ -15,5 +15,3 @@ function UserListController( $state, self) {
         return $state.current.name === 'course-users';
     }
 }
-
-
