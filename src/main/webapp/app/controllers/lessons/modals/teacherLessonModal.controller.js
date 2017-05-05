@@ -4,6 +4,7 @@ angular
 
 function TeacherLessonModalController($mdDialog, LessonFactory, CourseFactory, lesson) {
     var self = this;
+    $controller('LessonModalController')
 
     if (lesson && lesson.startTime) {
         lesson.startTime = new Date(lesson.startTime);

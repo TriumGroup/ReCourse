@@ -9,10 +9,12 @@ function HttpRequestErrorsHandler($httpProvider) {
         return {
             responseError: function(response) {
                 var errors = [];
-                if (!!response.data.errors) {
-                    errors = errors.concat(response.data.errors);
-                } else if (!!response.data.errors) {
-                    errors.push({ title: 'Auth', message: response.data.error_description })
+                if (response.status !== 404) {
+                    if (!!response.data.errors) {
+                        errors = errors.concat(response.data.errors);
+                    } else if (!!response.data.errors) {
+                        errors.push({title: 'Auth', message: response.data.error_description})
+                    }
                 }
                 $rootScope.$broadcast('httpError', errors);
                 return $q.reject(response);
