@@ -1,6 +1,6 @@
 .md-fab {
     position: fixed;
-    bottom: 20px;
+    bottom: 45px;
     right: 20px;
     z-index: 1000;
 }
@@ -38,6 +38,15 @@ md-table-pagination.md-table-pagination {
 
 md-dialog.md-dialog-modal {
     max-height: 95%;
+}
+
+footer h4 {
+    font-size: 12pt;
+}
+
+footer {
+    background-color: rgb(63,81,181);
+    color: rgba(255,255,255,0.87);
 }
 
 div.md-select-box {
