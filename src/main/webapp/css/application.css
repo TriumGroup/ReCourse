@@ -38,3 +38,12 @@ md-table-pagination.md-table-pagination {
 md-dialog.md-dialog-modal {
     max-height: 95%;
 }
+
+div.md-select-box {
+    margin-bottom: 20px;
+}
+
+div.md-select-box label {
+    color: rgba(0, 0, 0, 0.38);
+    margin-bottom: 20px;
+}

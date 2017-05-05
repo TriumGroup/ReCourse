@@ -1,24 +1,28 @@
 <md-dialog class="md-dialog-modal" flex-xs="90">
     <form ng-cloak>
-        <md-dialog-content class="md-dialog-content" layout="column" layout-padding>
+        <md-dialog-content class="md-dialog-content">
             <h2 class="md-title">{{self.title}}</h2>
-            <md-input-container flex>
-                <label>Title</label>
-                <input ng-model="self.course.title" ng-disabled="{{!self.isAdminCourses()}}">
-            </md-input-container>
-            <div layout="row">
+            <div layout="column">
                 <md-input-container flex>
-                    <label>Status</label>
-                    <md-select ng-model="self.course.status" ng-disabled="{{!self.isAdminCourses()}}">
-                        <md-option ng-repeat="status in self.statuses" value="{{status}}">{{status}}</md-option>
-                    </md-select>
+                    <label>Title</label>
+                    <input ng-model="self.course.title" ng-disabled="{{!self.isAdminCourses()}}">
                 </md-input-container>
+                <div layout="row">
+                    <md-input-container flex>
+                        <label>Status</label>
+                        <md-select ng-model="self.course.status" ng-disabled="{{!self.isAdminCourses()}}">
+                            <md-option ng-repeat="status in self.statuses" value="{{status}}">{{status}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Max students</label>
+                        <input ng-model="self.course.maxStudents" ng-disabled="{{!self.isAdminCourses()}}">
+                    </md-input-container>
+                </div>
                 <md-input-container flex>
-                    <label>Max students</label>
-                    <input ng-model="self.course.maxStudents" ng-disabled="{{!self.isAdminCourses()}}">
+                    <label>Booking end</label>
+                    <md-datepicker md-hide-icons="calendar" md-date-filter="" ng-model="self.course.registrationEnd" ng-disabled="!self.isAdminCourses()"></md-datepicker>
                 </md-input-container>
-            </div>
-            <div layout="row">
                 <md-input-container flex>
                     <label>Description</label>
                     <textarea ng-model="self.course.description" rows="3" md-select-on-focus ng-disabled="{{!self.isAdminCourses()}}"></textarea>

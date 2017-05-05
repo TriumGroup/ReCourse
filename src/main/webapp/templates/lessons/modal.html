@@ -1,64 +1,52 @@
-<md-dialog>
+<md-dialog class="md-dialog-modal" flex-xs="90">
     <form ng-cloak>
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <h2>{{self.title}}</h2>
-                <span flex></span>
-                <md-button class="md-icon-button" ng-click="self.cancel()">
-                    <i class="material-icons">close</i>
-                </md-button>
-            </div>
-        </md-toolbar>
-        <md-dialog-content layout="column" layout-padding style="margin-top: 20px; width: 550px;">
-            <div layout="row">
+        <md-dialog-content class="md-dialog-content">
+            <h2 class="md-title">{{self.title}}</h2>
+            <div layout="column">
                 <md-input-container flex>
                     <label>Topic</label>
                     <input ng-model="self.lesson.topic" ng-disabled="!self.isAdminLesson()">
                 </md-input-container>
-            </div>
-            <div layout="row">
-                <md-input-container>
-                    <label>Start Time</label>
-                    <md-datepicker md-hide-icons="calendar" md-date-filter="" ng-model="self.lesson.startTime" ng-disabled="!self.isAdminLesson()"></md-datepicker>
-                </md-input-container>
-                <md-input-container flex>
-                    <label>Duration</label>
-                    <input ng-model="self.lesson.duration" ng-disabled="!self.isAdminLesson()">
-                </md-input-container>
-            </div>
-            <div layout="row" ng-if="self.isTeacherLesson()">
-                <md-input-container flex>
+                <div layout="row">
+                    <md-input-container>
+                        <label>Start Time</label>
+                        <md-datepicker md-hide-icons="calendar" md-date-filter="" ng-model="self.lesson.startTime" ng-disabled="!self.isAdminLesson()"></md-datepicker>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Duration</label>
+                        <input ng-model="self.lesson.duration" ng-disabled="!self.isAdminLesson()">
+                    </md-input-container>
+                </div>
+                <md-input-container flex ng-if="self.isTeacherLesson()">
                     <label>Course</label>
                     <input ng-model="self.course.title" disabled>
                 </md-input-container>
-            </div>
-            <div layout="row" ng-if="self.isAdminLesson()">
-                <label style="color: rgba(0, 0, 0, 0.38); margin-right: 20px;">Teacher</label>
-                <md-block flex>
-                    <md-autocomplete
-                            md-search-text="self.teacherSearchText"
-                            md-selected-item="self.lesson.teacher"
-                            md-item-text="teacher.name + ' ' + teacher.surname + ' ('+ teacher.email +')'"
-                            placeholder="Select a teacher"
-                            md-min-length="0"
-                            md-no-cache="true"
-                            md-select-on-match="true"
-                            md-items="teacher in self.teachers | propertyFilter: { searchText: self.teacherSearchText, properties: ['name', 'surname', 'email'] }">
-                        <md-item-template>
-                            <span md-highlight-text="self.teacherSearchText">{{teacher.name}} </span>
-                            <span md-highlight-text="self.teacherSearchText">{{teacher.surname}} </span>
-                            <span md-highlight-text="self.teacherSearchText">({{teacher.email}})</span>
-                        </md-item-template>
-                        <md-not-found>
-                            No teachers matching "{{self.teacherSearchText}}" were found.
-                        </md-not-found>
-                    </md-autocomplete>
-                </md-block>
-            </div>
-            <div layout="row">
+                <div ng-if="self.isAdminLesson()" class="md-select-box" layout="column">
+                    <label style="">Teacher</label>
+                    <md-block flex>
+                        <md-autocomplete
+                                md-search-text="self.teacherSearchText"
+                                md-selected-item="self.lesson.teacher"
+                                md-item-text="teacher.name + ' ' + teacher.surname + ' ('+ teacher.email +')'"
+                                placeholder="Select a teacher"a
+                                md-min-length="0"
+                                md-no-cache="true"
+                                md-select-on-match="true"
+                                md-items="teacher in self.teachers | propertyFilter: { searchText: self.teacherSearchText, properties: ['name', 'surname', 'email'] }">
+                            <md-item-template>
+                                <span md-highlight-text="self.teacherSearchText">{{teacher.name}} </span>
+                                <span md-highlight-text="self.teacherSearchText">{{teacher.surname}} </span>
+                                <span md-highlight-text="self.teacherSearchText">({{teacher.email}})</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No teachers matching "{{self.teacherSearchText}}" were found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </md-block>
+                </div>
                 <md-input-container flex>
                     <label>Hometask</label>
-                    <textarea ng-model="self.lesson.task" rows="5" ng-disabled="!self.canEditHometask()"></textarea>
+                    <textarea ng-model="self.lesson.task" rows="3" ng-disabled="!self.canEditHometask()"></textarea>
                 </md-input-container>
             </div>
         </md-dialog-content>
