@@ -2,110 +2,26 @@ angular
     .module('app')
     .controller('LessonListController', LessonListController);
 
-function LessonListController($state, AuthService, self) {
+function LessonListController(AuthService, self) {
     self.title = '';
     self.lessons = [];
-    self.pagination = { page: 1, limit: 7 };
-    // self.isUpdatingChosen = false;
+    self.pagination = {page: 1, limit: 7};
 
-    // self.addLesson = addLesson;
-    // self.deleteLesson = deleteLesson;
-    // self.editLesson = editLesson;
-    // self.showLesson = showLesson;
-    // self.showSolutions = showSolutions;
     self.isTeacherLessons = isTeacherLessons;
     self.isStudentLessons = isStudentLessons;
     self.isAdminLessons = isAdminLessons;
-    // self.
-    // self.courseId = $stateParams.course;
-
-    // self.refresh();
-
-    // function refresh() {
-    //     if (self.teacherId) {
-    //         LessonFactory.getForTeacher({id: self.teacherId}).$promise.then(function (result) {
-    //             self.lessons = result;
-    //         })
-    //     } else {
-    //         if (self.courseId) {
-    //             self.title = 'Course Lessons';
-    //             CourseFactory.getLessons({id: self.courseId}).$promise.then(function (result) {
-    //                 self.lessons = result;
-    //             });
-    //         } else {
-    //             self.title = 'Lessons';
-    //             LessonFactory.query().$promise.then(function (result) {
-    //                 self.lessons = result;
-    //             });
-    //         }
-    //     }
-    // }
 
     function isTeacherLessons() {
-        // return $state.current.name === 'teacher-lessons';
         return AuthService.role === 'TEACHER';
     }
 
     function isAdminLessons() {
-        // return $state.current.name === 'course-lessons';
         return AuthService.role === 'ADMIN';
     }
 
     function isStudentLessons() {
-        // return $state.current.name === 'student-lessons';
         return AuthService.role === 'STUDENT';
     }
-
-    // function addLesson() {
-    //     openEditModal();
-    // }
-
-    // function deleteLesson(lesson ) {
-    //     LessonFactory.delete(lesson, refresh);
-    // }
-
-    // function editLesson (lesson) {
-    //     openEditModal(lesson);
-    // }
-
-    // function showLesson(lesson) {
-    //     openShowModal(lesson);
-    // }
-
-    // function showSolutions(lesson) {
-    //     if (!self.teacherId){
-    //         $state.go('crud.lessons.solutions', { id: lesson.id });
-    //     } else {
-    //         $state.go('teacher.solutions', { id: lesson.id });
-    //     }
-    //
-    // }
-
-    // function openEditModal(lesson) {
-    //     $mdDialog.show({
-    //         controller: 'LessonModalController as self',
-    //         templateUrl: 'templates/crud/lessons/modal.html',
-    //         parent: angular.element(document.body),
-    //         clickOutsideToClose: true,
-    //         locals: {
-    //             lesson: angular.copy(lesson),
-    //             courseId: self.courseId
-    //         }
-    //     }).then(refresh, refresh);
-    // }
-    //
-    // function openShowModal(lesson) {
-    //     $mdDialog.show({
-    //         controller: 'TeacherLessonModalController as self',
-    //         templateUrl: 'templates/teacher/lessons/modal.html',
-    //         parent: angular.element(document.body),
-    //         clickOutsideToClose: true,
-    //         locals: {
-    //             lesson: angular.copy(lesson),
-    //             courseId: self.courseId
-    //         }
-    //     }).then(refresh, refresh);
-    // }
 }
 
 

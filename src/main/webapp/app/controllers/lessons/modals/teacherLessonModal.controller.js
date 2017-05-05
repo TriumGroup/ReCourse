@@ -2,36 +2,22 @@ angular
     .module('app')
     .controller('TeacherLessonModalController', TeacherLessonModalController);
 
-function TeacherLessonModalController($mdDialog, LessonFactory, CourseFactory, lesson) {
+function TeacherLessonModalController($controller, $mdDialog, LessonFactory, CourseFactory, lesson) {
     var self = this;
-    $controller('LessonModalController')
+    $controller('LessonModalController', { self: self, lesson: lesson });
 
-    if (lesson && lesson.startTime) {
-        lesson.startTime = new Date(lesson.startTime);
-    }
-
-    self.lesson = lesson;
-    self.cancel = cancel;
+    self.title = 'My Lesson';
     self.course = {};
-    self.saveHometask = saveHometask;
-    self.now = now;
 
-    CourseFactory.query().$promise.then(function (result) {
-        self.courses = result;
-        self.course = self.courses.find(function (course) {
-            return course.id === self.lesson.courseId;
-        })
-    });
+    self.saveLesson = saveLesson;
 
-    function now() {
-        return +new Date();
-    }
-
-    function saveHometask() {
+    function saveLesson() {
         LessonFactory.update(self.lesson, $mdDialog.hide);
     }
 
-    function cancel() {
-        $mdDialog.cancel();
-    }
+    CourseFactory.query().$promise.then(function (result) {
+        self.course = result.find(function (course) {
+            return course.id === self.lesson.courseId;
+        });
+    });
 }

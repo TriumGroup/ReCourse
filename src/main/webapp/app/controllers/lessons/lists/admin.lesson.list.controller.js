@@ -49,7 +49,7 @@ function AdminLessonListController($controller, $mdDialog, $stateParams, CourseF
 
     function openEditModal(lesson) {
         $mdDialog.show({
-            controller: 'LessonModalController as self',
+            controller: 'AdminLessonModalController as self',
             templateUrl: 'templates/lessons/modal.html',
             parent: angular.element(document.body),
             clickOutsideToClose: true,

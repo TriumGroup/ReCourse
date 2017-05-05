@@ -11,8 +11,6 @@ function StudentPastLessonListController($controller, $mdDialog, $state, LessonF
     self.lessonsType = 'past';
     self.lessons = [];
 
-    self.showLesson = showLesson;
-    self.showSolutions = showSolutions;
     self.refresh = refresh;
 
     AuthService.prepareAuthInfo().then(function() {
@@ -24,27 +22,6 @@ function StudentPastLessonListController($controller, $mdDialog, $state, LessonF
         LessonFactory.getPastForStudent({ id: self.studentId }).$promise.then(function (result) {
             self.lessons = result;
         })
-    }
-
-    function showLesson(lesson) {
-        openShowModal(lesson);
-    }
-
-    function openShowModal(lesson) {
-        $mdDialog.show({
-            controller: 'TeacherLessonModalController as self',
-            templateUrl: 'templates/teacher/lessons/modal.html',
-            parent: angular.element(document.body),
-            clickOutsideToClose: true,
-            locals: {
-                lesson: angular.copy(lesson),
-                courseId: self.courseId
-            }
-        }).then(self.refresh, self.refresh);
-    }
-
-    function showSolutions(lesson) {
-        $state.go('teacher-solutions', { id: lesson.id });
     }
 }
 

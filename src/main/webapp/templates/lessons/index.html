@@ -69,7 +69,7 @@
                                         </md-menu-item>
                                     </div>
 
-                                    <div ng-if="self.isTeacherLessons()">
+                                    <div ng-if="self.isTeacherLessons() || self.isStudentLessons()">
                                         <md-menu-item>
                                             <md-button ng-click="self.showLesson(lesson)">
                                                 <md-icon md-menu-origin>

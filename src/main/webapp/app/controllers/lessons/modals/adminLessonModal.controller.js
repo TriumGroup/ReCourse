@@ -1,54 +1,32 @@
 angular
     .module('app')
-    .controller('LessonModalController', LessonModalController);
+    .controller('AdminLessonModalController', AdminLessonModalController);
 
-function LessonModalController($mdDialog, UserFactory, CourseFactory, LessonFactory, lesson, courseId) {
+function AdminLessonModalController($mdDialog, $controller, UserFactory, LessonFactory, courseId, lesson) {
     var self = this;
+    $controller('LessonModalController', { self: self, lesson: lesson });
 
-    if (lesson && lesson.startTime) {
-        lesson.startTime = new Date(lesson.startTime);
-    }
-
-    self.lesson = lesson;
     self.saveLesson = saveLesson;
-    self.cancel = cancel;
-    self.courseSelected = courseSelected;
     self.updateMode = !!self.lesson;
     self.courseId = courseId;
-
     self.teachers = [];
-    self.courses = [];
-    self.course = {};
+
+    if (self.updateMode) {
+        self.title = 'Update Lesson';
+    } else {
+        self.title = 'Create Lesson'
+    }
 
     UserFactory.query().$promise.then(function (result) {
         self.teachers = result.filter(function (user) { return user.role === 'TEACHER' });
     });
 
-    CourseFactory.query().$promise.then(function (result) {
-        self.courses = result;
-        self.course = self.courses.find(function (course) {
-            return course.id === self.lesson.courseId;
-        })
-    });
-
-    function courseSelected(course) {
-        if (course) {
-            self.lesson.courseId = course.id;
-        }
-    }
-
     function saveLesson() {
-        if (self.courseId) {
-            self.lesson.courseId = courseId;
-        }
+        self.lesson.courseId = courseId;
         if (self.updateMode){
             LessonFactory.update(self.lesson, $mdDialog.hide);
         } else {
             LessonFactory.save(self.lesson, $mdDialog.hide);
         }
-    }
-
-    function cancel() {
-        $mdDialog.cancel();
     }
 }

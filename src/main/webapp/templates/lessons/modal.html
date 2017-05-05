@@ -2,8 +2,7 @@
     <form ng-cloak>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2 ng-if="self.updateMode">Update Lesson</h2>
-                <h2 ng-if="!self.updateMode">Create Lesson</h2>
+                <h2>{{self.title}}</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="self.cancel()">
                     <i class="material-icons">close</i>
@@ -14,20 +13,26 @@
             <div layout="row">
                 <md-input-container flex>
                     <label>Topic</label>
-                    <input ng-model="self.lesson.topic">
+                    <input ng-model="self.lesson.topic" ng-disabled="!self.isAdminLesson()">
                 </md-input-container>
             </div>
             <div layout="row">
                 <md-input-container>
                     <label>Start Time</label>
-                    <md-datepicker md-hide-icons="calendar" md-date-filter="" ng-model="self.lesson.startTime"></md-datepicker>
+                    <md-datepicker md-hide-icons="calendar" md-date-filter="" ng-model="self.lesson.startTime" ng-disabled="!self.isAdminLesson()"></md-datepicker>
                 </md-input-container>
                 <md-input-container flex>
                     <label>Duration</label>
-                    <input ng-model="self.lesson.duration">
+                    <input ng-model="self.lesson.duration" ng-disabled="!self.isAdminLesson()">
                 </md-input-container>
             </div>
-            <div layout="row">
+            <div layout="row" ng-if="self.isTeacherLesson()">
+                <md-input-container flex>
+                    <label>Course</label>
+                    <input ng-model="self.course.title" disabled>
+                </md-input-container>
+            </div>
+            <div layout="row" ng-if="self.isAdminLesson()">
                 <label style="color: rgba(0, 0, 0, 0.38); margin-right: 20px;">Teacher</label>
                 <md-block flex>
                     <md-autocomplete
@@ -50,39 +55,19 @@
                     </md-autocomplete>
                 </md-block>
             </div>
-
-            <div ng-if="!self.courseId">
-                <md-autocomplete
-                        md-search-text="self.courseSearchText"
-                        md-selected-item="self.course"
-                        md-item-text="course.title"
-                        placeholder="Select a course"
-                        md-min-length="0"
-                        md-selected-item-change="self.courseSelected(course)"
-                        md-no-cache="true"
-                        md-select-on-match="true"
-                        md-items="course in self.courses | propertyFilter: { searchText: self.courseSearchText, properties: ['title', 'status'] }"
-                        md-floating-label="Course">
-                    <md-item-template>
-                        <span md-highlight-text="self.courseSearchText">{{course.title}} </span>
-                        <span md-highlight-text="self.courseSearchText">({{course.status}})</span>
-                    </md-item-template>
-                    <md-not-found>
-                        No course matching "{{self.courseSearchText}}" were found.
-                    </md-not-found>
-                </md-autocomplete>
-            </div>
-
             <div layout="row">
                 <md-input-container flex>
                     <label>Hometask</label>
-                    <input ng-model="self.lesson.hometask">
+                    <textarea ng-model="self.lesson.task" rows="5" ng-disabled="!self.canEditHometask()"></textarea>
                 </md-input-container>
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
-            <md-button ng-click="self.saveLesson()">Save</md-button>
+            <md-button ng-click="self.saveLesson()" ng-if="self.canSave()">Save</md-button>
             <md-button ng-click="self.cancel()">Cancel</md-button>
         </md-dialog-actions>
     </form>
 </md-dialog>
+
+
+
