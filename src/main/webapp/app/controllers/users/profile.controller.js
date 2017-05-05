@@ -17,6 +17,9 @@ function ProfileController(UserFactory, AuthService) {
     function refresh() {
         AuthService.refreshUserInfo().then(function() {
             self.user = angular.copy(AuthService.user);
+            if (self.user.birthday) {
+                self.user.birthday = new Date(self.user.birthday);
+            }
         });
     }
 
