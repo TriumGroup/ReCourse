@@ -9,7 +9,6 @@ function CourseListController(self, $state) {
 
     self.isAdminCourses = isAdminCourses;
     self.isAvailableStudentCourses = isAvailableStudentCourses;
-    self.showLessons = showLessons;
     self.isStudentCourses = isStudentCourses;
 
     function isAdminCourses() {
@@ -22,9 +21,5 @@ function CourseListController(self, $state) {
 
     function isStudentCourses() {
         return $state.current.name === 'student-my-courses';
-    }
-
-    function showLessons(course) {
-        $state.go('course-lessons', { course: course.id });
     }
 }

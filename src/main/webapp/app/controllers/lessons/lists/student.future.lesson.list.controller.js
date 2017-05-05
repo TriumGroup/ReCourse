@@ -2,7 +2,7 @@ angular
     .module('app')
     .controller('StudentFutureLessonListController', StudentFutureLessonListController);
 
-function StudentFutureLessonListController($controller, $mdDialog, LessonFactory, AuthService) {
+function StudentFutureLessonListController($controller, LessonFactory, AuthService) {
     var self = this;
     $controller('StudentLessonListController', { self: self });
 

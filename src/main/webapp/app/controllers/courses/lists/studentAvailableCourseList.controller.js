@@ -2,12 +2,12 @@ angular
     .module('app')
     .controller('StudentAvailableCourseListController', StudentAvailableCourseListController);
 
-function StudentAvailableCourseListController($mdDialog, $controller, CourseFactory, AuthService) {
+function StudentAvailableCourseListController($state, $mdDialog, $controller, CourseFactory, AuthService) {
     var self = this;
     $controller('CourseListController', { self: self });
 
     self.title = 'Available Courses';
-
+    self.showLessons = showLessons;
     self.registerStudent = registerStudent;
 
     AuthService.prepareAuthInfo().then(function () {
@@ -35,6 +35,10 @@ function StudentAvailableCourseListController($mdDialog, $controller, CourseFact
                 course: angular.copy(course)
             }
         }).then(refresh, refresh);
+    }
+
+    function showLessons(course) {
+        $state.go('student-available-lessons', { course: course.id });
     }
 }
 

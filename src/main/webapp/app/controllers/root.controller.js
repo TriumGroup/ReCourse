@@ -9,7 +9,7 @@ function RootController(AuthService, $state) {
         } else if (AuthService.role === 'TEACHER') {
             $state.go('teacher-lessons');
         } else if (AuthService.role === 'STUDENT') {
-            $state.go('student-courses');
+            $state.go('student-lessons');
         } else {
             $state.go('signIn');
         }

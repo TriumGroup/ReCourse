@@ -2,7 +2,7 @@ angular
     .module('app')
     .controller('AdminCourseListController', AdminCourseListController);
 
-function AdminCourseListController($controller, $mdDialog, CourseFactory, $state) {
+function AdminCourseListController($state, $controller, $mdDialog, CourseFactory, $state) {
     var self = this;
     $controller('CourseListController', { self: self });
 
@@ -12,6 +12,7 @@ function AdminCourseListController($controller, $mdDialog, CourseFactory, $state
     self.editCourse = editCourse;
     self.showStudents = showStudents;
     self.showFeedbacks = showFeedbacks;
+    self.showLessons = showLessons;
 
     refresh();
 
@@ -46,6 +47,10 @@ function AdminCourseListController($controller, $mdDialog, CourseFactory, $state
 
     function showFeedbacks(course) {
         $state.go('feedbacks', { course: course.id });
+    }
+
+    function showLessons(course) {
+        $state.go('course-lessons', { course: course.id });
     }
 
     function openModal(course) {

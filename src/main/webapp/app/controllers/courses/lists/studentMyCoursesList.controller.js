@@ -2,11 +2,12 @@ angular
     .module('app')
     .controller('StudentMyCoursesListController', StudentMyCoursesListController);
 
-function StudentMyCoursesListController($mdDialog, $controller, CourseFactory, AuthService, FeedbackFactory) {
+function StudentMyCoursesListController($state, $mdDialog, $controller, CourseFactory, AuthService, FeedbackFactory) {
     var self = this;
     $controller('CourseListController', { self: self });
 
     self.title = 'My Courses';
+    self.showLessons = showLessons;
 
     self.unregisterStudent = unregisterStudent;
     self.addFeedback = addFeedback;
@@ -56,6 +57,10 @@ function StudentMyCoursesListController($mdDialog, $controller, CourseFactory, A
                 courseId: course.id
             }
         }).then(refresh, refresh);
+    }
+
+    function showLessons(course) {
+        $state.go('student-available-lessons', { course: course.id });
     }
 }
 
