@@ -10,4 +10,5 @@ public interface DocumentGenerator<TMainEntity, TTableEntity> {
     void writeDocument(OutputStream output,
                        TMainEntity mainModel,
                        Collection<TTableEntity> tableEntities) throws DocumentException, IOException;
+    String getContentType();
 }

@@ -4,6 +4,7 @@ import by.triumgroup.recourse.document.generator.DocumentGenerator;
 import by.triumgroup.recourse.document.model.provider.ContentProvider;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,6 +30,11 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
 
     public PdfGenerator(ContentProvider<TMainModel, TTableEntity> contentProvider) {
         this.contentProvider = contentProvider;
+    }
+
+    @Override
+    public String getContentType() {
+        return MediaType.APPLICATION_PDF_VALUE;
     }
 
     @Override

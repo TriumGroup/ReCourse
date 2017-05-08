@@ -11,7 +11,6 @@ import by.triumgroup.recourse.entity.support.DocumentTypeEnumConverter;
 import by.triumgroup.recourse.service.UserService;
 import by.triumgroup.recourse.util.DocumentGeneratorCallWrapper;
 import org.slf4j.Logger;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,8 +64,8 @@ public class DocumentControllerImpl implements DocumentController {
                                                                      TMainEntity mainModel,
                                                                      Collection<TTableEntity> tableEntities,
                                                                      ContentProvider<TMainEntity, TTableEntity> contentProvider) {
-        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
         DocumentGenerator<TMainEntity, TTableEntity> documentGenerator = documentType.createGenerator(contentProvider);
+        response.setContentType(documentGenerator.getContentType());
         DocumentGeneratorCallWrapper.wrapDocumentGeneratorCall(() -> documentGenerator.writeDocument(
                 response.getOutputStream(),
                 mainModel,
