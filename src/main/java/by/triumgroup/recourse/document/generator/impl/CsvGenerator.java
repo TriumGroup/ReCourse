@@ -37,7 +37,7 @@ public class CsvGenerator<TMainEntity, TTableEntity> implements DocumentGenerato
     @Override
     public void writeDocument(HttpServletResponse response, TMainEntity mainModel, Collection<TTableEntity> tableEntities) throws DocumentException, IOException {
         ICsvListWriter listWriter = new CsvListWriter(response.getWriter(),
-                CsvPreference.STANDARD_PREFERENCE);
+                CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
         addContent(tableEntities, listWriter);
         listWriter.flush();
     }
