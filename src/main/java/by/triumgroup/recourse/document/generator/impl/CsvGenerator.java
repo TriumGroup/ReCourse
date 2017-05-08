@@ -21,7 +21,7 @@ public class CsvGenerator<TMainEntity, TTableEntity> implements DocumentGenerato
 
     @Override
     public String getContentType() {
-        return "application/csv";
+        return "text/csv; charset=utf-8";
     }
 
     @Override
