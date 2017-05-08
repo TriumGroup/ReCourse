@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 public class StudentProfileContentProvider implements ContentProvider<Student, StudentCourseAverageMark> {
     @Override
     public String createTitle(Student mainEntity) {
-        return mainEntity.getName() + " " + mainEntity.getSurname();
+        return mainEntity.getFullName();
     }
 
     @Override
     public String createFilename(Student user) {
-        return String.format("%s_%s_profile", user.getName(), user.getSurname());
+        return String.format("%s_profile", user.getFullName());
     }
 
     @Override
