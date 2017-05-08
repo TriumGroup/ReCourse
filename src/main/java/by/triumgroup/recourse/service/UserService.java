@@ -2,6 +2,7 @@ package by.triumgroup.recourse.service;
 
 import by.triumgroup.recourse.entity.dto.PasswordChanging;
 import by.triumgroup.recourse.entity.dto.RegistrationDetails;
+import by.triumgroup.recourse.entity.dto.Student;
 import by.triumgroup.recourse.entity.model.User;
 import by.triumgroup.recourse.service.exception.ServiceException;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,7 @@ public interface UserService extends CrudService<User, Integer> {
     Optional<Boolean> register(RegistrationDetails registrationDetails) throws ServiceException;
 
     Optional<Boolean> changePassword(Integer userId, PasswordChanging passwordChanging) throws ServiceException;
+
+    Optional<Student> getStudent(Integer userId) throws ServiceException;
+
 }

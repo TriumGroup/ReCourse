@@ -1,8 +1,6 @@
 package by.triumgroup.recourse.service.impl;
 
-import by.triumgroup.recourse.entity.dto.ErrorMessage;
-import by.triumgroup.recourse.entity.dto.PasswordChanging;
-import by.triumgroup.recourse.entity.dto.RegistrationDetails;
+import by.triumgroup.recourse.entity.dto.*;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.model.User;
@@ -234,6 +232,21 @@ public class UserServiceImpl extends AbstractCrudService<User, Integer> implemen
             databaseUser.setPasswordHash(newPasswordHash);
             wrapJPACall(() -> userRepository.save(databaseUser));
             result = Optional.of(true);
+        } else {
+            result = Optional.empty();
+        }
+        return result;
+    }
+
+    @Override
+    public Optional<Student> getStudent(Integer userId) throws ServiceException {
+        Optional<Student> result;
+        Optional<User> studentOptional = wrapJPACallToOptional(() -> userRepository.findOne(userId));
+        if (studentOptional.isPresent()){
+            User studentUser = studentOptional.get();
+            List<StudentCourseAverageMark> averageMarks = wrapJPACall(() -> userRepository.getStudentAverageMarksByCourses(userId));
+            Double averageMark = wrapJPACall(() -> userRepository.getStudentAverageMark(userId));
+            result = Optional.of(new Student(studentUser, averageMark, averageMarks));
         } else {
             result = Optional.empty();
         }

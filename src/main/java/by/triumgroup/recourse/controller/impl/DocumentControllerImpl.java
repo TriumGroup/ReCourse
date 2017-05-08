@@ -5,8 +5,8 @@ import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.document.DocumentType;
 import by.triumgroup.recourse.document.generator.DocumentGenerator;
 import by.triumgroup.recourse.document.model.provider.ContentProvider;
-import by.triumgroup.recourse.document.model.provider.StudentProfileContentProvider;
-import by.triumgroup.recourse.entity.model.User;
+import by.triumgroup.recourse.document.model.provider.impl.StudentProfileContentProvider;
+import by.triumgroup.recourse.entity.dto.Student;
 import by.triumgroup.recourse.entity.support.DocumentTypeEnumConverter;
 import by.triumgroup.recourse.service.UserService;
 import by.triumgroup.recourse.util.DocumentGeneratorCallWrapper;
@@ -45,14 +45,14 @@ public class DocumentControllerImpl implements DocumentController {
             @PathVariable("id") Integer id,
             @RequestParam("type") DocumentType documentType,
             HttpServletResponse response) {
-        Optional<User> studentOptional = wrapServiceCall(logger, () -> userService.findById(id));
+        Optional<Student> studentOptional = wrapServiceCall(logger, () -> userService.getStudent(id));
         if (studentOptional.isPresent()){
-            User existingStudent = studentOptional.get();
+            Student existingStudent = studentOptional.get();
             dispatchDocumentRequest(
                     response,
                     documentType,
                     existingStudent,
-                    new ArrayList<>(existingStudent.getCourses()),
+                    new ArrayList<>(existingStudent.getAverageMarks()),
                     new StudentProfileContentProvider());
         } else {
             throw new NotFoundException();

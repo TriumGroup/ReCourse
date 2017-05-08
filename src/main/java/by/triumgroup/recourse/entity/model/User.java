@@ -1,5 +1,6 @@
 package by.triumgroup.recourse.entity.model;
 
+import by.triumgroup.recourse.entity.dto.StudentCourseAverageMark;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
@@ -17,6 +18,36 @@ import static by.triumgroup.recourse.validation.support.Constants.PATTERN;
 
 @Entity
 @Table(name = "user")
+@SqlResultSetMapping(
+        name = "StudentCourseAverageMarkMapping",
+        classes = @ConstructorResult(
+                targetClass = StudentCourseAverageMark.class,
+                columns = {
+                        @ColumnResult(name = "title", type = String.class),
+                        @ColumnResult(name = "averageMark", type = Double.class)
+                }
+        )
+)
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name = "User.getStudentAverageMarksByCourses",
+                query = "SELECT course.title as title, AVG(mark.score) as averageMark\n" +
+                        "FROM mark\n" +
+                        "  JOIN hometask_solution\n" +
+                        "    ON mark.solution_id = hometask_solution.id\n" +
+                        "  JOIN lesson\n" +
+                        "    ON hometask_solution.lesson_id = lesson.id\n" +
+                        "  JOIN course\n" +
+                        "    ON lesson.course_id = course.id\n" +
+                        "  JOIN course_student\n" +
+                        "    ON course.id = course_student.course_id\n" +
+                        "WHERE course_student.student_id = :studentId\n" +
+                        "GROUP BY course_student.course_id",
+                resultSetMapping = "StudentCourseAverageMarkMapping"
+
+        ),
+
+})
 public class User extends BaseEntity<Integer> {
 
     @NotNull(message = "Email is not specified")
