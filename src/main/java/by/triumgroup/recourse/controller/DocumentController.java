@@ -1,9 +1,7 @@
 package by.triumgroup.recourse.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import by.triumgroup.recourse.document.DocumentType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +12,7 @@ public interface DocumentController {
     @GetMapping("/users/{id}/profile")
     void generateStudentProfile(
             @PathVariable("id") Integer id,
+            @RequestParam("type") DocumentType documentType,
             HttpServletResponse response);
 
 }

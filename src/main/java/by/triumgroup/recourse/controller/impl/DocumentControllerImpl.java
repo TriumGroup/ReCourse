@@ -1,21 +1,26 @@
 package by.triumgroup.recourse.controller.impl;
 
 import by.triumgroup.recourse.controller.DocumentController;
+import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.document.DocumentType;
 import by.triumgroup.recourse.document.generator.DocumentGenerator;
+import by.triumgroup.recourse.document.model.provider.ContentProvider;
 import by.triumgroup.recourse.document.model.provider.StudentProfileContentProvider;
-import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.User;
+import by.triumgroup.recourse.entity.support.DocumentTypeEnumConverter;
 import by.triumgroup.recourse.service.UserService;
-import by.triumgroup.recourse.service.exception.ServiceException;
+import by.triumgroup.recourse.util.DocumentGeneratorCallWrapper;
 import org.slf4j.Logger;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
 
 import static by.triumgroup.recourse.util.ServiceCallWrapper.wrapServiceCall;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -30,20 +35,41 @@ public class DocumentControllerImpl implements DocumentController {
         this.userService = userService;
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(DocumentType.class, new DocumentTypeEnumConverter());
+    }
+
     @Override
     public void generateStudentProfile(
             @PathVariable("id") Integer id,
+            @RequestParam("type") DocumentType documentType,
             HttpServletResponse response) {
+        Optional<User> studentOptional = wrapServiceCall(logger, () -> userService.findById(id));
+        if (studentOptional.isPresent()){
+            User existingStudent = studentOptional.get();
+            dispatchDocumentRequest(
+                    response,
+                    documentType,
+                    existingStudent,
+                    new ArrayList<>(existingStudent.getCourses()),
+                    new StudentProfileContentProvider());
+        } else {
+            throw new NotFoundException();
+        }
+
+    }
+
+    private <TMainEntity, TTableEntity> void dispatchDocumentRequest(HttpServletResponse response,
+                                                                     DocumentType documentType,
+                                                                     TMainEntity mainModel,
+                                                                     Collection<TTableEntity> tableEntities,
+                                                                     ContentProvider<TMainEntity, TTableEntity> contentProvider) {
         response.setContentType(MediaType.APPLICATION_PDF_VALUE);
-        wrapServiceCall(logger, () -> {
-            try {
-                ServletOutputStream stream = response.getOutputStream();
-                User user = userService.findById(31).get(); // Mikhail_Snitavets@triumgroup.com
-                DocumentGenerator<User, Course> studentProfileGenerator = DocumentType.PDF.createGenerator(new StudentProfileContentProvider());
-                studentProfileGenerator.writeDocument(stream, user, new ArrayList<>(user.getCourses()));
-            } catch (IOException e) {
-                throw new ServiceException(e);
-            }
-        });
+        DocumentGenerator<TMainEntity, TTableEntity> documentGenerator = documentType.createGenerator(contentProvider);
+        DocumentGeneratorCallWrapper.wrapDocumentGeneratorCall(() -> documentGenerator.writeDocument(
+                response.getOutputStream(),
+                mainModel,
+                tableEntities));
     }
 }

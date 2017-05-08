@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -31,25 +32,21 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
     }
 
     @Override
-    public void writeDocument(OutputStream output, TMainModel mainModel, List<TTableEntity> tableEntities) {
-        try {
-            PdfReader template = openTemplate(TEMPLATE_URL);
-            Document document = createDocument(template.getPageSizeWithRotation(1));
+    public void writeDocument(OutputStream output, TMainModel mainModel, Collection<TTableEntity> tableEntities) throws DocumentException, IOException {
+        PdfReader template = openTemplate(TEMPLATE_URL);
+        Document document = createDocument(template.getPageSizeWithRotation(1));
 
-            PdfWriter writer = createPdfWriter(output, document);
+        PdfWriter writer = createPdfWriter(output, document);
 
-            document.open();
+        document.open();
 
-            setTemplate(template, writer);
-            addTitle(document, contentProvider.createTitle(mainModel));
-            addContent(mainModel, tableEntities, document);
+        setTemplate(template, writer);
+        addTitle(document, contentProvider.createTitle(mainModel));
+        addContent(mainModel, tableEntities, document);
 
-            document.close();
+        document.close();
 
-            output.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        output.flush();
     }
 
     private PdfWriter createPdfWriter(OutputStream output, Document document) throws DocumentException {
@@ -64,7 +61,7 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
         document.add(titleParagraph);
     }
 
-    private void addContent(TMainModel mainModel, List<TTableEntity> tableEntities, Document document) throws DocumentException {
+    private void addContent(TMainModel mainModel, Collection<TTableEntity> tableEntities, Document document) throws DocumentException {
         addSubtitles(document, mainModel);
 
         Paragraph tableTitle = createTableTitle(mainModel, tableEntities);
@@ -74,22 +71,20 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
         document.add(pdfTable);
     }
 
-    private void addSubtitles(Document document, TMainModel mainModel) {
+    private void addSubtitles(Document document, TMainModel mainModel) throws DocumentException {
         Map<String, String> subtitles = contentProvider.createSubtitles(mainModel);
-        subtitles.forEach((name, value) -> {
-            try {
-                Paragraph paragraph = new Paragraph();
-                paragraph.add(new Phrase(name, EM_FONT));
-                paragraph.add(new Phrase(SUBTITLE_SEPARATOR, EM_FONT));
-                paragraph.add(new Phrase(value, DEFAULT_FONT));
-                document.add(paragraph);
-            } catch (DocumentException e) {
-                e.printStackTrace();
-            }
-        });
+        for (Map.Entry<String, String> pair: subtitles.entrySet()) {
+            String name = pair.getKey();
+            String value = pair.getValue();
+            Paragraph paragraph = new Paragraph();
+            paragraph.add(new Phrase(name, EM_FONT));
+            paragraph.add(new Phrase(SUBTITLE_SEPARATOR, EM_FONT));
+            paragraph.add(new Phrase(value, DEFAULT_FONT));
+            document.add(paragraph);
+        }
     }
 
-    private PdfPTable createTable(List<TTableEntity> tableEntities) {
+    private PdfPTable createTable(Collection<TTableEntity> tableEntities) {
         PdfPTable pdfTable = new PdfPTable(contentProvider.getHeaders().size());
         pdfTable.setWidthPercentage(100);
 
@@ -108,7 +103,7 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
         return pdfTable;
     }
 
-    private Paragraph createTableTitle(TMainModel mainModel, List<TTableEntity> tableEntities) {
+    private Paragraph createTableTitle(TMainModel mainModel, Collection<TTableEntity> tableEntities) {
         Paragraph tableTitle = new Paragraph(contentProvider.createTableTitle(mainModel, tableEntities), EM_FONT);
         tableTitle.setSpacingAfter(10);
         tableTitle.setAlignment(Element.ALIGN_CENTER);

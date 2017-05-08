@@ -26,12 +26,12 @@ public class StudentProfileContentProvider implements ContentProvider<User, Cour
     }
 
     @Override
-    public String createTableTitle(User user, List<Course> courses) {
+    public String createTableTitle(User user, Collection<Course> courses) {
         return "Courses";
     }
 
     @Override
-    public List<List<String>> createRows(List<Course> courses) {
+    public List<List<String>> createRows(Collection<Course> courses) {
         return courses.stream()
                 .map(course -> Arrays.asList(course.getTitle(), course.getMaxStudents().toString()))
                 .collect(Collectors.toList());
