@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import static by.triumgroup.recourse.util.ServiceCallWrapper.wrapServiceCall;
+import static by.triumgroup.recourse.util.Util.sanitizeFilename;
 import static org.slf4j.LoggerFactory.getLogger;
 
 
@@ -67,14 +68,19 @@ public class DocumentControllerImpl implements DocumentController {
         DocumentGenerator<TMainEntity, TTableEntity> documentGenerator = documentType.createGenerator(contentProvider);
         response.setContentType(documentGenerator.getContentType());
         if (documentGenerator.isForceAttachment()) {
-            response.setHeader("Content-disposition",
-                    String.format("attachment;filename=%s.%s",
-                            contentProvider.createFilename(mainEntity),
-                            documentGenerator.getFileExtension()));
+            response.setHeader("Content-disposition", "attachment;filename=" + createFilename(mainEntity, contentProvider, documentGenerator));
         }
         DocumentGeneratorCallWrapper.wrapDocumentGeneratorCall(() -> documentGenerator.writeDocument(
                 response,
                 mainEntity,
                 tableEntities));
+    }
+
+    private <TMainEntity, TTableEntity> String createFilename(TMainEntity mainEntity, ContentProvider<TMainEntity, TTableEntity> contentProvider, DocumentGenerator<TMainEntity, TTableEntity> documentGenerator) {
+        String filename = String.format("%s.%s",
+                contentProvider.createFilename(mainEntity),
+                documentGenerator.getFileExtension());
+        filename = sanitizeFilename(filename);
+        return filename;
     }
 }

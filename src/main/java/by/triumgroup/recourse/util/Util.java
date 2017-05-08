@@ -22,4 +22,7 @@ public class Util {
         return toTest == null ? defaultValue : toTest;
     }
 
+    public static String sanitizeFilename(String filename) {
+        return filename.replaceAll("[^a-zA-Z0-9.-]", "_");
+    }
 }
