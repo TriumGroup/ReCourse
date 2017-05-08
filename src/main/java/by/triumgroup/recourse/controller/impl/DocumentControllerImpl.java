@@ -1,9 +1,13 @@
 package by.triumgroup.recourse.controller.impl;
 
 import by.triumgroup.recourse.controller.DocumentController;
-import by.triumgroup.recourse.document.impl.StudentProfilePdfGenerator;
+import by.triumgroup.recourse.document.DocumentType;
+import by.triumgroup.recourse.document.generator.DocumentGenerator;
+import by.triumgroup.recourse.document.model.provider.StudentProfileContentProvider;
+import by.triumgroup.recourse.entity.model.Course;
+import by.triumgroup.recourse.entity.model.User;
+import by.triumgroup.recourse.service.UserService;
 import by.triumgroup.recourse.service.exception.ServiceException;
-import com.itextpdf.text.DocumentException;
 import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static by.triumgroup.recourse.util.ServiceCallWrapper.wrapServiceCall;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -19,10 +24,10 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class DocumentControllerImpl implements DocumentController {
 
     private static final Logger logger = getLogger(DocumentControllerImpl.class);
-    private final StudentProfilePdfGenerator studentProfilePdfGenerator;
+    private UserService userService;
 
-    public DocumentControllerImpl(StudentProfilePdfGenerator studentProfilePdfGenerator) {
-        this.studentProfilePdfGenerator = studentProfilePdfGenerator;
+    public DocumentControllerImpl(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -33,8 +38,10 @@ public class DocumentControllerImpl implements DocumentController {
         wrapServiceCall(logger, () -> {
             try {
                 ServletOutputStream stream = response.getOutputStream();
-                studentProfilePdfGenerator.generatePdfById(stream, id);
-            } catch (IOException | DocumentException e) {
+                User user = userService.findById(31).get(); // Mikhail_Snitavets@triumgroup.com
+                DocumentGenerator<User, Course> studentProfileGenerator = DocumentType.PDF.createGenerator(new StudentProfileContentProvider());
+                studentProfileGenerator.writeDocument(stream, user, new ArrayList<>(user.getCourses()));
+            } catch (IOException e) {
                 throw new ServiceException(e);
             }
         });

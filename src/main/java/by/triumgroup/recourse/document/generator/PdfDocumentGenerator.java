@@ -1,4 +1,4 @@
-package by.triumgroup.recourse.document;
+package by.triumgroup.recourse.document.generator;
 
 import com.itextpdf.text.DocumentException;
 

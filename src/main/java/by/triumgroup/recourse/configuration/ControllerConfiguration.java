@@ -4,7 +4,6 @@ package by.triumgroup.recourse.configuration;
 import by.triumgroup.recourse.controller.*;
 import by.triumgroup.recourse.controller.exception.WhiteLabelErrorPageController;
 import by.triumgroup.recourse.controller.impl.*;
-import by.triumgroup.recourse.document.impl.StudentProfilePdfGenerator;
 import by.triumgroup.recourse.service.*;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +19,8 @@ public class ControllerConfiguration {
     }
 
     @Bean
-    public DocumentController documentController(StudentProfilePdfGenerator studentProfilePdfGenerator) {
-        return new DocumentControllerImpl(studentProfilePdfGenerator);
+    public DocumentController documentController(UserService userService) {
+        return new DocumentControllerImpl(userService);
     }
 
     @Bean
