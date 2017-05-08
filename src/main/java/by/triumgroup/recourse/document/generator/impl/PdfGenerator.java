@@ -6,6 +6,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.springframework.http.MediaType;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
@@ -38,7 +39,9 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
     }
 
     @Override
-    public void writeDocument(OutputStream output, TMainModel mainModel, Collection<TTableEntity> tableEntities) throws DocumentException, IOException {
+    public void writeDocument(HttpServletResponse response, TMainModel mainModel, Collection<TTableEntity> tableEntities) throws DocumentException, IOException {
+        OutputStream output = response.getOutputStream();
+
         PdfReader template = openTemplate(TEMPLATE_URL);
         Document document = createDocument(template.getPageSizeWithRotation(1));
 
@@ -53,6 +56,16 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
         document.close();
 
         output.flush();
+    }
+
+    @Override
+    public String getFileExtension() {
+        return "pdf";
+    }
+
+    @Override
+    public boolean isForceAttachment() {
+        return false;
     }
 
     private PdfWriter createPdfWriter(OutputStream output, Document document) throws DocumentException {

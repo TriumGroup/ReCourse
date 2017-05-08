@@ -9,21 +9,21 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
 
-public class XlsGenerator<TMainEntity, TTableEntity> implements DocumentGenerator<TMainEntity, TTableEntity> {
+public class XlsxGenerator<TMainEntity, TTableEntity> implements DocumentGenerator<TMainEntity, TTableEntity> {
 
     private ContentProvider<TMainEntity, TTableEntity> contentProvider;
 
-    public XlsGenerator(ContentProvider<TMainEntity, TTableEntity> contentProvider){
+    public XlsxGenerator(ContentProvider<TMainEntity, TTableEntity> contentProvider){
         this.contentProvider = contentProvider;
     }
 
     @Override
-    public void writeDocument(OutputStream output, TMainEntity mainModel, Collection<TTableEntity> tableEntities) throws DocumentException, IOException {
+    public void writeDocument(HttpServletResponse response, TMainEntity mainModel, Collection<TTableEntity> tableEntities) throws DocumentException, IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Test");
         sheet.setDefaultColumnWidth(30);
@@ -38,12 +38,22 @@ public class XlsGenerator<TMainEntity, TTableEntity> implements DocumentGenerato
         CellStyle style = getCellStyle(workbook);
         addContent(tableEntities, contentProvider, sheet, style);
 
-        workbook.write(output);
+        workbook.write(response.getOutputStream());
     }
 
     @Override
     public String getContentType() {
         return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    }
+
+    @Override
+    public String getFileExtension() {
+        return "xlsx";
+    }
+
+    @Override
+    public boolean isForceAttachment() {
+        return true;
     }
 
     private void addContent(Collection<TTableEntity> tableEntities, ContentProvider<TMainEntity, TTableEntity> contentProvider, Sheet sheet, CellStyle style) {

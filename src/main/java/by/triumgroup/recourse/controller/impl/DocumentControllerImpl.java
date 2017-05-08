@@ -61,14 +61,20 @@ public class DocumentControllerImpl implements DocumentController {
 
     private <TMainEntity, TTableEntity> void dispatchDocumentRequest(HttpServletResponse response,
                                                                      DocumentType documentType,
-                                                                     TMainEntity mainModel,
+                                                                     TMainEntity mainEntity,
                                                                      Collection<TTableEntity> tableEntities,
                                                                      ContentProvider<TMainEntity, TTableEntity> contentProvider) {
         DocumentGenerator<TMainEntity, TTableEntity> documentGenerator = documentType.createGenerator(contentProvider);
         response.setContentType(documentGenerator.getContentType());
+        if (documentGenerator.isForceAttachment()) {
+            response.setHeader("Content-disposition",
+                    String.format("attachment;filename=%s.%s",
+                            contentProvider.createFilename(mainEntity),
+                            documentGenerator.getFileExtension()));
+        }
         DocumentGeneratorCallWrapper.wrapDocumentGeneratorCall(() -> documentGenerator.writeDocument(
-                response.getOutputStream(),
-                mainModel,
+                response,
+                mainEntity,
                 tableEntities));
     }
 }

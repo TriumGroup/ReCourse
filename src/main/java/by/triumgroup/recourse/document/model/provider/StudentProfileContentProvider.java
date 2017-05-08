@@ -8,15 +8,20 @@ import java.util.stream.Collectors;
 
 public class StudentProfileContentProvider implements ContentProvider<User, Course> {
     @Override
-    public String createTitle(User mainModel) {
-        return mainModel.getName() + " " + mainModel.getSurname();
+    public String createTitle(User mainEntity) {
+        return mainEntity.getName() + " " + mainEntity.getSurname();
     }
 
     @Override
-    public Map<String, String> createSubtitles(User mainModel) {
+    public String createFilename(User user) {
+        return String.format("%s_%s_profile", user.getName(), user.getSurname());
+    }
+
+    @Override
+    public Map<String, String> createSubtitles(User mainEntity) {
         return new HashMap<String, String>(){{
-            put("Role", mainModel.getRole().name());
-            put("Birthday", mainModel.getBirthday().toString());
+            put("Role", mainEntity.getRole().name());
+            put("Birthday", mainEntity.getBirthday().toString());
         }};
     }
 

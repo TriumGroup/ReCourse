@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface ContentProvider<TMainEntity, TTableEntity> {
-    String createTitle(TMainEntity mainModel);
-    Map<String, String> createSubtitles(TMainEntity mainModel);
+    String createFilename(TMainEntity mainEntity);
+    String createTitle(TMainEntity mainEntity);
+    Map<String, String> createSubtitles(TMainEntity mainEntity);
     List<String> getHeaders();
     String createTableTitle(TMainEntity mainEntity, Collection<TTableEntity> tableEntities);
     List<List<String>> createRows(Collection<TTableEntity> entities);
