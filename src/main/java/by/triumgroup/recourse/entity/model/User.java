@@ -170,6 +170,11 @@ public class User extends BaseEntity<Integer> {
         this.courses = courses;
     }
 
+    @JsonIgnore
+    public String getFullName() {
+        return String.format("%s %s", getName(), getSurname());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

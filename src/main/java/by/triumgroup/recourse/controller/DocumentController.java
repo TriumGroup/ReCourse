@@ -10,7 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 public interface DocumentController {
 
     @GetMapping("/users/{id}/profile")
-    void generateStudentProfile(
+    void exportStudentProfile(
+            @PathVariable("id") Integer id,
+            @RequestParam("type") DocumentType documentType,
+            HttpServletResponse response);
+
+    @GetMapping("/courses/{id}/lessons/export")
+    void exportCourseLessons(
             @PathVariable("id") Integer id,
             @RequestParam("type") DocumentType documentType,
             HttpServletResponse response);
