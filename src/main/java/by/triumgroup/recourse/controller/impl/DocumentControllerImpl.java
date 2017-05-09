@@ -5,14 +5,17 @@ import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.document.DocumentType;
 import by.triumgroup.recourse.document.generator.DocumentGenerator;
 import by.triumgroup.recourse.document.model.provider.ContentProvider;
+import by.triumgroup.recourse.document.model.provider.impl.CourseFeedbacksContentProvider;
 import by.triumgroup.recourse.document.model.provider.impl.CourseLessonsContentProvider;
 import by.triumgroup.recourse.document.model.provider.impl.CourseStudentsContentProvider;
 import by.triumgroup.recourse.document.model.provider.impl.StudentProfileContentProvider;
 import by.triumgroup.recourse.entity.dto.CourseWithStudents;
 import by.triumgroup.recourse.entity.dto.StudentProfile;
 import by.triumgroup.recourse.entity.model.Course;
+import by.triumgroup.recourse.entity.model.CourseFeedback;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.support.DocumentTypeEnumConverter;
+import by.triumgroup.recourse.service.CourseFeedbackService;
 import by.triumgroup.recourse.service.CourseService;
 import by.triumgroup.recourse.service.LessonService;
 import by.triumgroup.recourse.service.UserService;
@@ -40,13 +43,16 @@ public class DocumentControllerImpl implements DocumentController {
     private UserService userService;
     private CourseService courseService;
     private LessonService lessonService;
+    private CourseFeedbackService courseFeedbackService;
 
     public DocumentControllerImpl(UserService userService,
                                   CourseService courseService,
-                                  LessonService lessonService) {
+                                  LessonService lessonService,
+                                  CourseFeedbackService courseFeedbackService) {
         this.userService = userService;
         this.courseService = courseService;
         this.lessonService = lessonService;
+        this.courseFeedbackService = courseFeedbackService;
     }
 
     @InitBinder
@@ -81,7 +87,7 @@ public class DocumentControllerImpl implements DocumentController {
         Optional<Course> courseOptional = wrapServiceCall(logger, () -> courseService.findById(id));
         if (courseOptional.isPresent()){
             Course existingCourse = courseOptional.get();
-            List<Lesson> courseLessons = lessonService.findByCourseId(id, allItemsPage()).get();
+            List<Lesson> courseLessons = wrapServiceCall(logger, () -> lessonService.findByCourseId(id, allItemsPage())).get();
             dispatchDocumentRequest(
                     response,
                     documentType,
@@ -111,6 +117,25 @@ public class DocumentControllerImpl implements DocumentController {
             throw new NotFoundException();
         }
 
+    }
+
+    @Override
+    public void exportCourseFeedbacks(@PathVariable("id") Integer id,
+                                      @RequestParam("type") DocumentType documentType,
+                                      HttpServletResponse response) {
+        Optional<Course> courseOptional = wrapServiceCall(logger, () -> courseService.findById(id));
+        if (courseOptional.isPresent()) {
+            List<CourseFeedback> courseFeedbacks = wrapServiceCall(logger, () -> courseFeedbackService.findByCourseId(id, allItemsPage())).get();
+            dispatchDocumentRequest(
+                    response,
+                    documentType,
+                    courseOptional.get(),
+                    courseFeedbacks,
+                    new CourseFeedbacksContentProvider()
+            );
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     private <TMainEntity, TTableEntity> void dispatchDocumentRequest(HttpServletResponse response,
