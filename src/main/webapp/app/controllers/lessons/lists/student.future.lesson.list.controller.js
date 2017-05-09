@@ -2,7 +2,7 @@ angular
     .module('app')
     .controller('StudentFutureLessonListController', StudentFutureLessonListController);
 
-function StudentFutureLessonListController($controller, LessonFactory, AuthService) {
+function StudentFutureLessonListController($controller, LessonFactory, AuthService, DocumentDownloaderService) {
     var self = this;
     $controller('StudentLessonListController', { self: self });
 
@@ -10,6 +10,7 @@ function StudentFutureLessonListController($controller, LessonFactory, AuthServi
     self.isUpdatingChosen = false;
     self.lessonsType = 'future';
     self.lessons = [];
+    self.downloadTimetable = downloadTimetable;
 
     self.refresh = refresh;
 
@@ -22,6 +23,10 @@ function StudentFutureLessonListController($controller, LessonFactory, AuthServi
         LessonFactory.getFutureForStudent({ id: self.studentId }).$promise.then(function (result) {
             self.lessons = result;
         })
+    }
+
+    function downloadTimetable(type) {
+        DocumentDownloaderService.downloadDocument('api/users/' + self.studentId + '/lessons/export', type);
     }
 }
 

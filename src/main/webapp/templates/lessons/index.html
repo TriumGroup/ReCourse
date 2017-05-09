@@ -2,7 +2,7 @@
     <md-toolbar class="md-table-toolbar md-default">
         <div class="md-toolbar-tools">
             <span>{{self.title}}</span>
-            <md-menu ng-if="!(self.isTeacherLessons() || self.isStudentLessons())">
+            <md-menu ng-if="self.isAllLessons()">
                 <md-button ng-click="$mdMenu.open($event)">
                     <md-icon md-menu-origin>
                         <i class="material-icons">file_download</i>
@@ -22,6 +22,31 @@
                     </md-menu-item>
                     <md-menu-item>
                         <md-button ng-click="self.downloadLessons('csv')">
+                            CSV
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-menu ng-if="!self.isPastLessons()">
+                <md-button ng-click="$mdMenu.open($event)">
+                    <md-icon md-menu-origin>
+                        <i class="material-icons">file_download</i>
+                    </md-icon>
+                    timetable
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item>
+                        <md-button ng-click="self.downloadTimetable('pdf')">
+                            PDF
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="self.downloadTimetable('xlsx')">
+                            XLSX
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="self.downloadTimetable('csv')">
                             CSV
                         </md-button>
                     </md-menu-item>

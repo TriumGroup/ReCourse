@@ -2,7 +2,7 @@ angular
     .module('app')
     .controller('AdminLessonListController', AdminLessonListController);
 
-function AdminLessonListController($controller, $mdDialog, $stateParams, CourseFactory, LessonFactory, $state, DocumentDownloaderService) {
+function AdminLessonListController($controller, $mdDialog, $stateParams, CourseFactory, LessonFactory, $state) {
     var self = this;
     $controller('LessonListController', {self: self});
     self.lessons = [];
@@ -14,7 +14,6 @@ function AdminLessonListController($controller, $mdDialog, $stateParams, CourseF
     self.editLesson = editLesson;
     self.showSolutions = showSolutions;
     self.courseId = $stateParams.course;
-    self.downloadLessons = downloadLessons;
 
     refresh();
 
@@ -59,10 +58,6 @@ function AdminLessonListController($controller, $mdDialog, $stateParams, CourseF
                 courseId: self.courseId
             }
         }).then(refresh, refresh);
-    }
-
-    function downloadLessons(type) {
-        DocumentDownloaderService.downloadDocument('api/courses/' + self.courseId + '/lessons/export', type);
     }
 }
 
