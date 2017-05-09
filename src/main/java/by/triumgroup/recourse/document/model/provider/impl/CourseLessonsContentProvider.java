@@ -8,6 +8,9 @@ import org.springframework.data.util.Pair;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static by.triumgroup.recourse.util.Util.lessonDurationToString;
+import static by.triumgroup.recourse.util.Util.lessonStartTimeToString;
+
 public class CourseLessonsContentProvider implements ContentProvider<Course, Lesson> {
     @Override
     public String createFilename(Course course) {
@@ -40,8 +43,8 @@ public class CourseLessonsContentProvider implements ContentProvider<Course, Les
     public List<List<String>> createRows(Collection<Lesson> lessons) {
         return lessons.stream()
                 .map(lesson -> Arrays.asList(lesson.getTopic(),
-                        lesson.getStartTime().toString(),
-                        lesson.getDuration().toString(),
+                        lessonStartTimeToString(lesson.getStartTime()),
+                        lessonDurationToString(lesson.getDuration()),
                         lesson.getTeacher().getFullName()))
                 .collect(Collectors.toList());
     }

@@ -5,15 +5,14 @@ import by.triumgroup.recourse.controller.exception.NotFoundException;
 import by.triumgroup.recourse.document.DocumentType;
 import by.triumgroup.recourse.document.generator.DocumentGenerator;
 import by.triumgroup.recourse.document.model.provider.ContentProvider;
-import by.triumgroup.recourse.document.model.provider.impl.CourseFeedbacksContentProvider;
-import by.triumgroup.recourse.document.model.provider.impl.CourseLessonsContentProvider;
-import by.triumgroup.recourse.document.model.provider.impl.CourseStudentsContentProvider;
-import by.triumgroup.recourse.document.model.provider.impl.StudentProfileContentProvider;
+import by.triumgroup.recourse.document.model.provider.impl.*;
 import by.triumgroup.recourse.entity.dto.CourseWithStudents;
+import by.triumgroup.recourse.entity.dto.LessonWithCourse;
 import by.triumgroup.recourse.entity.dto.StudentProfile;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.CourseFeedback;
 import by.triumgroup.recourse.entity.model.Lesson;
+import by.triumgroup.recourse.entity.model.User;
 import by.triumgroup.recourse.entity.support.DocumentTypeEnumConverter;
 import by.triumgroup.recourse.service.CourseFeedbackService;
 import by.triumgroup.recourse.service.CourseService;
@@ -132,6 +131,26 @@ public class DocumentControllerImpl implements DocumentController {
                     courseOptional.get(),
                     courseFeedbacks,
                     new CourseFeedbacksContentProvider()
+            );
+        } else {
+            throw new NotFoundException();
+        }
+    }
+
+    @Override
+    public void exportStudentLessons(@PathVariable("id") Integer id,
+                                     @RequestParam("type") DocumentType documentType,
+                                     HttpServletResponse response) {
+        Optional<User> studentOptional = wrapServiceCall(logger, () -> userService.findById(id));
+        if (studentOptional.isPresent()) {
+            User student = studentOptional.get();
+            List<LessonWithCourse> lessons = lessonService.findStudentFutureLessonsWithCourse(id).get();
+            dispatchDocumentRequest(
+                    response,
+                    documentType,
+                    student,
+                    lessons,
+                    new StudentLessonsContentProvider()
             );
         } else {
             throw new NotFoundException();

@@ -1,6 +1,7 @@
 package by.triumgroup.recourse.service.impl;
 
 import by.triumgroup.recourse.entity.dto.ErrorMessage;
+import by.triumgroup.recourse.entity.dto.LessonWithCourse;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.model.User;
@@ -24,9 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static by.triumgroup.recourse.util.RepositoryCallWrapper.wrapJPACall;
 import static by.triumgroup.recourse.util.RepositoryCallWrapper.wrapJPACallToOptional;
+import static by.triumgroup.recourse.util.Util.allItemsPage;
 import static by.triumgroup.recourse.util.Util.ifExistsWithRole;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -176,6 +179,23 @@ public class LessonServiceImpl
     @Override
     public Optional<List<Lesson>> findPastLessonsByUserId(Integer userId, Pageable pageable) {
         return wrapJPACallToOptional(() -> repository.findPastLessonsByUserId(userId, pageable));
+    }
+
+    @Override
+    public Optional<List<LessonWithCourse>> findStudentFutureLessonsWithCourse(Integer studentId) {
+        Optional<List<LessonWithCourse>> result;
+        Optional<List<Lesson>> futureLessonsOptional = findFutureLessonsByUserId(studentId, allItemsPage());
+        if (futureLessonsOptional.isPresent()){
+            List<Lesson> futureLessons = futureLessonsOptional.get();
+            result = Optional.of(futureLessons.stream()
+                    .map(lesson -> new LessonWithCourse(
+                            lesson,
+                            wrapJPACall(() -> courseRepository.findOne(lesson.getCourseId()))))
+                    .collect(Collectors.toList()));
+        } else {
+            result = Optional.empty();
+        }
+        return result;
     }
 
     @Override

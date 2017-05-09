@@ -32,4 +32,11 @@ public interface DocumentController {
             @PathVariable("id") Integer id,
             @RequestParam("type") DocumentType documentType,
             HttpServletResponse response);
+
+    @GetMapping("/users/{id}/lessons/export")
+    void exportStudentLessons(
+            @PathVariable("id") Integer id,
+            @RequestParam("type") DocumentType documentType,
+            HttpServletResponse response
+    );
 }

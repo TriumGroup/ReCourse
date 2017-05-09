@@ -59,6 +59,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
                 .antMatchers(HttpMethod.GET, "/api/users/me").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/users/**/profile/export").permitAll() //TODO: fix
+                .antMatchers(HttpMethod.GET, "/api/users/**/lessons/export").permitAll() //TODO: fix
                 .antMatchers(HttpMethod.PUT, "/api/users/**").authenticated()
                 .antMatchers("/api/users/logout", "/api/users/password/change").authenticated()
                 .antMatchers( "/api/users/**").hasAuthority(User.Role.ADMIN.name())
