@@ -4,6 +4,7 @@ import by.triumgroup.recourse.entity.model.User;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.OptionalDouble;
 
 public class StudentProfile extends User {
     private Double totalAverageMark;
@@ -11,11 +12,16 @@ public class StudentProfile extends User {
 
     public StudentProfile(User user, List<CourseWithMark> averageMarks) {
         super(user);
-        this.totalAverageMark = averageMarks.stream()
+        OptionalDouble totalAverageMarkOptional = averageMarks.stream()
                 .map(CourseWithMark::getAverageMark)
                 .filter(Objects::nonNull)
                 .mapToDouble(x -> x)
-                .average().getAsDouble();
+                .average();
+        if (totalAverageMarkOptional.isPresent()){
+            this.totalAverageMark = totalAverageMarkOptional.getAsDouble();
+        } else {
+            this.totalAverageMark = null;
+        }
         this.averageMarks = averageMarks;
     }
 

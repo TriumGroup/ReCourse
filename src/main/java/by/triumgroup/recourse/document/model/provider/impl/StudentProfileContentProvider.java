@@ -24,7 +24,7 @@ public class StudentProfileContentProvider implements ContentProvider<StudentPro
     @Override
     public List<Pair<String, String>> createSubtitles(StudentProfile mainEntity) {
         return Collections.singletonList(
-                Pair.of("Total average mark", mainEntity.getTotalAverageMark().toString())
+                Pair.of("Total average mark", optionalMarkToString(mainEntity.getTotalAverageMark()))
         );
     }
 
