@@ -46,6 +46,7 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
         Document document = createDocument(template.getPageSizeWithRotation(1));
 
         PdfWriter writer = createPdfWriter(output, document);
+        setCopyProtection(writer);
 
         document.open();
 
@@ -112,7 +113,6 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
             headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             pdfTable.addCell(headerCell);
         }
-        pdfTable.setHeaderRows(1);
 
         for (List<String> row : contentProvider.createRows(tableEntities)) {
             for (String cell : row) {
@@ -146,6 +146,14 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
         PdfContentByte content = writer.getDirectContent();
         PdfImportedPage page = writer.getImportedPage(templateReader, 1);
         content.addTemplate(page, 0, 0);
+    }
+
+    private void setCopyProtection(PdfWriter writer) throws DocumentException{
+        writer.setEncryption(
+                null,
+                null,
+                ~(PdfWriter.ALLOW_COPY),
+                PdfWriter.STANDARD_ENCRYPTION_128);
     }
 
     private class PdfNewPageEventHandler extends PdfPageEventHelper {
