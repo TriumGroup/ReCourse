@@ -42,8 +42,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers("/api/users/register").permitAll()
 
-                .antMatchers(HttpMethod.GET, "/api/courses/**/students/export").permitAll() //TODO: fix
-                .antMatchers(HttpMethod.GET, "/api/courses/**/feedbacks/export").permitAll() //TODO: fix
                 .antMatchers(HttpMethod.GET, "/api/courses/**").authenticated()
                 //TODO Hotfix here to allow student to register self
                 .antMatchers( "/api/courses/**").hasAnyAuthority(User.Role.ADMIN.name(), User.Role.STUDENT.name())
@@ -57,7 +55,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/api/hometasks/solutions/marked/**").hasAnyAuthority(User.Role.ADMIN.name())
 
                 .antMatchers(HttpMethod.GET, "/api/users/me").authenticated()
-                .antMatchers(HttpMethod.GET, "/api/users/**/lessons/export").permitAll() //TODO: fix
+                .antMatchers(HttpMethod.GET, "/api/users/**/lessons/export").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/users/**").authenticated()
                 .antMatchers("/api/users/logout", "/api/users/password/change").authenticated()
                 .antMatchers( "/api/users/**").hasAuthority(User.Role.ADMIN.name())
