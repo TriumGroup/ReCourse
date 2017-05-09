@@ -27,7 +27,7 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-            <md-menu ng-if="!self.isPastLessons()">
+            <md-menu ng-if="self.isStudentLessons() && !self.isPastLessons()">
                 <md-button ng-click="$mdMenu.open($event)">
                     <md-icon md-menu-origin>
                         <i class="material-icons">file_download</i>
