@@ -41,11 +41,12 @@ import static by.triumgroup.recourse.validation.support.Constants.PATTERN;
                         "  LEFT JOIN lesson\n" +
                         "    ON lesson.course_id = course.id\n" +
                         "  LEFT JOIN hometask_solution\n" +
-                        "    ON course_student.student_id = hometask_solution.student_id AND lesson.course_id = course.id\n" +
+                        "    ON (course_student.student_id = hometask_solution.student_id) AND  \n" +
+                        "       (lesson.id = hometask_solution.lesson_id)\n" +
                         "  LEFT JOIN mark\n" +
                         "    ON mark.solution_id = hometask_solution.id\n" +
                         "WHERE course_student.student_id = :studentId\n" +
-                        "GROUP BY course.id",
+                        "GROUP BY course_student.course_id",
                 resultSetMapping = "StudentCourseAverageMarkMapping"
 
         )
