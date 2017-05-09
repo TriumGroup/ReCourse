@@ -4,6 +4,7 @@ import by.triumgroup.recourse.document.generator.DocumentGenerator;
 import by.triumgroup.recourse.document.model.provider.ContentProvider;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +12,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator<TMainModel, TTableEntity> {
     private final static String TEMPLATE_URL = "./template.pdf";
@@ -91,10 +91,10 @@ public class PdfGenerator<TMainModel, TTableEntity> implements DocumentGenerator
     }
 
     private void addSubtitles(Document document, TMainModel mainModel) throws DocumentException {
-        Map<String, String> subtitles = contentProvider.createSubtitles(mainModel);
-        for (Map.Entry<String, String> pair: subtitles.entrySet()) {
-            String name = pair.getKey();
-            String value = pair.getValue();
+        List<Pair<String, String>> subtitles = contentProvider.createSubtitles(mainModel);
+        for (Pair<String, String> pair: subtitles) {
+            String name = pair.getFirst();
+            String value = pair.getSecond();
             Paragraph paragraph = new Paragraph();
             paragraph.add(new Phrase(name, EM_FONT));
             paragraph.add(new Phrase(SUBTITLE_SEPARATOR, EM_FONT));

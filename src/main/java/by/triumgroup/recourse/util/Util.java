@@ -25,4 +25,12 @@ public class Util {
     public static String sanitizeFilename(String filename) {
         return filename.replaceAll("[^a-zA-Z0-9.-]", "_");
     }
+
+    public static String optionalMarkToString(Double mark) {
+        if (mark == null) {
+            return "No marks";
+        } else {
+            return mark.toString();
+        }
+    }
 }

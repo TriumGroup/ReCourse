@@ -3,6 +3,7 @@ package by.triumgroup.recourse.document.model.provider.impl;
 import by.triumgroup.recourse.document.model.provider.ContentProvider;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.Lesson;
+import org.springframework.data.util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,10 +20,10 @@ public class CourseLessonsContentProvider implements ContentProvider<Course, Les
     }
 
     @Override
-    public Map<String, String> createSubtitles(Course course) {
-        return new HashMap<String, String>(){{
-            put("Description", course.getDescription());
-        }};
+    public List<Pair<String, String>> createSubtitles(Course course) {
+        return Collections.singletonList(
+                Pair.of("Description", course.getDescription())
+        );
     }
 
     @Override

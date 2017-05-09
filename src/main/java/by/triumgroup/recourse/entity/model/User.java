@@ -1,6 +1,6 @@
 package by.triumgroup.recourse.entity.model;
 
-import by.triumgroup.recourse.entity.dto.StudentCourseAverageMark;
+import by.triumgroup.recourse.entity.dto.CourseWithMark;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Email;
@@ -18,35 +18,37 @@ import static by.triumgroup.recourse.validation.support.Constants.PATTERN;
 
 @Entity
 @Table(name = "user")
-@SqlResultSetMapping(
-        name = "StudentCourseAverageMarkMapping",
-        classes = @ConstructorResult(
-                targetClass = StudentCourseAverageMark.class,
-                columns = {
-                        @ColumnResult(name = "title", type = String.class),
-                        @ColumnResult(name = "averageMark", type = Double.class)
-                }
-        )
+@SqlResultSetMappings({
+            @SqlResultSetMapping(
+                name = "StudentCourseAverageMarkMapping",
+                classes = @ConstructorResult(
+                        targetClass = CourseWithMark.class,
+                        columns = {
+                                @ColumnResult(name = "title", type = String.class),
+                                @ColumnResult(name = "averageMark", type = Double.class)
+                        }
+                )
+            )
+        }
 )
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "User.getStudentAverageMarksByCourses",
                 query = "SELECT course.title as title, AVG(mark.score) as averageMark\n" +
-                        "FROM mark\n" +
-                        "  JOIN hometask_solution\n" +
-                        "    ON mark.solution_id = hometask_solution.id\n" +
-                        "  JOIN lesson\n" +
-                        "    ON hometask_solution.lesson_id = lesson.id\n" +
-                        "  JOIN course\n" +
-                        "    ON lesson.course_id = course.id\n" +
+                        "FROM course\n" +
                         "  JOIN course_student\n" +
                         "    ON course.id = course_student.course_id\n" +
+                        "  LEFT JOIN lesson\n" +
+                        "    ON lesson.course_id = course.id\n" +
+                        "  LEFT JOIN hometask_solution\n" +
+                        "    ON course_student.student_id = hometask_solution.student_id AND lesson.course_id = course.id\n" +
+                        "  LEFT JOIN mark\n" +
+                        "    ON mark.solution_id = hometask_solution.id\n" +
                         "WHERE course_student.student_id = :studentId\n" +
-                        "GROUP BY course_student.course_id",
+                        "GROUP BY course.id",
                 resultSetMapping = "StudentCourseAverageMarkMapping"
 
-        ),
-
+        )
 })
 public class User extends BaseEntity<Integer> {
 

@@ -1,28 +1,31 @@
 package by.triumgroup.recourse.document.model.provider.impl;
 
 import by.triumgroup.recourse.document.model.provider.ContentProvider;
-import by.triumgroup.recourse.entity.dto.Student;
-import by.triumgroup.recourse.entity.dto.StudentCourseAverageMark;
+import by.triumgroup.recourse.entity.dto.StudentProfile;
+import by.triumgroup.recourse.entity.dto.CourseWithMark;
+import org.springframework.data.util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class StudentProfileContentProvider implements ContentProvider<Student, StudentCourseAverageMark> {
+import static by.triumgroup.recourse.util.Util.optionalMarkToString;
+
+public class StudentProfileContentProvider implements ContentProvider<StudentProfile, CourseWithMark> {
     @Override
-    public String createTitle(Student mainEntity) {
+    public String createTitle(StudentProfile mainEntity) {
         return mainEntity.getFullName();
     }
 
     @Override
-    public String createFilename(Student user) {
+    public String createFilename(StudentProfile user) {
         return String.format("%s_profile", user.getFullName());
     }
 
     @Override
-    public Map<String, String> createSubtitles(Student mainEntity) {
-        return new HashMap<String, String>(){{
-            put("Total average mark", mainEntity.getTotalAverageMark().toString());
-        }};
+    public List<Pair<String, String>> createSubtitles(StudentProfile mainEntity) {
+        return Collections.singletonList(
+                Pair.of("Total average mark", mainEntity.getTotalAverageMark().toString())
+        );
     }
 
     @Override
@@ -31,14 +34,14 @@ public class StudentProfileContentProvider implements ContentProvider<Student, S
     }
 
     @Override
-    public String createTableTitle(Student user, Collection<StudentCourseAverageMark> courses) {
+    public String createTableTitle(StudentProfile user, Collection<CourseWithMark> courses) {
         return "Courses";
     }
 
     @Override
-    public List<List<String>> createRows(Collection<StudentCourseAverageMark> courses) {
+    public List<List<String>> createRows(Collection<CourseWithMark> courses) {
         return courses.stream()
-                .map(studentCourse -> Arrays.asList(studentCourse.getTitle(), studentCourse.getAverageMark().toString()))
+                .map(studentCourse -> Arrays.asList(studentCourse.getTitle(), optionalMarkToString(studentCourse.getAverageMark())))
                 .collect(Collectors.toList());
     }
 }

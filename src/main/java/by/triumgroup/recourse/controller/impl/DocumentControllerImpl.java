@@ -6,8 +6,10 @@ import by.triumgroup.recourse.document.DocumentType;
 import by.triumgroup.recourse.document.generator.DocumentGenerator;
 import by.triumgroup.recourse.document.model.provider.ContentProvider;
 import by.triumgroup.recourse.document.model.provider.impl.CourseLessonsContentProvider;
+import by.triumgroup.recourse.document.model.provider.impl.CourseStudentsContentProvider;
 import by.triumgroup.recourse.document.model.provider.impl.StudentProfileContentProvider;
-import by.triumgroup.recourse.entity.dto.Student;
+import by.triumgroup.recourse.entity.dto.CourseWithStudents;
+import by.triumgroup.recourse.entity.dto.StudentProfile;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.support.DocumentTypeEnumConverter;
@@ -57,14 +59,14 @@ public class DocumentControllerImpl implements DocumentController {
             @PathVariable("id") Integer id,
             @RequestParam("type") DocumentType documentType,
             HttpServletResponse response) {
-        Optional<Student> studentOptional = wrapServiceCall(logger, () -> userService.getStudent(id));
+        Optional<StudentProfile> studentOptional = wrapServiceCall(logger, () -> userService.getStudent(id));
         if (studentOptional.isPresent()){
-            Student existingStudent = studentOptional.get();
+            StudentProfile existingStudentProfile = studentOptional.get();
             dispatchDocumentRequest(
                     response,
                     documentType,
-                    existingStudent,
-                    existingStudent.getAverageMarks(),
+                    existingStudentProfile,
+                    existingStudentProfile.getAverageMarks(),
                     new StudentProfileContentProvider());
         } else {
             throw new NotFoundException();
@@ -86,6 +88,25 @@ public class DocumentControllerImpl implements DocumentController {
                     existingCourse,
                     courseLessons,
                     new CourseLessonsContentProvider());
+        } else {
+            throw new NotFoundException();
+        }
+
+    }
+
+    @Override
+    public void exportCourseStudents(@PathVariable("id") Integer id,
+                                     @RequestParam("type") DocumentType documentType,
+                                     HttpServletResponse response) {
+        Optional<CourseWithStudents> courseProfileOptional = wrapServiceCall(logger, () -> courseService.getCourseWithStudents(id));
+        if (courseProfileOptional.isPresent()){
+            CourseWithStudents courseWithStudents = courseProfileOptional.get();
+            dispatchDocumentRequest(
+                    response,
+                    documentType,
+                    courseWithStudents,
+                    courseWithStudents.getStudentsWithMarks(),
+                    new CourseStudentsContentProvider());
         } else {
             throw new NotFoundException();
         }

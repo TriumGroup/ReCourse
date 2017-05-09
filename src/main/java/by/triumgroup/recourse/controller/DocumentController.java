@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/api")
 public interface DocumentController {
 
-    @GetMapping("/users/{id}/profile")
+    @GetMapping("/users/{id}/profile/export")
     void exportStudentProfile(
             @PathVariable("id") Integer id,
             @RequestParam("type") DocumentType documentType,
@@ -21,4 +21,9 @@ public interface DocumentController {
             @RequestParam("type") DocumentType documentType,
             HttpServletResponse response);
 
+    @GetMapping("/courses/{id}/students/export")
+    void exportCourseStudents(
+            @PathVariable("id") Integer id,
+            @RequestParam("type") DocumentType documentType,
+            HttpServletResponse response);
 }

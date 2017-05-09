@@ -185,7 +185,7 @@ public class UserServiceImpl extends AbstractCrudService<User, Integer> implemen
 
     private void checkStudentRoleUpdate(User student) {
         if (!student.getCourses().isEmpty()) {
-            rejectRoleChanging("Student is registered to courses.");
+            rejectRoleChanging("StudentProfile is registered to courses.");
         }
     }
 
@@ -239,14 +239,13 @@ public class UserServiceImpl extends AbstractCrudService<User, Integer> implemen
     }
 
     @Override
-    public Optional<Student> getStudent(Integer userId) throws ServiceException {
-        Optional<Student> result;
+    public Optional<StudentProfile> getStudent(Integer userId) throws ServiceException {
+        Optional<StudentProfile> result;
         Optional<User> studentOptional = wrapJPACallToOptional(() -> userRepository.findOne(userId));
         if (studentOptional.isPresent()){
             User studentUser = studentOptional.get();
-            List<StudentCourseAverageMark> averageMarks = wrapJPACall(() -> userRepository.getStudentAverageMarksByCourses(userId));
-            Double averageMark = wrapJPACall(() -> userRepository.getStudentAverageMark(userId));
-            result = Optional.of(new Student(studentUser, averageMark, averageMarks));
+            List<CourseWithMark> averageMarks = wrapJPACall(() -> userRepository.getStudentAverageMarksByCourses(userId));
+            result = Optional.of(new StudentProfile(studentUser, averageMarks));
         } else {
             result = Optional.empty();
         }

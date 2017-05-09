@@ -1,6 +1,6 @@
 package by.triumgroup.recourse.repository;
 
-import by.triumgroup.recourse.entity.dto.StudentCourseAverageMark;
+import by.triumgroup.recourse.entity.dto.StudentWithMark;
 import by.triumgroup.recourse.entity.model.Course;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +40,6 @@ public interface CourseRepository extends PagingAndSortingRepository<Course, Int
             "ORDER BY id DESC \n#pageable\n",
             nativeQuery = true)
     List<Course> findRegisteredForUser(Integer userId, Pageable pageable);
+
+    List<StudentWithMark> getStudentsAverageMarksForCourse(@Param("courseId") Integer courseId);
 }
