@@ -42,7 +42,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers("/api/users/register").permitAll()
 
-                .antMatchers(HttpMethod.GET, "/api/courses/**/lessons/export").permitAll() //TODO: fix
                 .antMatchers(HttpMethod.GET, "/api/courses/**/students/export").permitAll() //TODO: fix
                 .antMatchers(HttpMethod.GET, "/api/courses/**/feedbacks/export").permitAll() //TODO: fix
                 .antMatchers(HttpMethod.GET, "/api/courses/**").authenticated()
