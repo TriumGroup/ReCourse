@@ -1,8 +1,6 @@
 package by.triumgroup.recourse.service.impl;
 
-import by.triumgroup.recourse.entity.dto.ErrorMessage;
-import by.triumgroup.recourse.entity.dto.PasswordChanging;
-import by.triumgroup.recourse.entity.dto.RegistrationDetails;
+import by.triumgroup.recourse.entity.dto.*;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.model.User;
@@ -187,7 +185,7 @@ public class UserServiceImpl extends AbstractCrudService<User, Integer> implemen
 
     private void checkStudentRoleUpdate(User student) {
         if (!student.getCourses().isEmpty()) {
-            rejectRoleChanging("Student is registered to courses.");
+            rejectRoleChanging("StudentProfile is registered to courses.");
         }
     }
 
@@ -234,6 +232,20 @@ public class UserServiceImpl extends AbstractCrudService<User, Integer> implemen
             databaseUser.setPasswordHash(newPasswordHash);
             wrapJPACall(() -> userRepository.save(databaseUser));
             result = Optional.of(true);
+        } else {
+            result = Optional.empty();
+        }
+        return result;
+    }
+
+    @Override
+    public Optional<StudentProfile> getStudent(Integer userId) throws ServiceException {
+        Optional<StudentProfile> result;
+        Optional<User> studentOptional = wrapJPACallToOptional(() -> userRepository.findOne(userId));
+        if (studentOptional.isPresent()){
+            User studentUser = studentOptional.get();
+            List<CourseWithMark> averageMarks = wrapJPACall(() -> userRepository.getStudentAverageMarksByCourses(userId));
+            result = Optional.of(new StudentProfile(studentUser, averageMarks));
         } else {
             result = Optional.empty();
         }

@@ -1,5 +1,6 @@
 package by.triumgroup.recourse.service;
 
+import by.triumgroup.recourse.entity.dto.LessonWithCourse;
 import by.triumgroup.recourse.entity.model.Lesson;
 import by.triumgroup.recourse.entity.model.User;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +23,6 @@ public interface LessonService extends CrudService<Lesson, Integer> {
     Optional<List<Lesson>> findFutureLessonsByUserId(Integer userId, Pageable pageable);
 
     Optional<List<Lesson>> findPastLessonsByUserId(Integer userId, Pageable pageable);
+
+    Optional<List<LessonWithCourse>> findStudentFutureLessonsWithCourse(Integer studentId);
 }

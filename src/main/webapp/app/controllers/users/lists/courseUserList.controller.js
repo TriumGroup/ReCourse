@@ -2,7 +2,7 @@ angular
     .module('app')
     .controller('CourseUserListController', CourseUserListController);
 
-function CourseUserListController($mdDialog, UserFactory, $stateParams, $controller, CourseFactory) {
+function CourseUserListController($mdDialog, UserFactory, $stateParams, $controller, CourseFactory, DocumentDownloaderService) {
     var self = this;
     $controller('UserListController', {self: self});
 
@@ -12,6 +12,7 @@ function CourseUserListController($mdDialog, UserFactory, $stateParams, $control
     self.users = [];
     self.registerStudent = registerStudent;
     self.unregisterStudent = unregisterStudent;
+    self.downloadStudents = downloadStudents;
 
     refresh();
 
@@ -46,6 +47,10 @@ function CourseUserListController($mdDialog, UserFactory, $stateParams, $control
                 courseId: self.course
             }
         }).then(refresh, refresh);
+    }
+
+    function downloadStudents(type) {
+        DocumentDownloaderService.downloadDocument('api/courses/' + self.course + '/students/export', type);
     }
 }
 

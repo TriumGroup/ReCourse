@@ -31,7 +31,7 @@
                                 </md-icon>
                             </md-button>
                             <md-menu-content>
-                                <md-menu-item ng-if="self.isAdminCourses()">
+                                <md-menu-item ng-if="self.isAdminCourses() && course.status !== 'DRAFT'">
                                     <md-button ng-click="self.showStudents(course)">
                                         <md-icon md-menu-origin>
                                             <i class="material-icons">face</i>
@@ -47,7 +47,7 @@
                                         Lessons
                                     </md-button>
                                 </md-menu-item>
-                                <md-menu-item ng-if="self.isAdminCourses()">
+                                <md-menu-item ng-if="self.isAdminCourses() && course.status === 'FINISHED'">
                                     <md-button ng-click="self.showFeedbacks(course)">
                                         <md-icon md-menu-origin>
                                             <i class="material-icons">message</i>
@@ -71,7 +71,7 @@
                                         Delete
                                     </md-button>
                                 </md-menu-item>
-                                <md-menu-item ng-if="self.isAvailableStudentCourses()">
+                                <md-menu-item ng-if="self.isAvailableStudentCourses() && course.status === 'PUBLISHED'">
                                     <md-button ng-click="self.registerStudent(course)">
                                         <md-icon md-menu-origin>
                                             <i class="material-icons">account_balance</i>

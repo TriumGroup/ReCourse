@@ -1,5 +1,6 @@
 package by.triumgroup.recourse.service;
 
+import by.triumgroup.recourse.entity.dto.CourseWithStudents;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.User;
 import org.springframework.data.domain.Pageable;
@@ -26,4 +27,6 @@ public interface CourseService extends CrudService<Course, Integer> {
     Optional<List<Course>> findRegisteredForUser(Integer userId, Pageable pageable);
 
     List<User> findStudentsForCourse(Integer courseId);
+
+    Optional<CourseWithStudents> getCourseWithStudents(Integer courseId);
 }

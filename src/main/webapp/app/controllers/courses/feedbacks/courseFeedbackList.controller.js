@@ -2,7 +2,7 @@ angular
     .module('app')
     .controller('CourseFeedbackListController', CourseFeedbackListController);
 
-function CourseFeedbackListController($mdDialog, CourseFactory, FeedbackFactory, $stateParams) {
+function CourseFeedbackListController($mdDialog, CourseFactory, FeedbackFactory, $stateParams, DocumentDownloaderService) {
     var self = this;
 
     self.title = 'Course Feedbacks';
@@ -14,6 +14,7 @@ function CourseFeedbackListController($mdDialog, CourseFactory, FeedbackFactory,
     self.addFeedback = addFeedback;
     self.deleteFeedback = deleteFeedback;
     self.editFeedback = editFeedback;
+    self.downloadFeedbacks = downloadFeedbacks;
 
     refresh();
 
@@ -53,6 +54,10 @@ function CourseFeedbackListController($mdDialog, CourseFactory, FeedbackFactory,
                 courseId: self.courseId
             }
         }).then(refresh, refresh);
+    }
+
+    function downloadFeedbacks(type) {
+        DocumentDownloaderService.downloadDocument('api/courses/' + self.courseId + '/feedbacks/export', type);
     }
 }
 

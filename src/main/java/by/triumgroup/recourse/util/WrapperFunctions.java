@@ -1,5 +1,8 @@
 package by.triumgroup.recourse.util;
 
+import com.itextpdf.text.DocumentException;
+
+import java.io.IOException;
 import java.util.Optional;
 
 public class WrapperFunctions {
@@ -19,5 +22,8 @@ public class WrapperFunctions {
         Optional<R> call();
     }
 
-
+    @FunctionalInterface
+    public interface DocumentGeneratorCall {
+        void call() throws DocumentException, IOException;
+    }
 }
