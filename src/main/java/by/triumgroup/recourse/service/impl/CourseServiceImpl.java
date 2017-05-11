@@ -1,6 +1,8 @@
 package by.triumgroup.recourse.service.impl;
 
+import by.triumgroup.recourse.entity.dto.CourseWithStudents;
 import by.triumgroup.recourse.entity.dto.ErrorMessage;
+import by.triumgroup.recourse.entity.dto.StudentWithMark;
 import by.triumgroup.recourse.entity.model.BaseEntity;
 import by.triumgroup.recourse.entity.model.Course;
 import by.triumgroup.recourse.entity.model.Lesson;
@@ -100,6 +102,19 @@ public class CourseServiceImpl
         checkUpdateAvailability(entity, course);
         processStatusChangingSideEffects(entity, course);
         return wrapJPACallToOptional(() -> courseRepository.save(entity));
+    }
+
+    @Override
+    public Optional<CourseWithStudents> getCourseWithStudents(Integer courseId) {
+        Optional<CourseWithStudents> result;
+        Optional<Course> courseOptional = wrapJPACallToOptional(() -> courseRepository.findOne(courseId));
+        if (courseOptional.isPresent()){
+            List<StudentWithMark> students = wrapJPACall(() -> courseRepository.getStudentsAverageMarksForCourse(courseId));
+            result = Optional.of(new CourseWithStudents(courseOptional.get(), students));
+        } else {
+            result = Optional.empty();
+        }
+        return result;
     }
 
     private void checkUpdateAvailability(Course updatedCourse, Course databaseCourse) {

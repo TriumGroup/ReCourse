@@ -40,6 +40,31 @@
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
+            <md-menu ng-if="self.user.role === 'STUDENT'">
+                <md-button ng-click="$mdMenu.open($event)">
+                    <md-icon md-menu-origin>
+                        <i class="material-icons">file_download</i>
+                    </md-icon>
+                    Profile
+                </md-button>
+                <md-menu-content>
+                    <md-menu-item>
+                        <md-button ng-click="self.downloadProfile('pdf')">
+                            PDF
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="self.downloadProfile('xlsx')">
+                            XLSX
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="self.downloadProfile('csv')">
+                            CSV
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
             <md-button ng-click="self.saveUser()">Save</md-button>
             <md-button ng-click="self.cancel()">Cancel</md-button>
         </md-dialog-actions>

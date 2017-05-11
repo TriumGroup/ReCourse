@@ -50,6 +50,14 @@ public class Lesson extends BaseEntity<Integer> {
         this.teacher = teacher;
     }
 
+    public Lesson(Lesson lesson) {
+        this.startTime = lesson.startTime;
+        this.duration = lesson.duration;
+        this.courseId = lesson.courseId;
+        this.topic = lesson.topic;
+        this.teacher = lesson.teacher;
+    }
+
     public Timestamp getStartTime() {
         return startTime;
     }

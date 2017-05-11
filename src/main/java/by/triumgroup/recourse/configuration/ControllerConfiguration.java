@@ -19,6 +19,14 @@ public class ControllerConfiguration {
     }
 
     @Bean
+    public DocumentController documentController(UserService userService,
+                                                 CourseService courseService,
+                                                 LessonService lessonService,
+                                                 CourseFeedbackService courseFeedbackService) {
+        return new DocumentControllerImpl(userService, courseService, lessonService, courseFeedbackService);
+    }
+
+    @Bean
     public UserController userController(UserService userService, DefaultTokenServices defaultTokenServices) {
         return new UserControllerImpl(userService, defaultTokenServices);
     }

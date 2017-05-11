@@ -2,7 +2,7 @@ angular
     .module('app')
     .controller('UserModalController', UserModalController);
 
-function UserModalController($mdDialog, UserFactory, user) {
+function UserModalController($mdDialog, UserFactory, user, DocumentDownloaderService) {
     var self = this;
 
     if (user && user.birthday) {
@@ -12,6 +12,7 @@ function UserModalController($mdDialog, UserFactory, user) {
     self.user = user;
     self.saveUser = saveUser;
     self.cancel = cancel;
+    self.downloadProfile = downloadProfile;
     self.updateMode = !!self.user;
 
     self.genders = ['MALE', 'FEMALE'];
@@ -27,5 +28,9 @@ function UserModalController($mdDialog, UserFactory, user) {
 
     function cancel() {
         $mdDialog.cancel();
+    }
+
+    function downloadProfile(type) {
+        DocumentDownloaderService.downloadDocument('api/users/' + user.id + '/profile/export', type);
     }
 }

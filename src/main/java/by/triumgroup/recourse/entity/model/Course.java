@@ -1,5 +1,6 @@
 package by.triumgroup.recourse.entity.model;
 
+import by.triumgroup.recourse.entity.dto.StudentWithMark;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.SafeHtml;
@@ -13,6 +14,33 @@ import java.util.Set;
 
 @Entity
 @Table(name = "course")
+@SqlResultSetMapping(
+        name = "StudentWithMarkMapping",
+        classes = @ConstructorResult(
+                targetClass = StudentWithMark.class,
+                columns = {
+                        @ColumnResult(name = "name", type = String.class),
+                        @ColumnResult(name = "surname", type = String.class),
+                        @ColumnResult(name = "mark", type = Double.class)
+                }
+        )
+)
+@NamedNativeQuery(
+        name = "Course.getStudentsAverageMarksForCourse",
+        query = "SELECT user.name, user.surname, AVG(mark.score) as mark\n" +
+                "FROM user\n" +
+                "  JOIN course_student\n" +
+                "    ON user.id = course_student.student_id\n" +
+                "  LEFT JOIN lesson\n" +
+                "    ON course_student.course_id = lesson.course_id\n" +
+                "  LEFT JOIN hometask_solution\n" +
+                "    ON course_student.student_id = hometask_solution.student_id AND hometask_solution.lesson_id = lesson.id\n" +
+                "  LEFT JOIN mark\n" +
+                "    ON mark.solution_id = hometask_solution.id\n" +
+                "WHERE lesson.course_id = :courseId\n" +
+                "GROUP BY user.id\n",
+        resultSetMapping = "StudentWithMarkMapping"
+)
 public class Course extends BaseEntity<Integer> {
 
     @NotNull(message = "Title is not specified")
@@ -56,6 +84,14 @@ public class Course extends BaseEntity<Integer> {
         this.status = status;
         this.registrationEnd = registrationEnd;
         this.maxStudents = maxStudents;
+    }
+
+    public Course(Course course) {
+        this.title = course.title;
+        this.description = course.description;
+        this.status = course.status;
+        this.registrationEnd = course.registrationEnd;
+        this.maxStudents = course.maxStudents;
     }
 
     public String getTitle() {
